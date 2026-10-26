@@ -484,7 +484,7 @@ pre.arrep{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--mono);fo
 .arcol-h span{font-family:var(--mono);font-size:12px;font-weight:700;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:0 8px;color:var(--ink)}
 .arcol .archips{margin-top:0}
 .arcol .arquick{flex-direction:column}
-.arcol .arquick button{width:100%}
+.arcol .arquick button{width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .arcol .archip{grid-template-columns:auto minmax(0,1fr) auto}
 .arcol .archip>span:nth-child(2){min-width:0;overflow-wrap:anywhere}
 @media (max-width:600px){.arcols{grid-template-columns:minmax(0,1fr)}}
@@ -508,6 +508,56 @@ pre.arrep{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--mono);fo
 .favgo{font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap}
 .favadd.on .favgo{color:var(--ok)}
 @media (max-width:520px){.favadd{grid-template-columns:minmax(0,1fr) auto}.favadd .art{justify-self:start}.favadd .ft{grid-column:1/-1;grid-row:2}.favadd .favgo{grid-column:2;grid-row:1}}
+
+/* ===== большой экран (Mac, ноутбук): на всю ширину и крупнее ===== */
+@media (min-width:1000px){
+  .in{max-width:1400px}
+  .narrow{max-width:none}
+  body{font-size:16.5px}
+  .top .brand h1{font-size:26px}
+  .gsearch input{font-size:17px;padding-block:11px}
+  .tabs{max-width:900px}
+  .tabs button{font-size:16px;padding:11px 8px}
+  .htitle{font-size:34px}
+  .lead{max-width:none;font-size:16.5px}
+  .tiles{grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+  .tile{padding:16px 18px}
+  .tile .t{font-size:19px}
+  .tile .d{font-size:15px}
+  .ab{margin-top:28px}
+  .ab>h3{font-size:17px}
+  .arsteps{gap:10px}
+  .arsteps button{font-size:16px;padding:11px 6px}
+  .arsteps button b{width:30px;height:30px;font-size:17px}
+  .arsteps button small{font-size:13px}
+  .arpick input{font-size:17px;padding:12px 14px}
+  .arcols{gap:18px}
+  .arcol{padding:14px}
+  .arcol-h{font-size:20px}
+  .archip{padding:10px 8px 10px 14px}
+  .archip b{font-size:15px}
+  .archip>span:nth-child(2){font-size:16.5px}
+  .archip small{font-size:14px}
+  .arquick-h{font-size:14px}
+  .arquick button{font-size:16px;padding:10px 14px}
+  .arbase ol{font-size:16px}
+  .arev{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px}
+  .arev label{font-size:16.5px;padding:12px 14px}
+  .run>li{padding:16px 18px;grid-template-columns:42px minmax(0,1fr);gap:16px}
+  .run .n{width:42px;height:42px;font-size:17px}
+  .run .a{font-size:20px}
+  .run .note{font-size:15.5px}
+  .run .sayline q,.arrun .sayline q{font-size:18.5px}
+  .arrun li.arph{font-size:13.5px}
+  dl.arsum{grid-template-columns:minmax(160px,240px) minmax(0,1fr)}
+  dl.arsum dt{font-size:14.5px}
+  dl.arsum dd{font-size:16px}
+  pre.arrep{font-size:14px}
+  .arfields input{font-size:16.5px}
+  .btn{font-size:15.5px;padding:10px 16px}
+  .favadd{padding:14px 16px}
+  .favadd .ft b{font-size:16.5px}
+}
 
 /* ===== телефон: компактная шапка, вкладки внизу под большим пальцем ===== */
 @media (max-width:640px){
@@ -1614,7 +1664,7 @@ function renderArrest(){
   const keys=arKeys(), p=arPlan();
   const chip=k=>{const r=ROWINFO[k], auto=autoReason(k); return `<span class="archip${r.code==="uk"?" uk":""}"><b>${esc(artLabel(k))}</b><span>${esc(r.d)}</span><small>${esc(r.sancText)}${auto?" · по ходу: "+esc(lc(auto)):""}</small><span class="chipbtns">${starBtn("row|"+k," sm")}${auto?"":`<button type="button" class="rm" data-arrm="${esc(k)}" aria-label="Убрать ${esc(artLabel(k))}">×</button>`}</span></span>`;};
   const mine=[...new Set(FAV.flatMap(f=>{ const [kind,code,x]=f.split("|"); if(kind==="row") return [code+"|"+x]; if(kind==="law"&&(code==="uk"||code==="koap")) return Object.keys(ROWINFO).filter(k=>{const r=ROWINFO[k]; return r.code===code&&r.base===x;}); return []; }))].filter(k=>ROWINFO[k]&&!keys.includes(k)).sort(artCmp);
-  const qb=k=>`<button type="button" data-aradd="${esc(k)}">+ ${esc(artLabel(k))} <span>${esc(ROWINFO[k].d.length>34?ROWINFO[k].d.slice(0,32)+"…":ROWINFO[k].d)}</span></button>`;
+  const qb=k=>`<button type="button" data-aradd="${esc(k)}">+ ${esc(artLabel(k))} <span>${esc(ROWINFO[k].d)}</span></button>`;
   const arCol=(code,title)=>{ const sel=keys.filter(k=>ROWINFO[k].code===code), my=mine.filter(k=>ROWINFO[k].code===code);
     return `<div class="arcol ${code}"><p class="arcol-h">${title}${sel.length?` <span>${sel.length}</span>`:""}</p><div class="archips">${sel.length?sel.map(chip).join(""):`<p class="muted">Не выбрано.</p>`}</div><p class="arquick-h">★ Мои статьи</p>${my.length?`<div class="arquick mine">${my.map(qb).join("")}</div>`:`<p class="muted">Нажмите ☆ у статьи ${title} — она сразу попадёт в задержание и останется здесь.</p>`}</div>`; };
   let n=0; let lastPh="";
