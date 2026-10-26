@@ -509,6 +509,122 @@ pre.arrep{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--mono);fo
 .favadd.on .favgo{color:var(--ok)}
 @media (max-width:520px){.favadd{grid-template-columns:minmax(0,1fr) auto}.favadd .art{justify-self:start}.favadd .ft{grid-column:1/-1;grid-row:2}.favadd .favgo{grid-column:2;grid-row:1}}
 
+/* ===== оформление: шаги как прогресс, номера статей как номерные знаки, действия лентой ===== */
+:root{--surface-2:#f4f6fa;--plate:#fbfbf6;--plate-ink:#12171e;--plate-edge:#12171e;--plate-uk:#b3141c;--accent-soft:#e3ebfa;--shadow-sm:0 1px 2px rgba(16,28,45,.06),0 4px 14px rgba(16,28,45,.07)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface-2:#1b2634;--plate-edge:#000000;--accent-soft:#1d2d47;--shadow-sm:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.28)}}
+:root[data-theme="dark"]{--surface-2:#1b2634;--plate-edge:#000000;--accent-soft:#1d2d47;--shadow-sm:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.28)}
+
+.plate,.archip b,.arev small{font-family:var(--mono);font-weight:700;font-size:12.5px;line-height:1.5;white-space:nowrap;background:var(--plate);color:var(--plate-ink);border:1.5px solid var(--plate-edge);border-radius:5px;padding:0 7px;font-variant-numeric:tabular-nums;justify-self:start;align-self:center}
+.plate.uk,.archip.uk b,.arev small{color:var(--plate-uk)}
+
+#vArrest>.lead{display:none}
+#vArrest>.htitle{margin-bottom:2px}
+
+/* шаги */
+.arsteps{gap:10px;padding:10px 0 14px;margin-top:8px}
+.arsteps button{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;row-gap:0;align-items:center;justify-items:start;text-align:left;padding:12px 2px 0;border:0;border-top:4px solid var(--line);border-radius:0;background:none;box-shadow:none;color:var(--muted);font-size:15px}
+.arsteps button b{grid-row:1/3;width:30px;height:30px;border-radius:50%;font-family:var(--mono);font-weight:700;font-size:14px;background:var(--surface);border:1.5px solid var(--line);color:var(--muted)}
+.arsteps button span{font-weight:700;line-height:1.2}
+.arsteps button small{grid-column:2;font-weight:500;min-height:0}
+.arsteps button.has{border-top-color:var(--accent)}
+.arsteps button.has b{border-color:var(--accent);color:var(--accent)}
+.arsteps button[aria-current="step"]{border-top-color:var(--sign);color:var(--ink);box-shadow:none}
+.arsteps button[aria-current="step"] b{background:var(--sign);border-color:var(--sign);color:var(--sign-ink)}
+.arsteps button:hover{color:var(--ink)}
+
+/* заголовок шага */
+.ab{margin-top:20px}
+.ab>h3{font-family:var(--display);font-weight:400;font-size:22px;letter-spacing:.01em;text-transform:none;margin:0 0 6px;text-wrap:balance}
+.ab>h3 span{display:none}
+.ab>h3+.muted{margin-bottom:12px}
+
+/* поиск статьи */
+.arpick input{border-radius:12px;padding:12px 14px;background:var(--surface);box-shadow:var(--shadow-sm)}
+
+/* колонки УК / КоАП */
+.arcols{gap:14px;margin-top:14px}
+.arcol{background:var(--surface);border:1px solid var(--line);border-top:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:10px;align-content:start}
+.arcol-h{margin:0;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:20px}
+.arcol-h em{font-family:var(--body);font-style:normal;font-size:13px;font-weight:500;color:var(--muted);letter-spacing:0}
+.arcol-h span{margin-left:auto;align-self:center;background:var(--accent-soft);border:0;color:var(--accent)}
+.arcol.uk .arcol-h span{background:var(--stop-soft);color:var(--stop)}
+.arempty{margin:0;padding:12px;border:1.5px dashed var(--line);border-radius:10px;color:var(--muted);font-size:14px}
+
+.arcol .archip,.archip{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"num btns" "desc desc" "sanc sanc";gap:4px 8px;background:var(--surface-2);border:1px solid var(--line);border-left:1px solid var(--line);border-radius:10px;padding:10px 8px 12px 12px}
+.arcol .archip b,.archip b{grid-area:num;font-size:13px}
+.arcol .archip>span:nth-child(2),.archip>span:nth-child(2){grid-area:desc;font-weight:600;line-height:1.35;overflow-wrap:normal}
+.archip small{grid-area:sanc;font-variant-numeric:tabular-nums}
+.archip .chipbtns{grid-area:btns}
+.archip .rm{background:none;border-color:transparent;color:var(--muted)}
+.archip .rm:hover{border-color:var(--line);color:var(--stop)}
+
+.arquick-h{margin:4px 0 0;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.arquick-h small{font-size:12px;font-weight:500;text-transform:none;letter-spacing:0}
+.arcol .arquick{gap:4px}
+.arcol .arquick button,.arquick.mine button{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:10px;align-items:center;width:100%;padding:8px 10px;border:1px solid transparent;border-radius:9px;background:none;box-shadow:none;font-weight:500;white-space:normal}
+.arquick.mine button:hover,.arquick.mine button:focus-visible{background:var(--surface-2);border-color:var(--line);outline:none}
+.arquick.mine button:focus-visible{border-color:var(--accent)}
+.arquick button span{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.qplus{font-style:normal;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-family:var(--mono);font-weight:700;font-size:18px;line-height:1}
+.arquick.mine button:hover .qplus{background:var(--accent);color:var(--accent-ink)}
+
+/* основание остановки */
+.arbase{margin-top:14px;background:none;border:0;border-left:0;padding:0}
+.arbase-h{font-size:14px;color:var(--muted);font-weight:600;margin:0 0 8px}
+.arbase ol{list-style:none;counter-reset:g;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;font-size:14px}
+.arbase li{counter-increment:g;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;line-height:1.4}
+.arbase li::before{content:counter(g);font-family:var(--mono);font-weight:700;font-size:12px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);border:1px solid var(--line)}
+@media (max-width:760px){.arbase ol{grid-template-columns:minmax(0,1fr)}}
+
+/* по ходу: свои чекбоксы */
+.arev{gap:8px}
+.arev label{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:center;border-radius:12px;padding:12px 14px;background:var(--surface);transition:border-color .12s,background .12s}
+.arev label:hover{border-color:var(--accent)}
+.arev label.on{background:var(--accent-soft);border-color:var(--accent)}
+.arev input{appearance:none;-webkit-appearance:none;width:22px;height:22px;margin:0;border:2px solid var(--line);border-radius:6px;background:var(--surface);display:grid;place-items:center;cursor:pointer}
+.arev input:checked{background:var(--accent);border-color:var(--accent)}
+.arev input:checked::after{content:"";width:10px;height:5px;border:2.5px solid var(--accent-ink);border-top:0;border-right:0;transform:translateY(-1px) rotate(-45deg)}
+.arev input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.arev label>span{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-weight:600;line-height:1.3}
+.arev small{display:inline-block;font-size:11.5px}
+
+/* предупреждения */
+#vArrest .warnbox{border:1px solid var(--stop);border-left:4px solid var(--stop);border-radius:10px;padding:10px 14px;margin:0 0 10px;line-height:1.45}
+
+/* действия: лента */
+.arrun{gap:0}
+.arrun{--padl:14px;--nw:36px}
+.arrun>li[data-ari]{position:relative;background:none;border:1px solid transparent;border-radius:14px}
+.arrun>li[data-ari]::before{content:"";position:absolute;left:calc(var(--padl) + var(--nw)/2 - 1px);top:0;bottom:0;width:2px;background:var(--line)}
+.arrun>li[data-ari] .n{position:relative;z-index:1;box-shadow:0 0 0 4px var(--bg)}
+.arrun>li.cur{background:var(--surface);border-color:var(--accent);box-shadow:var(--shadow-sm)}
+.arrun>li.cur .n{box-shadow:0 0 0 4px var(--surface)}
+.arrun>li.done{opacity:.55}
+.arrun li.arph{display:flex;align-items:center;gap:10px;padding:18px 0 6px;font-size:12px}
+.arrun li.arph::after{content:"";flex:1;height:1px;background:var(--line)}
+.arrun li.arph:first-child{padding-top:4px}
+.arrun .sayline{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:start;margin-top:10px;background:var(--surface-2);border:1px solid var(--line);border-left:1px solid var(--line);border-radius:4px 14px 14px 14px;padding:10px 12px 12px 14px}
+.arrun>li.cur .sayline{background:var(--accent-soft);border-color:transparent}
+.arrun .sayline .lbl{color:var(--accent);margin-bottom:4px}
+.arrun .sayline .copy{border-color:transparent;background:var(--surface);color:var(--accent)}
+.arrun .sayline .copy:hover{border-color:var(--accent)}
+.arrun .note{margin-top:8px;padding-left:12px;border-left:2px solid var(--line)}
+@media (max-width:560px){.arrun{--padl:12px;--nw:32px}.arrun .sayline{grid-template-columns:minmax(0,1fr)}.arrun .sayline .copy{justify-self:start}}
+@media (min-width:1000px){.arrun{--padl:18px;--nw:42px}}
+
+/* итог и навигация */
+dl.arsum{border-radius:14px}
+pre.arrep{border-radius:12px;background:var(--surface-2)}
+.arfields input{border-radius:10px}
+.arnav{margin-top:24px;padding-top:16px;border-top:1px solid var(--line)}
+
+/* плитки ситуаций */
+.tile{position:relative;padding-right:36px;border-radius:12px;transition:border-color .12s,transform .12s,box-shadow .12s}
+.tile::after{content:"→";position:absolute;top:14px;right:14px;color:var(--muted);font-weight:700}
+.tile:hover{box-shadow:var(--shadow-sm)}
+.tile:hover::after{color:var(--accent)}
+@media (prefers-reduced-motion:no-preference){.tile:hover{transform:translateY(-1px)}}
+
 /* ===== большой экран (Mac, ноутбук): на всю ширину и крупнее ===== */
 @media (min-width:1000px){
   .in{max-width:1400px}
@@ -525,7 +641,7 @@ pre.arrep{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--mono);fo
   .tile .t{font-size:19px}
   .tile .d{font-size:15px}
   .ab{margin-top:28px}
-  .ab>h3{font-size:17px}
+  .ab>h3{font-size:26px}
   .arsteps{gap:10px}
   .arsteps button{font-size:16px;padding:11px 6px}
   .arsteps button b{width:30px;height:30px;font-size:17px}
@@ -606,6 +722,12 @@ pre.arrep{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--mono);fo
   .archip .chipbtns{grid-row:1;grid-column:2}
   .archip .rm{width:38px;height:38px}
   .arev label{padding:11px 12px}
+  .arsteps{gap:6px}
+  .arsteps button{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;padding-top:8px;font-size:12.5px;row-gap:2px}
+  .arsteps button b{grid-row:auto;width:26px;height:26px;font-size:12.5px}
+  .arsteps button small{grid-column:1;font-size:11px}
+  .ab>h3{font-size:20px}
+  .arquick button span{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.3}
 }
 </style>
 </head>
@@ -1664,12 +1786,12 @@ function renderArrest(){
   const keys=arKeys(), p=arPlan();
   const chip=k=>{const r=ROWINFO[k], auto=autoReason(k); return `<span class="archip${r.code==="uk"?" uk":""}"><b>${esc(artLabel(k))}</b><span>${esc(r.d)}</span><small>${esc(r.sancText)}${auto?" · по ходу: "+esc(lc(auto)):""}</small><span class="chipbtns">${starBtn("row|"+k," sm")}${auto?"":`<button type="button" class="rm" data-arrm="${esc(k)}" aria-label="Убрать ${esc(artLabel(k))}">×</button>`}</span></span>`;};
   const mine=[...new Set(FAV.flatMap(f=>{ const [kind,code,x]=f.split("|"); if(kind==="row") return [code+"|"+x]; if(kind==="law"&&(code==="uk"||code==="koap")) return Object.keys(ROWINFO).filter(k=>{const r=ROWINFO[k]; return r.code===code&&r.base===x;}); return []; }))].filter(k=>ROWINFO[k]&&!keys.includes(k)).sort(artCmp);
-  const qb=k=>`<button type="button" data-aradd="${esc(k)}">+ ${esc(artLabel(k))} <span>${esc(ROWINFO[k].d)}</span></button>`;
+  const qb=k=>`<button type="button" data-aradd="${esc(k)}" aria-label="Добавить ${esc(artLabel(k))}"><i class="qplus" aria-hidden="true">+</i><b class="plate${ROWINFO[k].code==="uk"?" uk":""}">${esc(artLabel(k).replace(/^(УК|КоАП) /,""))}</b><span>${esc(ROWINFO[k].d)}</span></button>`;
   const arCol=(code,title)=>{ const sel=keys.filter(k=>ROWINFO[k].code===code), my=mine.filter(k=>ROWINFO[k].code===code);
-    return `<div class="arcol ${code}"><p class="arcol-h">${title}${sel.length?` <span>${sel.length}</span>`:""}</p><div class="archips">${sel.length?sel.map(chip).join(""):`<p class="muted">Не выбрано.</p>`}</div><p class="arquick-h">★ Мои статьи</p>${my.length?`<div class="arquick mine">${my.map(qb).join("")}</div>`:`<p class="muted">Нажмите ☆ у статьи ${title} — она сразу попадёт в задержание и останется здесь.</p>`}</div>`; };
+    return `<div class="arcol ${code}"><p class="arcol-h">${title}<em>${code==="uk"?"задержание и передача":"штраф на месте"}</em>${sel.length?`<span>${sel.length}</span>`:""}</p><div class="archips">${sel.length?sel.map(chip).join(""):`<p class="arempty">Пока ничего. Найдите статью в поиске выше или нажмите на свою ниже.</p>`}</div><p class="arquick-h">★ Мои статьи <small>нажмите — добавится</small></p>${my.length?`<div class="arquick mine">${my.map(qb).join("")}</div>`:`<p class="muted">Нажмите ☆ у статьи ${title} — она сразу попадёт в задержание и останется здесь.</p>`}</div>`; };
   let n=0; let lastPh="";
   const steps=p.st.map((s,i)=>{ const head=s.ph!==lastPh?`<li class="arph">${esc(s.ph)}</li>`:""; lastPh=s.ph; n++; const d=AR.done[i];
-    return head+`<li class="${d?"done":""}" data-ari="${i}"><button type="button" class="n" aria-pressed="${!!d}" aria-label="Отметить">${d?"✓":n}</button><div><div class="a">${esc(s.t)}</div>${(s.says||(s.say?[s.say]:[])).map((t,j)=>`<p class="sayline"><q id="ars-${i}-${j}"><span class="lbl">🗣 Зачитайте</span>${esc(t)}</q><button class="copy" type="button" data-copy="ars-${i}-${j}">Копировать</button></p>`).join("")}${s.note?`<p class="note">${esc(s.note)}</p>`:""}</div></li>`; }).join("");
+    return head+`<li class="${d?"done":""}" data-ari="${i}"><button type="button" class="n" aria-pressed="${!!d}" aria-label="Отметить">${d?"✓":n}</button><div><div class="a">${esc(s.t)}</div>${(s.says||(s.say?[s.say]:[])).map((t,j)=>`<p class="sayline"><q id="ars-${i}-${j}"><span class="lbl">Зачитайте</span>${esc(t)}</q><button class="copy" type="button" data-copy="ars-${i}-${j}">Копировать</button></p>`).join("")}${s.note?`<p class="note">${esc(s.note)}</p>`:""}</div></li>`; }).join("");
   const phrases=p.st.flatMap(s=>s.says||(s.say?[s.say]:[]));
   const has=keys.length||Object.values(AR.ev).some(Boolean);
   const warns=p.warn.map(w=>`<p class="warnbox">${esc(w)}</p>`).join("");
@@ -1714,7 +1836,7 @@ function arStep(n){
   const lis=[...document.querySelectorAll("#vArrest .arrun li[data-ari]")], dn=lis.filter(x=>x.classList.contains("done")).length;
   const evN=Object.values(AR.ev).filter(Boolean).length, artN=arKeys().length;
   const T=[["Статьи",artN?artN+" выбр.":"—"],["По ходу",evN?evN+" отм.":"—"],["Действия",lis.length?dn+" из "+lis.length:"—"],["Итог",""]];
-  const bar=$("arsteps"); if(bar) bar.innerHTML=T.map(([t,c],i)=>`<button type="button" data-arstep="${i+1}"${i+1===n?' aria-current="step"':""}><b>${i+1}</b>${t}<small>${c}</small></button>`).join("");
+  const bar=$("arsteps"); if(bar) bar.innerHTML=T.map(([t,c],i)=>`<button type="button" data-arstep="${i+1}" class="${c&&c!=="—"?"has":""}"${i+1===n?' aria-current="step"':""}><b>${i+1}</b><span>${t}</span><small>${c==="—"?"":c}</small></button>`).join("");
 }
 function arCur(){ const all=[...document.querySelectorAll("#vArrest .arrun li[data-ari]")]; all.forEach(x=>x.classList.remove("cur")); const c=all.find(x=>!x.classList.contains("done")); if(c) c.classList.add("cur"); return c; }
 function arAdd(k){ if(!ROWINFO[k]||AR.arts.includes(k)) return; AR.arts.push(k); AR.done={}; arSave(); }
