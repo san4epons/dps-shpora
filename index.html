@@ -625,6 +625,89 @@ pre.arrep{border-radius:12px;background:var(--surface-2)}
 .tile:hover::after{color:var(--accent)}
 @media (prefers-reduced-motion:no-preference){.tile:hover{transform:translateY(-1px)}}
 
+/* ===== тот же стиль для «Статей», «Законов» и «Избранного» ===== */
+/* номера статей везде — табличкой номерного знака */
+.art{background:var(--plate);color:var(--plate-ink);border:1.5px solid var(--plate-edge);border-radius:5px;padding:0 7px;line-height:1.5;font-size:12.5px}
+.art.uk{color:var(--plate-uk);border-color:var(--plate-edge)}
+.art.tp{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.faq .art.go:hover,.card .art.go:hover{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.badge{border-radius:999px;padding:2px 9px;font-size:11.5px}
+.badge.w{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+.badge.l{background:var(--stop-soft);color:var(--stop);border:1px solid var(--stop)}
+.btn{border-radius:10px}
+.backbtn{font-size:14px}
+
+/* общий вид заголовков разделов и групп */
+.asec>h2,.favgh,.lch>h3{text-wrap:balance}
+.asec>h2{font-size:24px;margin-bottom:2px}
+.asec>h2::before{display:none}
+.asec>p.src{font-size:13.5px;color:var(--muted);margin:0 0 14px}
+.tgroup,.favgh,.lch>h3{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);border:0;padding:0;margin:0 0 8px;background:none}
+.tgroup::after,.favgh::after,.lch>h3::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* Статьи */
+.artsearch input{border-radius:12px;padding:12px 14px;box-shadow:var(--shadow-sm)}
+.jump a{border-radius:999px}
+.jump a:hover{background:var(--accent-soft)}
+.faq{gap:12px}
+.faq .card{border-radius:14px;padding:16px;gap:10px}
+.faq .card.key{border-color:var(--line);box-shadow:none}
+.faq .card h4{font-size:17px;line-height:1.3;text-wrap:balance}
+.faq .card .line{gap:6px 8px}
+.table{border-radius:14px;background:var(--surface)}
+.table .tgroup{padding:16px 14px 6px;border-top:0}
+.table .tgroup:first-child{padding-top:12px}
+details.arow{border-top:1px solid var(--line)}
+.tgroup+details.arow{border-top:0}
+details.arow>summary{padding:10px 14px;align-items:center}
+details.arow>summary:hover{background:var(--surface-2)}
+details.arow[open]>summary{background:var(--accent-soft);border-bottom:0}
+details.arow>summary .s{color:var(--ink)}
+.rowbody{background:var(--accent-soft);padding:4px 14px 16px 14px}
+.rowbody>p{max-width:78ch;line-height:1.55}
+.sign{border-radius:14px}
+
+/* Законы */
+.lawhead{gap:12px}
+.lawtools input,.lawtools select{border-radius:10px}
+.lawtools input{box-shadow:var(--shadow-sm)}
+.lch{margin-top:30px}
+.lart{border-radius:12px;padding:14px 50px 14px 16px;gap:14px}
+.lart>.art{margin-top:2px}
+.lawtxt{max-width:80ch;line-height:1.65}
+.lawtxt .h{font-weight:500}
+.side{padding-right:4px}
+.side .sg{margin:14px 10px 6px;font-size:11.5px}
+.side a{border-radius:8px;color:var(--muted)}
+.side a:hover{background:var(--surface);color:var(--ink)}
+
+/* Избранное */
+#vFav>.lead{margin-bottom:4px}
+.favchips{gap:8px}
+.favchips button{padding:7px 14px}
+.favgroup{margin-top:22px}
+.favlist{gap:8px}
+.favrow{gap:4px}
+.favadd{border-radius:12px;padding:12px 14px;gap:12px}
+.favadd:hover{background:var(--surface-2)}
+.favgo{background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:4px 12px;font-size:12.5px}
+.favadd:hover .favgo{background:var(--accent);color:var(--accent-ink)}
+.favadd.on{border-color:var(--line)}
+.favadd.on .favgo{background:var(--ok);color:var(--ok-ink)}
+details.favcard{border-radius:12px}
+details.favcard>summary{padding:12px 14px}
+.favbody{border-radius:0 0 12px 12px;background:var(--surface-2)}
+details.favbackup{border-radius:12px}
+.favempty{border-radius:14px}
+@media (min-width:1300px){.favlist{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* сценарии из «Ситуаций»: реплики тем же облачком */
+.run .sayline{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:start;margin-top:10px;background:var(--surface-2);border:1px solid var(--line);border-left:1px solid var(--line);border-radius:4px 14px 14px 14px;padding:10px 12px 12px 14px}
+.run .sayline q{font-style:normal}
+.run .sayline .copy{border-color:transparent;background:var(--surface);color:var(--accent)}
+.run>li{border-radius:14px}
+@media (max-width:560px){.run .sayline{grid-template-columns:minmax(0,1fr)}.run .sayline .copy{justify-self:start}}
+
 /* ===== большой экран (Mac, ноутбук): на всю ширину и крупнее ===== */
 @media (min-width:1000px){
   .in{max-width:1400px}
