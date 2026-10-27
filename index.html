@@ -7,7 +7,7 @@
 <title>Шпаргалка ДПС</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Russo+One&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap">
 <style>
 
 /* Layout: sticky duty bar (search + section chips) over a single column of sections; article numbers set like plate-style mono chips */
@@ -812,6 +812,135 @@ details.favbackup{border-radius:12px}
   .ab>h3{font-size:20px}
   .arquick button span{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.3}
 }
+
+/* ===== строгая чёрная тема: одна тема для всех, без светлой =====
+   Layout: чёрный фон, тонкие линии вместо теней, жёлтый сигнальный акцент только для активного и главного,
+   красный — только УК, номера статей — белые таблички номерных знаков */
+:root:not(#_z){
+  --bg:#050505; --surface:#0f0f11; --surface-2:#18181b; --line:#2a2a2f; --ink:#f2f2ef; --muted:#8f8f97;
+  --accent:#ffcc00; --accent-ink:#0a0a0a; --accent-soft:#2a2205;
+  --sign:#ffcc00; --sign-ink:#0a0a0a;
+  --stop:#ff5b4f; --stop-soft:#2a0f0d; --ok:#45d27c; --ok-ink:#06140b; --ok-soft:#18181b;
+  --plate:#f2f2ee; --plate-ink:#0a0a0a; --plate-edge:#0a0a0a; --plate-uk:#c8141c;
+  --shadow:0 18px 44px rgba(0,0,0,.7); --shadow-sm:none;
+  --display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--body)}
+::selection{background:var(--accent);color:var(--accent-ink)}
+
+/* заголовки: узкий, плотный, прописной */
+.htitle,.scen h2,.asec>h2,.lawhead h2,.top .brand h1,.ab>h3,.arcol-h{font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.01em}
+.htitle{font-size:clamp(28px,4.4vw,40px);line-height:1}
+.ab>h3{font-size:20px}
+.top .brand h1{font-size:22px}
+.res-h,.tgroup,.favgh,.lch>h3,.arrun li.arph,.arquick-h,.ghead b,h3{letter-spacing:.09em}
+.lead,.muted,.note,.src{color:var(--muted)}
+
+/* шапка и вкладки */
+.top{background:var(--bg)}
+.top .brand .stripe{background:repeating-linear-gradient(135deg,var(--accent) 0 6px,#0a0a0a 6px 12px);box-shadow:0 0 0 1px var(--line)}
+.gsearch input,.artsearch input,.arpick input,.lawtools input,.lawtools select,.arfields input,.askform textarea{background:var(--surface);border-color:var(--line);border-radius:6px;box-shadow:none}
+.gsearch input:focus,.artsearch input:focus,.arpick input:focus{border-color:var(--accent);outline:none}
+.tabs{background:var(--surface);border-color:var(--line);border-radius:8px}
+.tabs button{border-radius:5px;text-transform:uppercase;letter-spacing:.06em;font-size:13px}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.favbtn{border-radius:6px;background:var(--surface);border-color:var(--line)}
+.favbtn span:first-child{color:var(--accent)}
+
+/* общие формы: меньше скруглений, линии вместо теней */
+.tile,.card,.table,.klist,.lart,.arcol,.archip,.run>li,.favadd,details.favcard,details.favbackup,details.lawbox,.arev label,.results,.arsug,.panel,.reason,.sign,.faq .card,.arbase li,.favempty,dl.arsum,pre.arrep,.askout,.whenbox,.warnbox,.toast{border-radius:6px}
+.btn,.copy,.res,.favchips button,.jump a,.arquick button,.qplus{border-radius:5px}
+.tile,.card,.panel,.table,.klist,.lart,.arcol{background:var(--surface);border-color:var(--line);box-shadow:none}
+.tile:hover,.faq .card:hover{border-color:var(--muted);box-shadow:none;transform:none}
+.tile.hot{border-color:var(--line);box-shadow:inset 3px 0 0 var(--accent)}
+.tile::after{color:var(--muted)}
+.tile:hover::after{color:var(--accent)}
+.btn{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.copy{border-color:var(--line);color:var(--ink);background:var(--surface-2)}
+.copy:hover{border-color:var(--accent);color:var(--accent)}
+.lnk,a{color:var(--accent)}
+mark,.res mark,.lawtxt mark{background:var(--accent);color:var(--accent-ink)}
+.badge.w{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
+.badge.l{background:var(--stop-soft);border-color:var(--stop);color:var(--stop)}
+.warnbox,#vArrest .warnbox{background:var(--stop-soft);border-color:var(--stop);color:var(--ink)}
+.whenbox{background:var(--surface);border:1px solid var(--line)}
+
+/* номерные таблички: белая пластина с тёмным ободком */
+.art,.plate,.archip b,.arev small{background:var(--plate);color:var(--plate-ink);border:1.5px solid var(--plate-edge);box-shadow:0 0 0 1px var(--plate);border-radius:4px}
+.art.uk,.plate.uk,.archip.uk b,.arev small{color:var(--plate-uk)}
+.art.tp,.res .k.tp{background:transparent;color:var(--accent);border-color:var(--accent);box-shadow:none}
+.res .k{border-color:var(--line);color:var(--ink)}
+.res .k.uk{border-color:var(--stop);color:var(--stop)}
+.results,.arsug{background:var(--surface);border-color:var(--line)}
+.res:hover,.res:focus-visible,.arsug button:hover{background:var(--surface-2)}
+
+/* таблица статей и законы */
+details.arow>summary:hover,details.krow>summary:hover{background:var(--surface-2)}
+details.arow[open]>summary{background:var(--surface-2)}
+.rowbody{background:var(--surface-2)}
+.lawtxt{color:var(--ink)}
+.side a:hover{background:var(--surface-2)}
+.sign .c{background:#f2f2ee;color:#0a0a0a;border-color:var(--stop)}
+
+/* ===== калькулятор задержания ===== */
+.arsteps{background:var(--bg)}
+.arsteps button{border-top-width:3px}
+.arsteps button b{border-radius:4px;background:var(--surface);border-color:var(--line)}
+.arsteps button.has{border-top-color:var(--ink)}
+.arsteps button.has b{border-color:var(--ink);color:var(--ink)}
+.arsteps button[aria-current="step"]{border-top-color:var(--accent);color:var(--ink)}
+.arsteps button[aria-current="step"] b{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+/* сводка задержания: всегда видна под шагами */
+.arstrip{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.arstrip:empty{display:none}
+.arstrip span{display:inline-flex;align-items:baseline;gap:6px;font-size:13px;font-weight:600;background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:5px 9px;color:var(--ink);font-variant-numeric:tabular-nums}
+.arstrip span i{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.arstrip span.uk{border-color:var(--stop)}
+.arstrip span.lish{border-color:var(--stop);color:var(--stop)}
+.arstrip span.stars{color:var(--accent)}
+.arcol{border-top:1px solid var(--line)}
+.arcol.uk{border-top:2px solid var(--stop)}
+.arcol.koap{border-top:2px solid var(--ink)}
+.arcol-h span{background:var(--surface-2);color:var(--ink)}
+.arcol.uk .arcol-h span{background:var(--stop-soft);color:var(--stop)}
+.archip{background:var(--surface-2);border-color:var(--line)}
+.arquick.mine button:hover,.arquick.mine button:focus-visible{background:var(--surface-2);border-color:var(--line)}
+.qplus{background:var(--surface-2);color:var(--accent);border:1px solid var(--line)}
+.arquick.mine button:hover .qplus{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.arbase li{background:var(--surface)}
+.arev label{background:var(--surface);border-color:var(--line)}
+.arev label.on{background:var(--accent-soft);border-color:var(--accent)}
+.arev input{border-radius:3px}
+.arev input:checked{background:var(--accent);border-color:var(--accent)}
+.arev input:checked::after{border-color:var(--accent-ink)}
+.arrun>li.cur{background:var(--surface);border-color:var(--accent);box-shadow:none}
+.arrun>li[data-ari] .n{box-shadow:0 0 0 4px var(--bg)}
+.arrun>li.cur .n{box-shadow:0 0 0 4px var(--surface)}
+.run .n{border-radius:5px;background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+.arrun>li.cur .n{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.run>li.done .n{background:var(--ok);color:var(--ok-ink);border-color:var(--ok)}
+.run .sayline,.arrun .sayline{background:var(--surface-2);border-color:var(--line);border-radius:3px 8px 8px 8px}
+.arrun>li.cur .sayline{background:var(--accent-soft);border-color:#5a4a0c}
+.run .sayline .lbl,.arrun .sayline .lbl{color:var(--accent)}
+.arrun .sayline .copy{background:var(--surface)}
+dl.arsum{background:var(--surface);border-color:var(--line)}
+dl.arsum dt{background:var(--surface-2)}
+pre.arrep{background:var(--surface);border-color:var(--line)}
+/* кнопки «Назад / Далее» прилипают к низу экрана */
+.arnav{position:sticky;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);z-index:6;background:linear-gradient(to top,var(--bg) 70%,transparent);padding:16px 0 4px;margin-top:20px;border-top:0}
+@media (max-width:640px){
+  .arnav{bottom:calc(66px + env(safe-area-inset-bottom,0px));padding-bottom:8px}
+  .top .tabs{background:var(--surface);border-top-color:var(--line);box-shadow:none}
+  .top .tabs button{text-transform:none;letter-spacing:0}
+  .top .tabs button[aria-selected="true"]{background:transparent;color:var(--accent)}
+  .htitle{font-size:28px}
+}
+@media (min-width:1000px){.htitle{font-size:44px}.ab>h3{font-size:24px}}
 </style>
 </head>
 <body>
@@ -1964,6 +2093,18 @@ function arReport(p){
   L1.push("Статьи и право на защиту разъяснены: "+(p.ukDet.length?"да":"—"),"Видеозапись: есть, хранить не менее 48 часов");
   return L1.join("\n");
 }
+function arStrip(p){
+  if(!p.uk.length&&!p.ko.length) return "";
+  const stars=Math.max(0,...p.uk.map(r=>((r.sancText||"").match(/★+/)||[""])[0].length));
+  const P=[];
+  if(p.uk.length) P.push(`<span class="uk"><i>УК</i>${p.uk.length}</span>`);
+  if(p.ko.length) P.push(`<span><i>КоАП</i>${p.ko.length}</span>`);
+  if(p.ko.length&&!AR.ev.vip) P.push(`<span><i>Штраф</i>до ${money(p.fines)} ₽</span>`);
+  if(stars) P.push(`<span class="stars"><i>Розыск</i>${"★".repeat(stars)}</span>`);
+  if(p.lish.length) P.push(`<span class="lish"><i>Права</i>лишение</span>`);
+  if(p.evac.length) P.push(`<span><i>ТС</i>эвакуация</span>`);
+  return P.join("");
+}
 function renderArrest(){
   const keys=arKeys(), p=arPlan();
   const chip=k=>{const r=ROWINFO[k], auto=autoReason(k); return `<span class="archip${r.code==="uk"?" uk":""}"><b>${esc(artLabel(k))}</b><span>${esc(r.d)}</span><small>${esc(r.sancText)}${auto?" · по ходу: "+esc(lc(auto)):""}</small><span class="chipbtns">${starBtn("row|"+k," sm")}${auto?"":`<button type="button" class="rm" data-arrm="${esc(k)}" aria-label="Убрать ${esc(artLabel(k))}">×</button>`}</span></span>`;};
@@ -1979,6 +2120,7 @@ function renderArrest(){
   const warns=p.warn.map(w=>`<p class="warnbox">${esc(w)}</p>`).join("");
   $("vArrest").innerHTML=`<h2 class="htitle">Задержание</h2><p class="lead">Идите по шагам. Между ними можно переключаться в любой момент — всё сохраняется.</p>
   <nav class="arsteps" id="arsteps" aria-label="Шаги задержания"></nav>
+  <div class="arstrip" id="arstrip" aria-label="Сводка задержания">${arStrip(p)}</div>
   <section class="ab" data-ars="1"><h3><span>1</span>Что нарушил</h3>
     <div class="arpick"><label for="arq" class="hide">Добавить статью</label><input id="arq" type="search" placeholder="Статья: номер или слова — 319.1, сплошная, угон…" autocomplete="off"><div id="arsug" class="arsug" hidden></div></div>
     <div class="arcols">${arCol("uk","УК")}${arCol("koap","КоАП")}</div>
