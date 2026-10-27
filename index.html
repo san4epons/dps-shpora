@@ -941,6 +941,33 @@ pre.arrep{background:var(--surface);border-color:var(--line)}
   .htitle{font-size:28px}
 }
 @media (min-width:1000px){.htitle{font-size:44px}.ab>h3{font-size:24px}}
+
+/* патч-ноут на главной */
+.patch{margin:18px 0 6px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px 18px;display:grid;gap:10px}
+.patch-top{display:flex;align-items:center;gap:10px}
+.patch-tag{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:var(--accent);color:var(--accent-ink);border-radius:4px;padding:3px 8px}
+.patch-top time{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.patch h3{margin:0;font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:.01em;text-transform:none;color:var(--ink);text-wrap:balance}
+.patch-key{margin:0;padding-left:18px;display:grid;gap:6px;max-width:80ch;line-height:1.5}
+.patch-key b{color:var(--ink)}
+details.patch-more>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--accent);padding:6px 0}
+details.patch-more>summary::-webkit-details-marker{display:none}
+details.patch-more>summary .chev{color:var(--accent)}
+.patch-body{display:grid;gap:10px;padding-top:6px;max-width:86ch;line-height:1.55}
+.patch-body h4{margin:12px 0 0;font-family:var(--display);font-weight:700;font-size:17px;text-transform:uppercase;letter-spacing:.04em}
+.patch-body p{margin:0}
+.patch-body ul{margin:0;padding-left:18px;display:grid;gap:6px}
+ul.pn-map{list-style:none;padding:0;gap:0;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+ul.pn-map li{display:grid;grid-template-columns:96px 18px 108px minmax(0,1fr);gap:8px;align-items:baseline;padding:8px 12px;border-top:1px solid var(--line)}
+ul.pn-map li:first-child{border-top:0}
+.pn-old{font-family:var(--mono);color:var(--muted);text-decoration:line-through}
+.pn-arrow{color:var(--muted)}
+.pn-new{font-family:var(--mono);font-weight:700;color:var(--plate-uk);background:var(--plate);border:1.5px solid var(--plate-edge);box-shadow:0 0 0 1px var(--plate);border-radius:4px;padding:0 6px;justify-self:start;white-space:nowrap;font-size:12.5px}
+.pn-what{color:var(--ink)}
+ul.pn-log{list-style:none;padding:0}
+ul.pn-log li{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px}
+ul.pn-log time{font-family:var(--mono);color:var(--muted)}
+@media (max-width:560px){ul.pn-map li{grid-template-columns:auto auto minmax(0,1fr);row-gap:2px}.pn-what{grid-column:1/-1}.patch{padding:14px}}
 </style>
 </head>
 <body>
@@ -1704,11 +1731,71 @@ function show(tok,opt){
 document.addEventListener("click",e=>{const b=e.target.closest("[data-go]"); if(b){e.preventDefault(); nav(b.dataset.go);}});
 
 /* ---------- grids ---------- */
+const PATCH=`<section class="patch" aria-labelledby="patch-h">
+  <div class="patch-top"><span class="patch-tag">Патч-ноут</span><time datetime="2026-10-27">27.10.2026</time></div>
+  <h3 id="patch-h">Новые законы: УК, УПК, КоАП, неприкосновенность</h3>
+  <ul class="patch-key">
+    <li><b>УК перенумерован</b> как в УК РФ: неподчинение ГИБДД теперь УК 319.1 ч.1, а не 17.6.</li>
+    <li><b>ПК отменён</b> — порядок задержания теперь в УПК: всё задержание не дольше 60 минут, «передать за 30 минут» больше нет.</li>
+    <li><b>Маска или отказ показать документы</b> сами по себе больше не основание для наручников.</li>
+    <li><b>Штраф</b> оплачивают в течение 24 часов: за отказ на месте задерживать нельзя.</li>
+  </ul>
+  <details class="patch-more" id="patch-more"><summary>Читать всё, что изменилось${CHEV}</summary>
+  <div class="patch-body">
+    <h4>1. УК — новая редакция</h4>
+    <p>Номера статей как в УК РФ. У каждой части звёзды — степень розыска (не больше 10 мес. за звезду и 50 мес. всего у должностного лица) и отметка [Р] или [Ф]: от неё зависит, кому передавать. ГИБДД по-прежнему только задерживает и передаёт (УК 44.1).</p>
+    <ul class="pn-map"><li><span class="pn-old">17.6 ч.1</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 319.1 ч.1</span><span class="pn-what">не остановился по требованию ГИБДД — ★★, 10 000 ₽ или до 20 мес.</span></li><li><span class="pn-old">17.6 (иное)</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 319.1 ч.2</span><span class="pn-what">не выполнил иное требование, мешает работать — 100 000 ₽ или до 30 мес.</span></li><li><span class="pn-old">17.7</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 315.1</span><span class="pn-what">не оплатил штраф за 24 часа (отказ на месте — не преступление)</span></li><li><span class="pn-old">17.3</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 319</span><span class="pn-what">публичное оскорбление сотрудника</span></li><li><span class="pn-old">17.2</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 318</span><span class="pn-what">насилие или угроза сотруднику</span></li><li><span class="pn-old">17.1</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 317</span><span class="pn-what">посягательство на жизнь сотрудника</span></li><li><span class="pn-old">17.8</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 319.2</span><span class="pn-what">помеха задержанию</span></li><li><span class="pn-old">10.3</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 166</span><span class="pn-what">угон — только если машину сдвинули с места</span></li><li><span class="pn-old">6.8</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 264</span><span class="pn-what">ДТП с тяжким вредом или смертью</span></li><li><span class="pn-old">12.8</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 222</span><span class="pn-what">оружие, патроны, тазер, наручники, жезл</span></li><li><span class="pn-old">12.1</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 222.3</span><span class="pn-what">глушилка</span></li><li><span class="pn-old">13.1</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 228</span><span class="pn-what">наркотики: до 5 г — ч.1, порога «до 3 г» нет, 1 шт. = 1 г</span></li><li><span class="pn-old">16.1</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 314</span><span class="pn-what">в розыске, уклонение от наказания</span></li><li><span class="pn-old">16.11</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 313</span><span class="pn-what">побег из-под ареста</span></li><li><span class="pn-old">12.7</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 213.1</span><span class="pn-what">закрытая территория и режимный объект (части поменялись)</span></li><li><span class="pn-old">15.4 / 15.5</span><span class="pn-arrow" aria-hidden="true">→</span><span class="pn-new">УК 290 / 291</span><span class="pn-what">получение / дача взятки</span></li></ul>
+    <h4>2. ПК отменён, вместо него УПК</h4>
+    <ul>
+      <li>Основания задержания (УПК 91): застали при совершении или сразу после; указали потерпевшие или очевидцы; явные следы на нём; есть ориентировка. Только в ходе пресечения или непрерывного преследования, в том числе пока он в розыске.</li>
+      <li>Ваши шаги (УПК 92): наручники → удостоверение по требованию → обыск, если есть основания → причина, статья и права → личность и госслужба → передать. Адвокат, прокурор и допрос — у принимающего.</li>
+      <li>Права теперь звучат так: «Вы задержаны по подозрению в совершении преступления, предусмотренного [пункт, часть, статья] УК РО, за […]. Вы имеете право на защиту и вправе вызвать адвоката. По вашей просьбе статьи будут разъяснены полностью». Старая фраза со ст. 36 Конституции больше не верна.</li>
+      <li>Передавать: [Р] — дознавателю МВД (не ГИБДД), [Ф] — ФСБ, любое — СК. Без затягивания, всё задержание не дольше 60 минут (УПК 94).</li>
+      <li>Маска или отказ показать документы — не основание (УПК 91 ч.4). Установление личности — только если уже есть основания задержания.</li>
+      <li>Видео — снимать задержание, обыск, установление личности и любую остановку за нарушение; хранить не меньше 48 часов (УПК 166).</li>
+      <li>Обыск машины — при признаках преступления, по ордеру или при ЧП. Ордер на обыск ТС — только при основаниях УПК 182 ч.12.</li>
+    </ul>
+    <h4>3. Остановка машины</h4>
+    <p>Теперь по «О полиции» 3.3 «г»: данные о нарушении ПДД, розыск, ориентировка, ДТП или проверка соблюдения ПДД. «Выборочной проверки на посту» и обязанности «заглушить двигатель» в законах больше нет. Не остановился — УК 319.1 ч.1.</p>
+    <h4>4. КоАП</h4>
+    <ul>
+      <li>Штраф оплачивают в течение 24 часов с момента объявления (КоАП 3.2). Правила «отвезти к банкомату» больше нет.</li>
+      <li>КоАП 12.3 (знак аварийной остановки) отменена.</li>
+      <li>За неисправность (11.3) и отсутствие прав или паспорта (11.8) водителя отстраняют от управления. При отстранении машину эвакуируют, даже если водитель на месте (26.4, 26.5).</li>
+      <li>Без своей видеозаписи — штраф вам до 100 000 ₽ (9.10), запись напарника не спасает.</li>
+    </ul>
+    <h4>5. Оружие и сила</h4>
+    <ul>
+      <li>«Неповиновение» больше не основание стрелять. В водителя, который просто не остановился, стрелять нельзя; выстрел по колёсам — «использование» оружия.</li>
+      <li>Стрелять можно: самооборона, угроза жизни других, вооружённое или опасное для жизни сопротивление, погоня за подозреваемым в насильственном преступлении — и только если иначе нельзя, после требования прекратить и предупреждения.</li>
+      <li>Человек с ножом идёт на вас — можно целиться, стрелять — только при основании.</li>
+      <li>Ступеней силы и дистанции 6 метров в законах больше нет.</li>
+      <li>Брать машину гражданина для погони нельзя — только служебный транспорт.</li>
+    </ul>
+    <h4>6. Неприкосновенность</h4>
+    <ul>
+      <li>Совета Федерации нет — неприкосновенны депутаты Госдумы (федеральные министры и представители МВД, ГИБДД, Армии, Больницы, СК, ФСО, прокуратуры).</li>
+      <li>Директор ФСБ и начальники МВД, ГИБДД, Армии, СК по должности больше не неприкосновенны.</li>
+      <li>Задержать можно за умышленные преступления против жизни и здоровья, свободы, общественной безопасности и конституционного строя (и УК 287.1). По требованию Генпрокурора, его заместителя или Госсоветника — по любой статье.</li>
+      <li>Прокурора вызывают из КПЗ через «Контакты»: ответа ждать до 10 минут, приезда — ещё до 10. Не приехал — отпустить, материалы в СК за 24 часа.</li>
+      <li>Машину неприкосновенного можно остановить только по решению суда, ордеру Генпрокуратуры, при угрозе движению или признаках преступления.</li>
+    </ul>
+    <h4>7. ПДД</h4>
+    <p>Без изменений.</p>
+    <h4>Обновления шпаргалки</h4>
+    <ul class="pn-log">
+      <li><time>28.10</time>Строгая чёрная тема. В «Задержании» — сводка (статьи, штраф, розыск, лишение) и кнопки «Назад / Далее» внизу экрана.</li>
+      <li><time>27.10</time>Шпаргалка переписана под новые законы. Избранное и задержание сами перевелись на новые номера статей.</li>
+      <li><time>26.10</time>Поиск по смыслу («неположенное место», «машина на тротуаре»). «Задержание» по шагам, фразы для зачитки прямо в шагах. Статьи по порядку номеров.</li>
+    </ul>
+  </div></details>
+</section>`;
 function gridDo(){
-  $("vGrid").innerHTML=`<h2 class="htitle">Что делать?</h2><p class="lead">Выберите ситуацию — откроется короткий порядок действий по шагам с готовыми фразами.</p>
+  $("vGrid").innerHTML=`<h2 class="htitle">Что делать?</h2><p class="lead">Выберите ситуацию — откроется короткий порядок действий по шагам с готовыми фразами.</p>${PATCH}
   <div class="tiles sc" style="margin-top:16px">${SC.map(s=>`<button type="button" class="tile${s.hot?" hot":""}" data-go="${s.id}"><span class="t">${s.t}</span><span class="d">${s.d}</span></button>`).join("")}</div>
   <div class="ghead"><b>Быстро найти</b></div>
-  <div class="tiles"><button type="button" class="tile hot" data-go="arrest"><span class="t">Собрать задержание</span><span class="d">Выберите статьи — получите порядок действий, фразы и итог</span></button><button type="button" class="tile" data-go="fav"><span class="t">★ Избранное${FAV.length?` (${FAV.length})`:""}</span><span class="d">${FAV.length?"Ваши статьи и ситуации":"Отмечайте ☆ нужные статьи — они соберутся здесь"}</span></button><button type="button" class="tile" data-go="art"><span class="t">Какая статья и сколько?</span><span class="d">КоАП, УК, лишение прав, скорость</span></button><button type="button" class="tile" data-go="law"><span class="t">Полный текст закона</span><span class="d">УК, КоАП, ПК, ПДД и другие</span></button></div>`;
+  <div class="tiles"><button type="button" class="tile hot" data-go="arrest"><span class="t">Собрать задержание</span><span class="d">Выберите статьи — получите порядок действий, фразы и итог</span></button><button type="button" class="tile" data-go="fav"><span class="t">★ Избранное${FAV.length?` (${FAV.length})`:""}</span><span class="d">${FAV.length?"Ваши статьи и ситуации":"Отмечайте ☆ нужные статьи — они соберутся здесь"}</span></button><button type="button" class="tile" data-go="art"><span class="t">Какая статья и сколько?</span><span class="d">КоАП, УК, лишение прав, скорость</span></button><button type="button" class="tile" data-go="law"><span class="t">Полный текст закона</span><span class="d">УК, КоАП, УПК, ПДД и другие</span></button></div>`;
+  document.querySelectorAll("#vGrid .patch-key, #vGrid .patch-body > p, #vGrid .patch-body > ul:not(.pn-map)").forEach(el=>linkify(el));
 }
 function gridInstr(){
   $("vGrid").innerHTML=`<h2 class="htitle">Инструктор</h2><p class="lead">Обязанности старшего состава ДПС.</p>`+INSTR.map(g=>`<div class="ghead"><b>${g.g}</b></div><div class="tiles">${g.items.map(([id,t,d,hot])=>`<button type="button" class="tile${hot?" hot":""}" data-go="${id}"><span class="t">${t}</span><span class="d">${d}</span></button>`).join("")}</div>`).join("");
