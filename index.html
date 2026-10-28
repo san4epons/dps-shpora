@@ -7,7 +7,7 @@
 <title>Шпаргалка ДПС</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=PT+Sans+Narrow:wght@400;700&family=PT+Mono&display=swap">
 <style>
 
 /* Layout: sticky duty bar (search + section chips) over a single column of sections; article numbers set like plate-style mono chips */
@@ -993,6 +993,76 @@ details.gd[open]>summary{border-bottom:1px solid var(--line)}
 .gd-ex b{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
 .gd-ex p{margin:4px 0 0;line-height:1.5}
 @media (max-width:700px){.gd-cols{grid-template-columns:minmax(0,1fr)}details.gd>summary{grid-template-columns:minmax(0,1fr) 18px}.gd-law{grid-column:1;grid-row:2;text-align:left}details.gd>summary .chev{grid-row:1/3;grid-column:2}}
+
+/* ===== полицейская тема: синяя форма, белый, синий и красный — как у мигалки =====
+   Layout: тёмно-синий фон-«форма», белые таблички номеров, сверху полоса мигалки (красный | синий),
+   синий — активное и главное, красный — только УК и «нельзя» */
+:root:not(#_z){
+  --bg:#0a1322; --surface:#0f1b2f; --surface-2:#15243d; --line:#233656; --ink:#eef3fb; --muted:#8fa3c1;
+  --accent:#2f7cf6; --accent-ink:#ffffff; --accent-soft:#12284b;
+  --sign:#2f7cf6; --sign-ink:#ffffff;
+  --stop:#e5484d; --stop-soft:#2a1220; --ok:#a9c3ea; --ok-ink:#0a1322; --ok-soft:#15243d;
+  --link:#7fb0ff; --siren-red:#e5343c; --siren-blue:#2f7cf6;
+  --plate:#f4f6f8; --plate-ink:#0a0f18; --plate-edge:#0a0f18; --plate-uk:#c8141c;
+  --display:"PT Sans Narrow","Arial Narrow",system-ui,sans-serif;
+  --body:"PT Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"PT Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+body{background:var(--bg);font-size:16px}
+::selection{background:var(--accent);color:#fff}
+.lnk,a{color:var(--link)}
+
+/* шапка: полоса мигалки снизу, щит вместо полосок */
+.top{background:var(--bg);border-bottom:3px solid transparent;border-image:linear-gradient(90deg,var(--siren-red) 0 50%,var(--siren-blue) 50% 100%) 1}
+.top .brand .stripe{width:24px;height:28px;border-radius:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 28'%3E%3Cpath d='M12 1 22 4.5v8.2c0 6.3-4.2 10.9-10 13.8C6.2 23.6 2 19 2 12.7V4.5z' fill='%231f5fd6' stroke='%23ffffff' stroke-width='1.6'/%3E%3Cpath d='M2.8 11h18.4v3.4H2.8z' fill='%23ffffff'/%3E%3Cpath d='M12 4.2 18.6 6.6v3H5.4v-3z' fill='%23e3343c'/%3E%3C/svg%3E") center/contain no-repeat;box-shadow:none}
+.top .brand h1{letter-spacing:.04em}
+.tabs{background:var(--surface);border-color:var(--line)}
+.tabs button{color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--accent);color:#fff}
+.favbtn span:first-child{color:#fff}
+.gsearch input:focus,.artsearch input:focus,.arpick input:focus{border-color:var(--accent)}
+
+/* заголовки: узкий шрифт, под главным — полоса как на борту машины ДПС */
+.htitle,.scen h2,.asec>h2,.lawhead h2,.top .brand h1,.ab>h3,.arcol-h,.guide h3,.patch h3,.gd-t{font-family:var(--display);font-weight:700}
+.htitle::after{content:"";display:block;width:132px;height:6px;margin-top:12px;background:linear-gradient(90deg,#ffffff 0 34%,var(--accent) 34% 100%);border-radius:1px}
+
+/* плитки и карточки */
+.tile.hot{box-shadow:inset 3px 0 0 var(--accent)}
+.tile:hover::after{color:var(--link)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.copy:hover{border-color:var(--accent);color:var(--link)}
+mark,.res mark,.lawtxt mark{background:var(--accent);color:#fff}
+.art.tp,.res .k.tp{color:var(--link);border-color:var(--accent)}
+.ghead{border-bottom-color:var(--line)}
+
+/* патч-ноут и памятка */
+.patch-tag{background:var(--accent);color:#fff}
+details.patch-more>summary,details.patch-more>summary .chev{color:var(--link)}
+.gd-can{border-top-color:var(--accent)}
+.gd-can .gd-h{color:var(--link)}
+.gd-ex b{color:var(--link)}
+.gd-law{color:var(--muted)}
+
+/* калькулятор задержания */
+.arsteps button.has{border-top-color:var(--ok)}
+.arsteps button.has b{border-color:var(--ok);color:var(--ok)}
+.arsteps button[aria-current="step"]{border-top-color:var(--accent)}
+.arsteps button[aria-current="step"] b{background:var(--accent);border-color:var(--accent);color:#fff}
+.arstrip span.stars{color:#fff}
+.arcol.koap{border-top-color:var(--accent)}
+.qplus{color:var(--link)}
+.arquick.mine button:hover .qplus{background:var(--accent);color:#fff;border-color:var(--accent)}
+.arev label.on{background:var(--accent-soft);border-color:var(--accent)}
+.arev input:checked{background:var(--accent);border-color:var(--accent)}
+.arev input:checked::after{border-color:#fff}
+.arrun>li.cur{border-color:var(--accent)}
+.arrun>li.cur .n{background:var(--accent);color:#fff;border-color:var(--accent)}
+.run>li.done .n{background:transparent;color:var(--ok);border-color:var(--ok)}
+.arrun>li.cur .sayline{background:var(--accent-soft);border-color:#244c86}
+.run .sayline .lbl,.arrun .sayline .lbl{color:var(--link)}
+.arnav{background:linear-gradient(to top,var(--bg) 70%,transparent)}
+@media (max-width:640px){.top .tabs button[aria-selected="true"]{background:transparent;color:var(--link)}.top .tabs{border-top:3px solid transparent;border-image:linear-gradient(90deg,var(--siren-red) 0 50%,var(--siren-blue) 50% 100%) 1}}
 </style>
 </head>
 <body>
@@ -1811,7 +1881,7 @@ const PATCH=`<section class="patch" aria-labelledby="patch-h">
     <p>Без изменений.</p>
     <h4>Обновления шпаргалки</h4>
     <ul class="pn-log">
-      <li><time>28.10</time>Штраф для ГИБДД — снова как раньше. Памятка «Как работать по новым законам» на главной. Строгая чёрная тема. В «Задержании» — сводка (статьи, штраф, розыск, лишение) и кнопки «Назад / Далее» внизу экрана.</li>
+      <li><time>28.10</time>Полицейский дизайн. Штраф для ГИБДД — снова как раньше. Памятка «Как работать по новым законам» на главной. Строгая чёрная тема. В «Задержании» — сводка (статьи, штраф, розыск, лишение) и кнопки «Назад / Далее» внизу экрана.</li>
       <li><time>27.10</time>Шпаргалка переписана под новые законы. Избранное и задержание сами перевелись на новые номера статей.</li>
       <li><time>26.10</time>Поиск по смыслу («неположенное место», «машина на тротуаре»). «Задержание» по шагам, фразы для зачитки прямо в шагах. Статьи по порядку номеров.</li>
     </ul>
