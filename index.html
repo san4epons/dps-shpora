@@ -7,7 +7,7 @@
 <title>Шпаргалка ДПС</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=PT+Sans+Narrow:wght@400;700&family=PT+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap">
 <style>
 
 /* Layout: sticky duty bar (search + section chips) over a single column of sections; article numbers set like plate-style mono chips */
@@ -1063,6 +1063,23 @@ details.patch-more>summary,details.patch-more>summary .chev{color:var(--link)}
 .run .sayline .lbl,.arrun .sayline .lbl{color:var(--link)}
 .arnav{background:linear-gradient(to top,var(--bg) 70%,transparent)}
 @media (max-width:640px){.top .tabs button[aria-selected="true"]{background:transparent;color:var(--link)}.top .tabs{border-top:3px solid transparent;border-image:linear-gradient(90deg,var(--siren-red) 0 50%,var(--siren-blue) 50% 100%) 1}}
+
+/* читаемый шрифт: широкий и плотный, без узких и тонких начертаний */
+:root:not(#_z){
+  --display:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --muted:#aebdd4;
+}
+body{font-family:var(--body);font-weight:500;font-size:16.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+b,strong,.tile .t,.gd-t,.run .a,.archip>span:nth-child(2){font-weight:700}
+.htitle,.top .brand h1{font-weight:800;letter-spacing:0}
+.scen h2,.asec>h2,.lawhead h2,.ab>h3,.arcol-h,.guide h3,.patch h3{font-weight:800;text-transform:none;letter-spacing:0}
+.tabs button{font-weight:700;letter-spacing:.02em}
+.lead,.muted,.note,.src,small{font-weight:500}
+.art,.plate,.archip b,.arev small,.pn-new,.res .k,.gd-law{font-family:var(--mono);font-weight:700}
+.lawtxt{font-weight:500}
+input,select,textarea,button{font-family:var(--body)}
 </style>
 </head>
 <body>
