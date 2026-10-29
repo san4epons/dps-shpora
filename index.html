@@ -2026,6 +2026,7 @@ function gridLaw(){
   if(!CODES){ $("vGrid").innerHTML=head+`<p class="loading" data-needs-codes>Загружаю тексты законов…</p>`; onCodes(()=>{if(cur==="law") gridLaw()}); return; }
   const tile=c=>`<button type="button" class="tile" data-go="law-${c.id}"><span class="t">${esc(c.name)}</span><span class="d">${c.g.reduce((s,g)=>s+g.a.filter(a=>a.n).length,0)} статей</span><span class="ref">${esc(c.s)}</span></button>`;
   $("vGrid").innerHTML=head+LAWGROUPS.map(g=>`<div class="ghead"><b>${g.h}</b></div><div class="tiles">${g.ids.map(id=>LAW[id]).filter(Boolean).map(tile).join("")}</div>`).join("")+
+   `<div class="ghead"><b>Службе ГИБДД</b></div><div class="tiles"><a class="tile" href="ustav.html" style="text-decoration:none;color:inherit"><span class="t">Уставы ГИБДД</span><span class="d">Внутренний и Дисциплинарный: взыскания, запреты, переаттестация</span></a></div>`+
    `<div class="ghead"><b>Главное для ДПС</b><span>нажмите — откроется текст статьи</span></div><div class="klist">`+KEY.map(([h,rows])=>`<div class="tgroup">${esc(h)}</div>`+rows.map(([code,n,title])=>{const a=findArt(code,n),c=LAW[code];
      return `<details class="krow"><summary><span><span class="art">${esc((c.s.length>6?"":c.s+" ")+n)}</span></span><span>${esc(title)}</span>${CHEV}</summary><div class="kbody">${a?`<p class="lawtxt">${lawText(a)}</p>`:""}<p class="krowacts"><button type="button" class="lnk" data-law="${code}" data-n="${n}">Открыть в законе →</button>${a?starBtn("law|"+code+"|"+a.n):""}</p></div></details>`}).join("")).join("")+`</div>`;
 }
