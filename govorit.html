@@ -76,12 +76,14 @@ function stem(x){x=norm(x);return x.length>5?x.slice(0,x.length-2):x.length>=4?x
 function say(t){return esc(t).replace(/\[([^\]]+)\]/g,"<em>[$1]</em>")}
 function ref(a){var m=a.match(/^(\S+)(?: ч\.(\d+))?$/);return m[2]?"части "+m[2]+" статьи "+m[1]:"статьи "+m[1]}
 function lc(s){return s.charAt(0).toLowerCase()+s.slice(1)}
+function refTv(a){var m=a.match(/^(\S+)(?: ч\.(\d+))?$/);return m[2]?"частью "+m[2]+" статьи "+m[1]:"статьёй "+m[1]}
+function clean(s){return s.replace(/\s*\(бывш[^)]*\)/g,"")}
 function block(id,title,text,note,extra){return '<section class="step'+(extra&&extra.key?" key":"")+'"><h2><span class="num">'+esc(extra&&extra.n||"•")+'</span><span>'+esc(title)+(extra&&extra.practice?'<span class="tag">практика</span>':"")+'</span></h2><div class="say"><b>Скажите</b><q id="t-'+id+'">'+say(text)+'</q></div><button class="copy" type="button" data-c="'+id+'" data-text="'+esc(text)+'">Скопировать</button>'+(note?'<p class="note">'+esc(note)+'</p>':"")+"</section>"}
 function articleBlocks(a){
  var r=D.rows.filter(function(x){return x[0]===a})[0]; if(!r) return "";
  var base=a.replace(/\s.*$/,"").replace(/ч\..*$/,"").trim(), nt=D.notes[base]||"";
- var desc=lc(r[1]);
- var t1="Вы задержаны по подозрению в совершении преступления, предусмотренного "+ref(a)+" Уголовного кодекса РО, а именно: "+desc+". Вы имеете право на защиту и вправе вызвать адвоката. По вашей просьбе указанные статьи будут разъяснены полностью.";
+ var desc=clean(lc(r[1]));
+ var t1="Вы задержаны по подозрению в совершении преступления, предусмотренного "+refTv(a)+" Уголовного кодекса РО, а именно: "+desc+". Вы имеете право на защиту и вправе вызвать адвоката. По вашей просьбе указанные статьи будут разъяснены полностью.";
  var t2="Здравствуйте, инспектор ДПС ГИБДД [звание, фамилия]. Передаю задержанного [имя, фамилия, номер паспорта]. Задержан [дата, время] по "+ref(a)+" УК РО, а именно: "+desc+". Основание: [что было]. Причина, статья и право на защиту разъяснены. Обыск [проведён / не проводился], изъято: [перечень или «ничего»]. Личность [установлена / нет]. Госслужащим [является / нет]. Видеозапись есть. Прошу принять задержанного, материалы и изъятое.";
  var j=r[3]||"";
  var h='<div class="h">По статье: УК '+esc(a)+'</div><div class="sanc">'+esc(r[1])+" · "+esc(r[2])+(j?" · ["+esc(j)+"]":"")+"</div>";
