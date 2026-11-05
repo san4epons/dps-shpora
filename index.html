@@ -1360,6 +1360,25 @@ details.pr-audit li b{font-family:var(--mono);font-size:13px;font-weight:700}
 .chgbanner .btn{text-decoration:none;font-weight:800}
 .chgx{font:inherit;font-size:20px;line-height:1;width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
 
+/* ===== чтение законов ===== */
+.lawtools .fsz{display:inline-flex;gap:4px}
+.fsz button{font:inherit;font-weight:800;min-width:44px;min-height:40px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.fsz button:hover{border-color:var(--accent)}
+#vLaw.fsz-set .lawtxt{font-size:var(--lawfs)}
+#vLaw .lch>h3{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--hdr));z-index:4;background:var(--bg);padding:10px 0 8px;margin-bottom:0}
+.totop{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:26;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);box-shadow:var(--shadow);display:grid;place-items:center;cursor:pointer}
+.totop svg{width:22px;height:22px}
+@media (max-width:640px){.totop{bottom:calc(84px + env(safe-area-inset-bottom,0px))}}
+/* ===== фраза «Скажите» в ФСБ и СК — как в ГИБДД ===== */
+.pr .sayline{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:start;margin:0;background:var(--accent-soft);border:1px solid transparent;border-radius:4px 14px 14px 14px;padding:10px 12px 12px 14px}
+.pr .sayline q{quotes:none;font-style:normal;line-height:1.5}
+.pr .sayline .lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--link);margin-bottom:4px}
+.pr .sayline .copy{border-color:transparent;background:var(--surface);color:var(--link)}
+.pr .sayline .copy:hover{border-color:var(--accent)}
+.fc-say .sayl{background:var(--accent-soft);border:1px solid transparent;border-radius:4px 14px 14px 14px}
+.fc-say .sayl b{color:var(--link)}
+@media (max-width:560px){.pr .sayline{grid-template-columns:minmax(0,1fr)}.pr .sayline .copy{justify-self:start}}
+
 /* ===== СК ===== */
 .sk-box{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;display:grid;gap:10px}
 .sk-box>h3{margin:0;font-size:18px;font-weight:800}
@@ -1612,6 +1631,7 @@ details.ukrow[open]>summary .t small.dd{display:none}
             <input id="lq" type="search" placeholder="Поиск в этом законе: номер или слово" autocomplete="off">
             <label for="lch" class="hide">Перейти к главе</label>
             <select id="lch"></select>
+            <div class="fsz" role="group" aria-label="Размер текста"><button type="button" data-fs="-1" aria-label="Текст мельче">А−</button><button type="button" data-fs="1" aria-label="Текст крупнее">А+</button></div>
           </div>
           <p class="lawinfo" id="lInfo"></p>
         </div>
@@ -3275,11 +3295,11 @@ function renderFsb(){
 </div>
 <section class="fsb-sec"><h3>Чем занимается ФСБ</h3><p class="lead">Главное — сразу на плашке, подробности — «Подробнее».</p><div class="gc-grid">${FSB_CARDS.join("")}</div></section>
 <section class="fsb-sec princ" id="fsb-cycle"><h3>Задержание и арест по шагам</h3><p class="lead">ФСБ — сама себе дознаватель: проходите весь порядок УПК 92 и сами выносите решение. Порядок можно менять по обстановке, если это не нарушает права задержанного (УПК 92 ч.4).</p>
-<ol class="pr-list">${FSB_STEPS.map(([h,t,law,say],i)=>`<li class="pr${i===7?" warn":""}"><span class="pr-n">${i+1}</span><div class="pr-main"><h4>${h}</h4><p class="pr-rule">${t}</p>${say?`<p class="say"><b>Сказать</b>${esc(say)}</p>`:""}<p class="pr-law">${law}</p></div></li>`).join("")}</ol>
+<ol class="pr-list">${FSB_STEPS.map(([h,t,law,say],i)=>`<li class="pr${i===7?" warn":""}"><span class="pr-n">${i+1}</span><div class="pr-main"><h4>${h}</h4><p class="pr-rule">${t}</p>${say?sayLine("fsay-"+i,"Скажите",say):""}<p class="pr-law">${law}</p></div></li>`).join("")}</ol>
 ${clockBtn()}<p class="fsb-warn"><b>Всё задержание — не дольше 60 минут</b> (УПК 94). Затягивать нельзя (УПК 92 ч.2). Задержанного держим в условиях без угрозы жизни и здоровью (УПК 10).</p></section>
 <section class="fsb-sec"><h3>Какими законами оперировать</h3><p class="lead">Нажмите — откроется текст статьи.</p><div class="fsb-refs">${FSB_REFS.map(([h,rows])=>`<div class="fsb-refg"><h4>${h}</h4>${rows.map(([c,n,t])=>`<button type="button" class="fsb-ref" data-law="${c}" data-n="${n}"><span class="art">${esc(LAWREF[c]==="УК"||LAWREF[c]==="УПК"?LAWREF[c]+" "+n:({terr:"Терр. ",docs:"Госдок ",chp:"ЧП ",fsblaw:"ФЗ о ФСБ "}[c]||"")+n)}</span><span>${esc(t)}</span></button>`).join("")}</div>`).join("")}
 <div class="fsb-refg"><h4>Законы целиком</h4>${[["fsblaw","ФЗ о ФСБ"],["immun","ФЗ о неприкосновенности"],["terr","Закон о территориях"],["docs","Закон о госдокументах"],["chp","ФКЗ о ЧП и ВП"],["upk","УПК"],["uk","УК"]].map(([c,t])=>`<button type="button" class="fsb-ref" data-go="law-${c}"><span class="art">${esc(t.split(" ")[0])}</span><span>${esc(t)}</span></button>`).join("")}</div></div></section>`;
-  linkify(el);
+  linkify(el); hookCopy(el);
   onCodes(()=>el.querySelectorAll(".fsb-ref[data-law]").forEach(b=>{ if(!exists(b.dataset.law,b.dataset.n)){ b.classList.add("badref"); b.title="Такой статьи нет в законах сервера"; } }));
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-scroll]"); if(b){ e.preventDefault(); const t=$(b.dataset.scroll); if(t) t.scrollIntoView({behavior:"smooth",block:"start"}); }});
@@ -3544,7 +3564,7 @@ function renderSk(){
 </div>
 <section class="fsb-sec"><h3>Чем занимается СК</h3><p class="lead">Главное — сразу на плашке, подробности — «Подробнее».</p><div class="gc-grid">${SK_CARDS.join("")}</div></section>
 <section class="fsb-sec"><h3>Какими законами оперировать</h3><p class="lead">Нажмите — откроется текст статьи.</p>${refGroups(SK_REFS,[["sklaw","ФЗ о СК"],["ustavsk","Устав СК"],["upk","УПК"],["uk","УК"],["immun","ФЗ о неприкосновенности"],["prok","«О Генпрокуратуре»"],["terr","Закон о территориях"],["docs","Закон о госдокументах"]])}</section>`;
-  linkify(el); markBadRefs(el);
+  linkify(el); markBadRefs(el); hookCopy(el);
 }
 
 /* ---------- СК: вызов на задержание ---------- */
@@ -3607,7 +3627,7 @@ function renderSkCall(){
 <div class="sk-box"><h3>Прибыть за 10 минут</h3><div class="sk-timer" id="skTimer"><span class="v">10:00</span><button type="button" class="btn pri" id="skTStart">Принял вызов — засечь</button><button type="button" class="btn" id="skTReset">Сбросить</button></div><p class="fc-empty" id="skTm"></p></div>
 <p class="fsb-note"><b>Вызов не нужен</b>, если задержание по решению суда, ордеру на арест, требованию сотрудника ГП (УПК 91 ч.2.1) или постановлению СК о задержании; за насильственный захват или удержание власти; если на задержанном нет ни удостоверения, ни опознавательного знака (УПК 450 ч.4).</p>
 <section class="fsb-sec princ"><h3>По шагам</h3>
-<ol class="pr-list">${SK_CALL.map(([h,t,law,say],i)=>`<li class="pr${i===1?" warn":""}"><span class="pr-n">${i+1}</span><div class="pr-main"><h4>${h}</h4><p class="pr-rule">${t}</p>${say?`<p class="say"><b>Сказать</b>${esc(say)}</p>`:""}${i===SK_CALL.length-1?`<p class="say"><b>Сказать — наказание</b>${esc(SK_SAY_OK)}</p><p class="say"><b>Сказать — освобождение</b>${esc(SK_SAY_FREE)}</p>`:""}<p class="pr-law">${law}</p></div></li>`).join("")}</ol></section>
+<ol class="pr-list">${SK_CALL.map(([h,t,law,say],i)=>`<li class="pr${i===1?" warn":""}"><span class="pr-n">${i+1}</span><div class="pr-main"><h4>${h}</h4><p class="pr-rule">${t}</p>${say?sayLine("ssay-"+i,"Скажите",say):""}${i===SK_CALL.length-1?sayLine("ssay-ok","Скажите — наказание",SK_SAY_OK)+sayLine("ssay-free","Скажите — освобождение",SK_SAY_FREE):""}<p class="pr-law">${law}</p></div></li>`).join("")}</ol></section>
 <section class="fsb-sec" id="sk-check"><h3>Проверка законности</h3><p class="lead">Отметьте, что нарушено. Ничего — задержание законно.</p>
 <div class="sk-box"><p class="sk-chk-g">Основания для освобождения — УПК 94</p>${SK_CHK.filter(r=>r[0]==="free").map(([,id,t,law])=>`<label class="fc-chk"><input type="checkbox" data-skc="${id}"><span>${esc(t)}<small>${law}</small></span></label>`).join("")}
 <p class="sk-chk-g">Нарушения порядка</p>${SK_CHK.filter(r=>r[0]==="proc").map(([,id,t,law])=>`<label class="fc-chk"><input type="checkbox" data-skc="${id}"><span>${esc(t)}<small>${law}</small></span></label>`).join("")}
@@ -3618,7 +3638,7 @@ function renderSkCall(){
     $("skTReset").onclick=()=>{ ls(SKTK,""); clearInterval(skTick); skTick=0; skTimerDraw(); };
     el.addEventListener("change",e=>{ const c=e.target.closest("[data-skc]"); if(c){ SKC[c.dataset.skc]=c.checked; skVerdict(); } });
     $("skCReset").onclick=()=>{ SKC={}; el.querySelectorAll("[data-skc]").forEach(c=>c.checked=false); skVerdict(); };
-    linkify(el);
+    linkify(el); hookCopy(el);
   }
   if(+(ls(SKTK)||0)) skTimerRun(); else skTimerDraw();
   skVerdict();
@@ -3832,6 +3852,22 @@ ${CHG.laws.filter(l=>l.items.length&&LAW[l.id]).map(l=>`<section class="chg-law"
   },true);
   document.addEventListener("click",e=>{ if(!e.target.closest(".dept")) dept.classList.remove("open"); });
   document.addEventListener("keydown",e=>{ if(e.key==="Escape") dept.classList.remove("open"); });
+})();
+
+/* ---------- фраза «Скажите» с копированием (одинаково во всех разделах) ---------- */
+function sayLine(id,lbl,t){ return `<p class="sayline"><q id="${id}"><span class="lbl">${lbl}</span>${esc(t)}</q><button class="copy" type="button" data-copy="${id}">Копировать</button></p>`; }
+
+/* ---------- чтение законов: размер текста, «наверх» ---------- */
+const LFS=[14,15,16,17,18,20,22];
+function lawFsApply(){ let i=parseInt(ls("shpora-lawfs")); const v=$("vLaw"); if(isNaN(i)){ v.classList.remove("fsz-set"); return; } i=Math.max(0,Math.min(LFS.length-1,i)); v.classList.add("fsz-set"); v.style.setProperty("--lawfs",LFS[i]+"px"); }
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-fs]"); if(!b) return; let i=parseInt(ls("shpora-lawfs")); if(isNaN(i)) i=2; i=Math.max(0,Math.min(LFS.length-1,i+(+b.dataset.fs))); ls("shpora-lawfs",String(i)); lawFsApply(); toast(`Размер текста: ${LFS[i]}`); });
+lawFsApply();
+(()=>{
+  const up=document.createElement("button"); up.type="button"; up.className="totop"; up.hidden=true; up.setAttribute("aria-label","Наверх"); up.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>`;
+  document.body.append(up); up.onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+  const long=()=>/^(law-|changes$|art$|fsbuk$|skuk$|fav$)/.test(cur);
+  addEventListener("scroll",()=>{ up.hidden=!(long()&&scrollY>1200); },{passive:true});
+  addEventListener("hashchange",()=>{ up.hidden=true; });
 })();
 
 favCount();
