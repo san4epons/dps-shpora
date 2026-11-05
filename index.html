@@ -1197,7 +1197,10 @@ details.pr-audit li b{font-family:var(--mono);font-size:13px;font-weight:700}
   .top .brand{display:none}
   .dept button{font-size:13px;padding:8px 10px}
   #tab-fsb{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M12 2.5 20 5.5v6.2c0 5-3.4 8.6-8 10.8-4.6-2.2-8-5.8-8-10.8V5.5z'/%3E%3Cpath d='m12 8 1.3 2.7 3 .4-2.2 2.1.5 3L12 14.8l-2.6 1.4.5-3-2.2-2.1 3-.4z'/%3E%3C/svg%3E")}
-  #tab-fsbcalc{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'%3E%3Crect x='5' y='2.5' width='14' height='19' rx='2'/%3E%3Cpath d='M8 6.5h8v3H8zM8.5 13h.01M12 13h.01M15.5 13h.01M8.5 17h.01M12 17h.01M15.5 17h.01'/%3E%3C/svg%3E")}
+  #tab-sk{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M12 3v17M7 21h10M4 7h16M7 7l-3 7a3 3 0 0 0 6 0zM17 7l-3 7a3 3 0 0 0 6 0z'/%3E%3C/svg%3E")}
+  #tab-skcall{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M5 3.5h4l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5.5a2 2 0 0 1 2-2z'/%3E%3C/svg%3E")}
+  #tab-skcase{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M3 6.5A1.5 1.5 0 0 1 4.5 5H10l2 2h7.5A1.5 1.5 0 0 1 21 8.5v10a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z'/%3E%3Cpath d='M8 12.5h8M8 16h5'/%3E%3C/svg%3E")}
+  #tab-fsbcalc,#tab-skcalc{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'%3E%3Crect x='5' y='2.5' width='14' height='19' rx='2'/%3E%3Cpath d='M8 6.5h8v3H8zM8.5 13h.01M12 13h.01M15.5 13h.01M8.5 17h.01M12 17h.01M15.5 17h.01'/%3E%3C/svg%3E")}
   #tab-fsbuk{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M7 3h7l5 5v13H7z'/%3E%3Cpath d='M14 3v5h5M10 13h6M10 17h6'/%3E%3C/svg%3E")}
   #tab-fsblaw{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z'/%3E%3Cpath d='M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5'/%3E%3C/svg%3E")}
 }
@@ -1286,6 +1289,38 @@ details.pr-audit li b{font-family:var(--mono);font-size:13px;font-weight:700}
 .fc-acts .btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
 @media (max-width:640px){.fc-row{grid-template-columns:minmax(0,1fr);gap:2px}.fc-big .v{font-size:30px}.fc-acts .btn{flex:1 1 100%;text-align:center;padding:12px}}
 
+/* ===== СК ===== */
+.sk-box{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;display:grid;gap:10px}
+.sk-box>h3{margin:0;font-size:18px;font-weight:800}
+.sk-box>p{margin:0;line-height:1.5}
+.sk-timer{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.sk-timer .v{font-size:40px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink);min-width:3.2ch}
+.sk-timer.over .v{color:var(--stop)}
+.sk-timer .btn.pri,.sk-tpl .btn.pri,.sk-res .btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.sk-chk-g{margin:6px 0 0;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.sk-res{display:grid;gap:8px}
+.sk-res .fc-flag.good{background:var(--ok-soft);border-color:var(--ok)}
+.sk-res .fc-flag.good b{color:var(--ok)}
+.sk-res .fc-flag.warn{background:var(--surface-2);border-color:var(--sign,var(--line))}
+.sk-dl{display:grid;gap:10px}
+.sk-dl label{display:grid;gap:4px;font-weight:700;font-size:14px}
+.sk-dl input{font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);max-width:260px}
+.sk-acts{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;align-items:start}
+.sk-act{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:6px;min-width:0}
+.sk-act h4{margin:0;font-size:16px;font-weight:800}
+.sk-act p{margin:0;line-height:1.45;font-size:14.5px}
+.sk-act p b{display:block;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.sk-act .pr-law{margin:0;font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--muted)}
+.sk-tpl{display:grid;gap:8px}
+details.sk-t{background:var(--surface);border:1px solid var(--line);border-radius:6px}
+details.sk-t>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto 16px;gap:10px;align-items:center;padding:12px 14px;font-weight:800}
+details.sk-t>summary::-webkit-details-marker{display:none}
+details.sk-t>summary small{font-weight:600;color:var(--muted);font-family:var(--mono);font-size:12.5px}
+details.sk-t[open]>summary{border-bottom:1px solid var(--line)}
+.sk-t .body{padding:12px 14px;display:grid;gap:10px}
+.sk-t pre{margin:0;white-space:pre-wrap;word-break:break-word;font:inherit;font-size:14.5px;line-height:1.55;background:var(--bg);border:1px dashed var(--accent);border-radius:6px;padding:10px 12px}
+@media (max-width:640px){.sk-timer .btn{flex:1 1 40%;padding:12px}.sk-acts{grid-template-columns:minmax(0,1fr)}}
+
 /* ===== ФСБ: статьи УК ===== */
 .uk-tools{position:sticky;top:calc(var(--hdr) + 0px);z-index:5;background:var(--bg);padding:12px 0 10px;display:grid;gap:10px;margin-top:8px}
 .uk-tools input{width:100%;font:inherit;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
@@ -1318,7 +1353,7 @@ details.ukrow[open]>summary .t small.dd{display:none}
   <div class="in">
     <div class="top-row">
       <button class="brand" id="brand" type="button" data-go="do" aria-label="Главная"><span class="stripe" aria-hidden="true"></span><h1>Шпаргалка</h1></button>
-      <div class="dept" role="group" aria-label="Ведомство"><button type="button" id="d-gibdd" data-go="do" aria-pressed="true">ГИБДД</button><button type="button" id="d-fsb" data-go="fsb" aria-pressed="false">ФСБ</button></div>
+      <div class="dept" role="group" aria-label="Ведомство"><button type="button" id="d-gibdd" data-go="do" aria-pressed="true">ГИБДД</button><button type="button" id="d-fsb" data-go="fsb" aria-pressed="false">ФСБ</button><button type="button" id="d-sk" data-go="sk" aria-pressed="false">СК</button></div>
       <div class="gsearch" role="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <label for="gq" class="hide">Поиск</label>
@@ -1340,6 +1375,12 @@ details.ukrow[open]>summary .t small.dd{display:none}
       <button type="button" role="tab" id="tab-fsbuk" data-go="fsbuk">Статьи УК</button>
       <button type="button" role="tab" id="tab-fsblaw" data-go="fsblaw">Законы</button>
     </div>
+    <div class="tabs" id="tabsS" role="tablist" aria-label="Разделы СК" hidden>
+      <button type="button" role="tab" id="tab-sk" data-go="sk">Обзор</button>
+      <button type="button" role="tab" id="tab-skcall" data-go="skcall">Вызов</button>
+      <button type="button" role="tab" id="tab-skcase" data-go="skcase">Следствие</button>
+      <button type="button" role="tab" id="tab-skcalc" data-go="skcalc">Калькулятор</button>
+    </div>
   </div>
 </header>
 
@@ -1352,6 +1393,9 @@ details.ukrow[open]>summary .t small.dd{display:none}
     <div id="vFsb" hidden></div>
     <div id="vFsbCalc" hidden></div>
     <div id="vFsbUk" class="narrow" hidden></div>
+    <div id="vSk" hidden></div>
+    <div id="vSkCall" class="narrow" hidden></div>
+    <div id="vSkCase" hidden></div>
 
     <div id="vArt" hidden>
       <h2 class="htitle">Статьи</h2>
@@ -2100,12 +2144,16 @@ function lawText(a){
 
 /* ---------- router ---------- */
 let cur="";
-let DEPT=ls("shpora-dept")==="fsb"?"fsb":"gibdd";
-const TABS={gibdd:["do","arrest","art","law"],fsb:["fsb","fsbcalc","fsbuk","fsblaw"]};
+let DEPT=(d=>d==="fsb"||d==="sk"?d:"gibdd")(ls("shpora-dept"));
+const TABS={gibdd:["do","arrest","art","law"],fsb:["fsb","fsbcalc","fsbuk","fsblaw"],sk:["sk","skcall","skcase","skcalc"]};
+const DHOME={gibdd:"do",fsb:"fsb",sk:"sk"};
 function viewOf(tok){
   if(tok==="do"||tok==="art"||tok==="law"||tok==="arrest") return {kind:tok,tab:tok,dept:"gibdd"};
   if(tok==="fsb"||tok==="fsbcalc"||tok==="fsbuk") return {kind:tok,tab:tok,dept:"fsb"};
   if(tok==="fsblaw") return {kind:"law",tab:tok,dept:"fsb"};
+  if(tok==="sk"||tok==="skcall"||tok==="skcase") return {kind:tok,tab:tok,dept:"sk"};
+  if(tok==="skcalc") return {kind:"fsbcalc",tab:tok,dept:"sk"};
+  if(tok==="skuk") return {kind:"fsbuk",tab:"-",dept:"sk"};
   if(tok==="fav") return {kind:"fav",tab:"fav"};
   if(S[tok]) return {kind:"scen",tab:"do",dept:"gibdd",id:tok};
   if(/^law-/.test(tok)) return {kind:"lawread",tab:"",id:tok.slice(4)};
@@ -2113,11 +2161,11 @@ function viewOf(tok){
 }
 let curTab="do";
 function setDept(){
-  const f=DEPT==="fsb"; ls("shpora-dept",DEPT);
-  $("tabsG").hidden=f; $("tabsF").hidden=!f;
-  $("d-gibdd").setAttribute("aria-pressed",String(!f)); $("d-fsb").setAttribute("aria-pressed",String(f));
-  $("brand").dataset.go=f?"fsb":"do";
-  document.title=f?"Шпаргалка ФСБ":"Шпаргалка ДПС";
+  ls("shpora-dept",DEPT);
+  $("tabsG").hidden=DEPT!=="gibdd"; $("tabsF").hidden=DEPT!=="fsb"; $("tabsS").hidden=DEPT!=="sk";
+  [["d-gibdd","gibdd"],["d-fsb","fsb"],["d-sk","sk"]].forEach(([id,d])=>$(id).setAttribute("aria-pressed",String(DEPT===d)));
+  $("brand").dataset.go=DHOME[DEPT];
+  document.title={gibdd:"Шпаргалка ДПС",fsb:"Шпаргалка ФСБ",sk:"Шпаргалка СК"}[DEPT];
 }
 function nav(tok,opt={}){
   if(!viewOf(tok)) tok="do";
@@ -2129,9 +2177,9 @@ window.addEventListener("hashchange",()=>{const t=location.hash.slice(1)||"do"; 
 function show(tok,opt){
   const v=viewOf(tok)||viewOf("do"); cur=tok; ls("shpora-route",tok);
   if(v.dept) DEPT=v.dept; setDept();
-  curTab=v.tab||(DEPT==="fsb"?"fsblaw":"law");
-  TABS.gibdd.concat(TABS.fsb).forEach(t=>{const b=$("tab-"+t); const on=t===curTab; b.setAttribute("aria-selected",String(on)); b.tabIndex=on?0:-1;});
-  $("vGrid").hidden=!["do","instr","law"].includes(v.kind); $("vScen").hidden=v.kind!=="scen"; $("vArt").hidden=v.kind!=="art"; $("vTopic").hidden=v.kind!=="topic"; $("vLaw").hidden=v.kind!=="lawread"; $("vAsk").hidden=v.kind!=="ask"; $("vFav").hidden=v.kind!=="fav"; $("vArrest").hidden=v.kind!=="arrest"; $("vFsb").hidden=v.kind!=="fsb"; $("vFsbCalc").hidden=v.kind!=="fsbcalc"; $("vFsbUk").hidden=v.kind!=="fsbuk";
+  curTab=v.tab||({gibdd:"law",fsb:"fsblaw",sk:"-"}[DEPT]);
+  TABS.gibdd.concat(TABS.fsb,TABS.sk).forEach(t=>{const b=$("tab-"+t); const on=t===curTab; b.setAttribute("aria-selected",String(on)); b.tabIndex=on?0:-1;});
+  $("vGrid").hidden=!["do","instr","law"].includes(v.kind); $("vScen").hidden=v.kind!=="scen"; $("vArt").hidden=v.kind!=="art"; $("vTopic").hidden=v.kind!=="topic"; $("vLaw").hidden=v.kind!=="lawread"; $("vAsk").hidden=v.kind!=="ask"; $("vFav").hidden=v.kind!=="fav"; $("vArrest").hidden=v.kind!=="arrest"; $("vFsb").hidden=v.kind!=="fsb"; $("vFsbCalc").hidden=v.kind!=="fsbcalc"; $("vFsbUk").hidden=v.kind!=="fsbuk"; $("vSk").hidden=v.kind!=="sk"; $("vSkCall").hidden=v.kind!=="skcall"; $("vSkCase").hidden=v.kind!=="skcase";
   closeResults();
   if(v.kind==="do") gridDo();
   if(v.kind==="instr") gridInstr();
@@ -2144,6 +2192,9 @@ function show(tok,opt){
   if(v.kind==="fsb") renderFsb();
   if(v.kind==="fsbcalc") renderFsbCalc();
   if(v.kind==="fsbuk") renderFsbUk();
+  if(v.kind==="sk") renderSk();
+  if(v.kind==="skcall") renderSkCall();
+  if(v.kind==="skcase") renderSkCase();
   if(!opt.art&&!opt.row) window.scrollTo({top:0});
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-go]"); if(b){e.preventDefault(); nav(b.dataset.go);}});
@@ -3170,7 +3221,7 @@ function renderFsbCalc(){
   if(!el.dataset.ready){
     el.dataset.ready="1";
     el.innerHTML=`<h2 class="htitle">Калькулятор наказания</h2>
-<p class="lead">Добавьте статьи — покажу, сколько может назначить сотрудник ФСБ: срок, штраф, залог, категорию и подследственность. Решение — по УПК 226.7.</p>
+<p class="lead" id="fcLead"></p>
 <div class="fc"><div class="fc-box"><h3>Статьи</h3>
  <div class="fc-add"><label for="fcq" class="hide">Добавить статью УК</label><input id="fcq" type="search" placeholder="Номер или слово: 205, взятка, оружие…" autocomplete="off"><div id="fcSug" class="fc-sug" hidden></div></div>
  <ul id="fcList" class="fc-list"></ul>
@@ -3180,7 +3231,7 @@ function renderFsbCalc(){
   <label class="fc-chk"><input type="checkbox" id="fcGos"><span>Задержанный — госслужащий</span></label>
   <label class="fc-chk"><input type="checkbox" id="fcRec"><span>Рецидив или непогашенная судимость<small>Влияет на залог</small></span></label>
  </div>
- <div class="fc-acts"><button type="button" class="btn" id="fcClear">Очистить</button></div>
+ <div class="fc-acts"><button type="button" class="btn" id="fcClear">Очистить</button><button type="button" class="btn" id="fcUkGo">Все статьи УК</button></div>
 </div><aside class="fc-box fc-res" id="fcRes" aria-live="polite"></aside></div>`;
     const q=$("fcq"),sug=$("fcSug");
     const draw=()=>{ const r=fcSearch(q.value); if(!q.value.trim()){sug.hidden=true;return;}
@@ -3194,9 +3245,12 @@ function renderFsbCalc(){
     $("fcW").addEventListener("change",e=>{FC.w=e.target.value; fcSave(); renderFsbCalc();});
     [["fcCourt","court"],["fc319","i319"],["fcGos","gos"],["fcRec","rec"]].forEach(([id,k])=>$(id).addEventListener("change",e=>{FC[k]=e.target.checked; fcSave(); renderFsbCalc();}));
     $("fcClear").onclick=()=>{ FC={list:[],w:"auto",court:false,i319:false,gos:false,rec:false}; fcSave(); renderFsbCalc(); };
+    $("fcUkGo").onclick=()=>nav(DEPT==="sk"?"skuk":"fsbuk");
     el.addEventListener("click",e=>{ const b=e.target.closest("[data-copy]"); if(!b) return; const t=b.dataset.copy==="rep"?fcText(fcCalc()):b.closest(".sayl").querySelector("span").textContent;
       const ok=()=>toast("Скопировано"); try{navigator.clipboard.writeText(t).then(ok,()=>toast("Не удалось скопировать"))}catch(err){toast("Не удалось скопировать")} });
   }
+  const SK=DEPT==="sk";
+  $("fcLead").textContent=SK?"Добавьте статьи — покажу, сколько может назначить следователь СК: срок, штраф, залог и категорию. Решение — по УПК 226.7, в том числе после вызова на задержание госслужащего.":"Добавьте статьи — покажу, сколько может назначить сотрудник ФСБ: срок, штраф, залог, категорию и подследственность. Решение — по УПК 226.7.";
   $("fcW").value=FC.w; $("fcCourt").checked=FC.court; $("fc319").checked=FC.i319; $("fcGos").checked=FC.gos; $("fcRec").checked=FC.rec;
   $("fcList").innerHTML=FC.list.length?FC.list.map(x=>{const p=UKPA[x.a]; return `<li class="fc-item"><span class="art">${esc(p.a)}</span><div><b>${esc(p.t)}</b><small>${jbadge(p.j)} <span class="stars">${Array.isArray(p.s)?"":fsbStars(p.s)}</span> ${esc(p.ss)}</small>${Array.isArray(p.s)?`<label class="hide" for="st-${esc(x.a)}">Звёзд розыска</label><select id="st-${esc(x.a)}" data-st="${esc(x.a)}">${[1,2,3,4,5].map(n=>`<option value="${n}"${n===(x.s||1)?" selected":""}>${"★".repeat(n)} — ${10*n} мес.</option>`).join("")}</select>`:""}</div><button type="button" class="fc-x" data-del="${esc(x.a)}" aria-label="Убрать ${esc(p.a)}">×</button></li>`;}).join(""):`<li><p class="fc-empty">Пока пусто. Начните вводить номер статьи или слово — например «205» или «взятка». Статьи можно добавлять и из вкладки «Статьи УК».</p></li>`;
   const res=$("fcRes"), r=fcCalc();
@@ -3204,10 +3258,11 @@ function renderFsbCalc(){
   const fine=fineTxt(r.top.p), bail=fcBail(r);
   const ourJ=r.juris.includes("Ф"), onlyR=r.juris.every(j=>j==="Р"), onlyV=r.juris.every(j=>j==="В");
   const ex=r.L.filter(o=>o.p.art==="299"||o.p.art==="315");
-  const jt=ourJ?`<b>ФСБ</b> — есть отметка [Ф]<small>УПК 151 ч.2 п.2</small>`:onlyR?`<b>МВД</b> — только [Р]<small>Наше — лишь по запросу МВД/ГИБДД при массовых беспорядках. Иначе неотложные действия и передать (УПК 151 ч.5)</small>`:onlyV?`<b>Военная полиция</b> — [В]<small>УПК 151 ч.3 п.3</small>`:`<b>${r.juris.join(", ")}</b>`;
+  const jt=SK?`<b>СК</b> — любые преступления${ex.length?"":ourJ?", есть [Ф] — может и ФСБ":onlyR?", [Р] — может и МВД":""}<small>УПК 151 ч.2 п.1</small>`:ourJ?`<b>ФСБ</b> — есть отметка [Ф]<small>УПК 151 ч.2 п.2</small>`:onlyR?`<b>МВД</b> — только [Р]<small>Наше — лишь по запросу МВД/ГИБДД при массовых беспорядках. Иначе неотложные действия и передать (УПК 151 ч.5)</small>`:onlyV?`<b>Военная полиция</b> — [В]<small>УПК 151 ч.3 п.3</small>`:`<b>${r.juris.join(", ")}</b>`;
   const flags=[];
-  if(FC.gos) flags.push(`<p class="fc-flag"><b>Госслужащий.</b> Сначала уведомить прокурора, СК и руководство (УПК 450). Срок — только если преступление выявил прокурор или СК, принявший вызов; штраф — только прокурор, СК или суд (УК 44.1 ч.4). Исключения: суд или постановление, госпереворот, нет удостоверения и знака.</p>`);
-  if(ex.length) flags.push(`<p class="fc-flag"><b>УК 299 и 315</b> не расследуют ни ФСБ, ни МВД (УПК 151) — передать по подследственности.</p>`);
+  if(FC.gos&&SK) flags.push(`<p class="fc-flag info"><b>Госслужащий.</b> Вы приняли вызов и выявили преступление — можете назначить и срок, и штраф (УК 44.1 ч.4, УПК 450 ч.2–3). Неприкосновенному — только после лишения или ограничения статуса.</p>`);
+  if(FC.gos&&!SK) flags.push(`<p class="fc-flag"><b>Госслужащий.</b> Сначала уведомить прокурора, СК и руководство (УПК 450). Срок — только если преступление выявил прокурор или СК, принявший вызов; штраф — только прокурор, СК или суд (УК 44.1 ч.4). Исключения: суд или постановление, госпереворот, нет удостоверения и знака.</p>`);
+  if(ex.length) flags.push(SK?`<p class="fc-flag info"><b>УК 299 и 315</b> — дело СК: ни ФСБ, ни МВД их не расследуют (УПК 151).</p>`:`<p class="fc-flag"><b>УК 299 и 315</b> не расследуют ни ФСБ, ни МВД (УПК 151) — передать по подследственности.</p>`);
   if(r.cat===1&&r.total&&!r.full) flags.push(`<p class="fc-flag info"><b>Небольшая тяжесть:</b> максимальный срок в КПЗ не давать (УПК 108, примечание) — назначьте меньше ${r.total}.</p>`);
   if(r.W<r.maxSt&&!r.full) flags.push(`<p class="fc-flag info"><b>Розыск ниже, чем у статей.</b> Считаем по фактическому розыску на момент задержания (УПК 210 ч.6).</p>`);
   if(FC.i319&&!r.L.some(o=>o.p.art==="319")) flags.push(`<p class="fc-flag info"><b>Добавьте УК 319</b>, чтобы прибавить срок за оскорбление.</p>`);
@@ -3239,7 +3294,7 @@ function renderFsbUk(){
   if(!el.dataset.ready){
     el.dataset.ready="1";
     el.innerHTML=`<h2 class="htitle">Статьи УК</h2>
-<p class="lead">Все части статей УК: юрисдикция, звёзды розыска и санкция. [Ф] — расследует ФСБ, [Р] — МВД, [В] — военная полиция; смешанные относятся к каждой юрисдикции (УК 18.1).</p>
+<p class="lead" id="ukLead"></p>
 <div class="uk-tools"><label for="ukq" class="hide">Поиск статьи УК</label><input id="ukq" type="search" placeholder="Номер или слово: 222, наркотики, взятка…" autocomplete="off">
 <div class="chips" role="group" aria-label="Юрисдикция">${[["all","Все"],["f","Наши — есть [Ф]"],["onlyf","Только [Ф]"],["r","Только [Р]"],["v","С [В]"]].map(([k,t])=>`<button type="button" data-j="${k}">${t}</button>`).join("")}</div><p class="uk-count" id="ukN"></p></div>
 <div id="ukList"></div>`;
@@ -3247,6 +3302,9 @@ function renderFsbUk(){
     el.querySelector(".chips").addEventListener("click",e=>{const b=e.target.closest("[data-j]"); if(b){UKF.j=b.dataset.j; ls("fsb-ukj",UKF.j); drawUk();}});
     $("ukList").addEventListener("click",e=>{const b=e.target.closest("[data-add]"); if(b){ fcAdd(b.dataset.add); toast(`УК ${b.dataset.add} — в калькуляторе (${FC.list.length})`); }});
   }
+  const SK=DEPT==="sk";
+  $("ukLead").textContent=SK?"Все части статей УК: юрисдикция, звёзды розыска и санкция. СК расследует любые; отметка показывает, кто ещё может вести дело: [Ф] — ФСБ, [Р] — МВД, [В] — военная полиция (УК 18.1, УПК 151).":"Все части статей УК: юрисдикция, звёзды розыска и санкция. [Ф] — расследует ФСБ, [Р] — МВД, [В] — военная полиция; смешанные относятся к каждой юрисдикции (УК 18.1).";
+  const fch=el.querySelector('.chips [data-j="f"]'); if(fch) fch.textContent=SK?"Есть [Ф]":"Наши — есть [Ф]";
   drawUk();
 }
 function drawUk(){
@@ -3263,6 +3321,270 @@ function drawUk(){
   $("ukList").innerHTML=html||`<p class="fc-empty" style="margin-top:16px">Ничего не нашёл. Попробуйте номер статьи или другое слово.</p>`;
 }
 
+/* ---------- СК: обзор ---------- */
+const refLbl=(c,n)=>(c==="uk"||c==="upk")?LAWREF[c]+" "+n:(({terr:"Терр.",docs:"Госдок",chp:"ЧП",immun:"Неприк.",prok:"ГП"})[c]||c)+" "+n;
+const refGroups=(groups,whole)=>`<div class="fsb-refs">${groups.map(([h,rows])=>`<div class="fsb-refg"><h4>${h}</h4>${rows.map(([c,n,t])=>`<button type="button" class="fsb-ref" data-law="${c}" data-n="${n}"><span class="art">${esc(refLbl(c,n))}</span><span>${esc(t)}</span></button>`).join("")}</div>`).join("")}
+<div class="fsb-refg"><h4>Законы целиком</h4>${whole.map(([c,t])=>`<button type="button" class="fsb-ref" data-go="law-${c}"><span class="art">${esc(t.split(" ")[0])}</span><span>${esc(t)}</span></button>`).join("")}</div></div>`;
+const markBadRefs=el=>onCodes(()=>el.querySelectorAll(".fsb-ref[data-law]").forEach(b=>{ if(!exists(b.dataset.law,b.dataset.n)){ b.classList.add("badref"); b.title="Такой статьи нет в законах сервера"; } }));
+const copyText=t=>{ const ok=()=>toast("Скопировано"); try{navigator.clipboard.writeText(t).then(ok,()=>toast("Не удалось скопировать"))}catch(err){toast("Не удалось скопировать")} };
+
+const SK_CARDS=[
+ fsbCard("sk-jur","Расследуем любые преступления","УПК 151, 448; закон о ГП 5.5",[
+  [1,"Следователи СК ведут дела о любых преступлениях — [Р], [Ф] и [В], с письменной отчётностью и без"],
+  [1,"Только СК: преступления сотрудников прокуратуры, Премьер-министра и Вице-премьера. Дела по УК 299 и 315 не ведут ни МВД, ни ФСБ, ни ФСО, ни военная полиция"],
+  [0,"Споры о подследственности решает прокурор и может передать дело другому органу — кроме дел, которые закон отдаёт только СК"]],
+  ulist(["Дело не ваше — проведите неотложные следственные действия и передайте по подследственности (УПК 151 ч.5).",
+   "Сообщение о преступлении СК принимает к рассмотрению не позднее 24 часов, решение — не позднее 3 суток (УПК 144).",
+   "Следователь сам направляет ход расследования и даёт полиции обязательные поручения: ОРМ, следственные действия, задержание, привод (УПК 38 ч.2).",
+   "Неприкосновенного задержали по статьям, где это разрешено, а сотрудника ГП на месте не было, — его освобождают, а материалы за 24 часа передают в СК (закон о неприкосновенности 3.5, УПК 449 ч.2).",
+   "Генпрокурор и его замы — особый порядок УПК 448; Генпрокуратура надзирает за такой проверкой и расследованием (закон о ГП 5.5)."])),
+ fsbCard("sk-call","Вызов на задержание госслужащего","УПК 450, 94 ч.3; УК 44.1 ч.4",[
+  [1,"Срок госслужащему — только если преступление выявил прокурор или следователь СК, принявший вызов. Штраф — только прокурор, СК или суд"],
+  [1,"Есть ли основания освободить госслужащего (УПК 94 п.1, 2, 4), решает только прокурор или СК, прибывший по вызову"],
+  [0,"Не ответили за 10 минут или не доехали за 10 минут — задержанного освобождают"]],
+  ulist(["Вызов не нужен, если задержание по решению суда, ордеру на арест, требованию прокурора (УПК 91 ч.2.1) или постановлению СК о задержании; за захват власти; если нет ни удостоверения, ни опознавательного знака (УПК 450 ч.4).",
+   "Уведомление обязательно, даже если человека уволили уже после задержания (УПК 450 ч.1).",
+   `<button type="button" class="btn fsb-gobtn" data-go="skcall">Порядок вызова по шагам</button>`])),
+ fsbCard("sk-act","Постановления и требования СК","УПК 21, 38; УК 315; закон о госдокументах 4.2",[
+  [1,"Требования, поручения и запросы следователя обязательны для всех — граждан, организаций и должностных лиц"],
+  [1,"Игнорирует больше 24 часов (или дольше срока в акте), прямо отказывается или не исполняет неоднократно — УК 315: до 40 мес., госслужащий — до 50"],
+  [0,"Не преступление, если акт отменён или приостановлен, или на исполнение дали меньше 24 часов и человек не успел"]],
+  ulist(["Акт реагирования — постановление, представление, требование, предписание, запрос и поручение в пределах полномочий (УК 315, примечание 3).",
+   "Выполнить невозможно — человек обязан сообщить об этом в пределах срока (УК 315, примечание 2).",
+   "Постановления СК — подзаконные нормативные акты (закон о госдокументах 4.2).",
+   "По постановлению СК сроки складываются полностью, без лимита 10 мес. за звезду, но не больше 100 (УК 69 ч.5, УК 56 ч.2).",
+   "Задержание по постановлению СК о задержании идёт без процедуры вызова (УПК 450 ч.4)."])),
+ fsbCard("sk-imm","Неприкосновенные","закон о неприкосновенности 3.3, 3.5; УПК 447–449",[
+  [1,"Дело против неприкосновенного — только после ордера о разрешении проведения следствия. Запрос с материалами — в Генпрокуратуру, ответ до 48 часов"],
+  [1,"Арест — только после ордера Генпрокуратуры о лишении неприкосновенности"],
+  [0,"Задержанного неприкосновенного освобождают сразу после подтверждения статуса — кроме исключений закона о неприкосновенности и УПК 449"]],
+  ulist(["Ордер о разрешении следствия не лишает статуса и действует до конца расследования (УПК 448 ч.6–7).",
+   "Неприкосновенного выводят с закрытой территории и освобождают; решение о дальнейшем содержании — за прокурором или СК, принявшим вызов (УПК 449 ч.4).",
+   "Судью задерживают только по решению Верховного суда; Вице-премьера и Генпрокурора лишают свободы только по решению Верховного суда (УПК 449 ч.5–6).",
+   "Депутаты, судьи, руководители госорганов и министры, Премьер, Вице-премьер, Генпрокурор и замы — только предварительное следствие с передачей дела в суд (УПК 447, 448 ч.3)."])),
+ fsbCard("sk-terr","Доступ и видеозаписи","закон о территориях 2.8, 3.9; УПК 166, 21",[
+  [1,"Свободный доступ в КПЗ, допросные и места процессуальных действий — кратчайшим путём"],
+  [1,"Видеозапись задержания, ареста, обыска вам обязаны отдать по первому требованию — не позже 24 часов"],
+  [0,"На территорию ФСБ без сопровождения — только по вызову на задержание или арест. Вне разрешённых мест могут потребовать уйти"]],
+  ulist(["Запись — цельная, без монтажа, с оригинальным звуком; хранится не меньше 48 часов, а при жалобе — до конца её рассмотрения (УПК 166 ч.4–5).",
+   "Доказательства, по которым возбуждено дело, храните 72 часа (УПК 21 ч.4, УПК 146).",
+   "Данные следствия не разглашаются; участников предупредите под подписку — иначе УК 310 (УПК 161).",
+   "Права и извещения по следствию — через систему «Государственные Фракции», а если человека там нет — СМС (УПК 474.1)."])),
+ fsbCard("sk-resp","Защита и ответственность следователя","УК 294–296, 300, 302, 303, 319, 319.1",[
+  [1,"Вмешательство в работу следователя — УК 294 ч.2; угрозы — 296; посягательство на жизнь — 295"],
+  [1,"Оскорбление сотрудника СК — УК 319 ч.3; неповиновение требованию следователя на месте — УК 319.1 ч.3"],
+  [0,"Сами отвечаете за незаконное освобождение (УК 300), принуждение к показаниям (302) и фальсификацию доказательств (303 ч.2)"]],
+  ulist(["Правительство и органы исполнительной власти не вправе вмешиваться в расследование; требования прокурора вмешательством не считаются (УПК 38 ч.4).",
+   "Доказательства, полученные с нарушением УПК, недопустимы (УПК 7 ч.3).",
+   "Не согласны с требованиями прокурора — письменные возражения; отмену возбуждения и возврат дела можно обжаловать (УПК 38)."]))
+];
+const SK_REFS=[
+ ["Полномочия",[["upk","38","Следователь"],["upk","21","Требования обязательны, 72 часа"],["upk","151","Подследственность"],["upk","144","Сообщение: 24 часа и 3 суток"],["docs","4.2","Постановления СК"],["terr","2.8","Доступ в КПЗ и допросные"],["terr","3.9","Территория ФСБ"]]],
+ ["Вызов на задержание",[["upk","450","Госслужащие"],["upk","94","Освобождение"],["upk","91","Основания задержания"],["upk","92","Порядок задержания"],["upk","226.7","Решение без отчётности"],["uk","44.1","Кто назначает наказание"],["upk","449","Неприкосновенные"]]],
+ ["Следствие",[["upk","146","Возбуждение дела"],["upk","162","Срок: 5 / 7 / 10 дней"],["upk","171","Привлечение обвиняемого"],["upk","208","Приостановление"],["upk","220","Обвинительное заключение"],["upk","166","Видеопротокол"],["upk","182","Обыск"],["upk","189","Допрос"],["upk","448","Ордера на неприкосновенных"]]],
+ ["УК и другие законы",[["uk","315","Неисполнение актов СК"],["uk","294","Вмешательство в следствие"],["uk","319","Оскорбление (ч.3 — СК)"],["uk","319.1","Неповиновение (ч.3)"],["uk","310","Разглашение данных"],["uk","302","Принуждение к показаниям"],["immun","3.3","Ордер на следствие"],["immun","3.5","Арест неприкосновенного"],["prok","5.5","Сотрудники прокуратуры"]]]
+];
+let skDone=false;
+function renderSk(){
+  if(skDone) return; skDone=true;
+  const el=$("vSk");
+  el.innerHTML=`<h2 class="htitle">Следственный комитет</h2>
+<p class="lead">Чем занимается СК, какие у следователя полномочия и какими статьями оперировать. Номера статей нажимаются — откроется текст закона сервера.</p>
+<p class="fsb-note"><b>Закона «О Следственном комитете» и устава СК в шпаргалке пока нет.</b> Всё ниже — по УПК, УК, законам о неприкосновенности, территориях, госдокументах и Генпрокуратуре. Будет страница с форума — добавлю.</p>
+<div class="tiles" style="margin-top:16px">
+ <button type="button" class="tile hot" data-go="skcall"><span class="t">Вызов на задержание</span><span class="d">Таймер 10 минут, проверка законности и решение</span><span class="ref">УПК 450</span></button>
+ <button type="button" class="tile" data-go="skcase"><span class="t">Дело по шагам</span><span class="d">Сроки, следственные действия и шаблоны постановлений</span><span class="ref">УПК 144–220</span></button>
+ <button type="button" class="tile" data-go="skcalc"><span class="t">Калькулятор наказания</span><span class="d">Статьи → срок, штраф, залог и что зачитать</span><span class="ref">УК 56, 69</span></button>
+ <button type="button" class="tile" data-go="skuk"><span class="t">Статьи УК</span><span class="d">Все части: юрисдикция, звёзды, санкция</span><span class="ref">УК 18.1</span></button>
+</div>
+<section class="fsb-sec"><h3>Чем занимается СК</h3><p class="lead">Главное — сразу на плашке, подробности — «Подробнее».</p><div class="gc-grid">${SK_CARDS.join("")}</div></section>
+<section class="fsb-sec"><h3>Какими законами оперировать</h3><p class="lead">Нажмите — откроется текст статьи.</p>${refGroups(SK_REFS,[["upk","УПК"],["uk","УК"],["immun","ФЗ о неприкосновенности"],["prok","«О Генпрокуратуре»"],["terr","Закон о территориях"],["docs","Закон о госдокументах"]])}</section>`;
+  linkify(el); markBadRefs(el);
+}
+
+/* ---------- СК: вызов на задержание ---------- */
+const SK_CALL=[
+ ["Принять вызов","Задержавший уведомляет прокурора и СК по горячей линии Правительства после доставки в КПЗ или допросную. На ответ — до 10 минут, задержание на это время приостановлено.","УПК 450 ч.1"],
+ ["Прибыть за 10 минут","Кратчайшим путём. В КПЗ и допросные — свободный доступ, на территорию ФСБ — без сопровождения только по вызову. Не успели — задержанного освобождают.","УПК 450 ч.1–2; закон о территориях 2.8, 3.9"],
+ ["Получить материалы","Задержавший передаёт материалы дела и видеозапись задержания. Запись — цельная, без монтажа, с оригинальным звуком.","УПК 450 ч.3, 166 ч.3–4",
+  "Следователь Следственного комитета РО (имя, фамилия). Прибыл по вызову на задержание. Прошу передать материалы и видеозапись задержания."],
+ ["Проверить статус","Удостоверение или опознавательный знак — госслужащий, процедура идёт. Неприкосновенный — освободить после подтверждения статуса, кроме исключений; арест — только после ордера ГП о лишении статуса.","УПК 449, 450 ч.2, 4"],
+ ["Выслушать стороны","Сначала задержавший: за что и на каком основании. Потом задержанный и его адвокат.","УПК 450 ч.3",
+  "Изложите, пожалуйста, вашу позицию по задержанию."],
+ ["Оценить законность","Пройдите проверку ниже: основания, сроки, видеозапись, права.","УПК 91, 92, 94"],
+ ["Вынести решение","Решаете сами по УПК 226.7: штраф или срок — либо прекращение преследования. Сколько можно дать — в калькуляторе.","УПК 450 ч.3, 226.7; УК 44.1 ч.4"]
+];
+const SK_SAY_OK="По результатам рассмотрения материалов задержание признано законным. В ваших действиях выявлено преступление, предусмотренное (пункт, часть, статья) Уголовного кодекса РО. Вам назначено наказание в виде (лишения свободы на … месяцев / штрафа … рублей). Решение принято в порядке статьи 226.7 УПК РО и может быть обжаловано в суде.";
+const SK_SAY_FREE="По результатам рассмотрения материалов оснований для применения наказания нет. Уголовное преследование прекращается, вы освобождаетесь.";
+const SK_CHK=[
+ ["free","p1","Подозрение не подтвердилось","УПК 94 ч.1 п.1"],
+ ["free","p2","Не было оснований УПК 91: не застигнут, не указали очевидцы, нет следов, нет ориентировки — или задержан не в ходе пресечения или погони","УПК 91 ч.1, 3.1; 94 ч.1 п.2"],
+ ["free","p2b","Задержали служащего, пока он сам задерживал другого, без решения прокурора","УПК 91 ч.7; 94 ч.1 п.2"],
+ ["free","p3","Задержание дольше 60 минут (не считая паузы на вызов)","УПК 94 ч.1 п.3"],
+ ["free","p4","Неприкосновенный, ордера о лишении статуса нет","УПК 94 ч.1 п.4, 449"],
+ ["proc","v","Нет видеозаписи задержания или она с монтажом","УПК 166 ч.3–4"],
+ ["proc","g","Не разъяснили причину, статью и право на адвоката","УПК 92 ч.1 «г»"],
+ ["proc","zh","Отказали в адвокате","УПК 92 ч.1 «ж»"],
+ ["proc","o","Обыскали без оснований","УПК 92 ч.1 «в», 182"],
+ ["proc","d","Допрос дольше 60 минут, наводящие вопросы или без затребованного защитника","УПК 187, 189"],
+ ["proc","n","Насилие, угрозы или телесные повреждения","УПК 164 ч.4; 189, примечание 2"]
+];
+let SKC={};
+const SKTK="sk-timer";
+let skTick=0;
+function skTimerDraw(){
+  const box=$("skTimer"); if(!box) return;
+  const end=+(ls(SKTK)||0), v=box.querySelector(".v"), m=$("skTm");
+  if(!end){ v.textContent="10:00"; m.textContent="Нажмите, когда приняли вызов."; box.classList.remove("over"); $("skTStart").hidden=false; return; }
+  $("skTStart").hidden=true;
+  const left=Math.round((end-Date.now())/1000);
+  if(left<=0){ v.textContent="0:00"; box.classList.add("over"); m.innerHTML="<b>Время вышло.</b> Не прибыли — задержанного освобождают (УПК 450 ч.2)."; clearInterval(skTick); skTick=0; return; }
+  box.classList.remove("over"); v.textContent=`${Math.floor(left/60)}:${String(left%60).padStart(2,"0")}`; m.textContent="Осталось, чтобы прибыть на место задержания.";
+}
+function skTimerRun(){ clearInterval(skTick); skTick=setInterval(skTimerDraw,1000); skTimerDraw(); }
+function skVerdict(){
+  const on=SK_CHK.filter(([,id])=>SKC[id]);
+  const free=on.filter(r=>r[0]==="free"), proc=on.filter(r=>r[0]==="proc");
+  let h="";
+  if(free.length) h+=`<p class="fc-flag"><b>Освободить задержанного.</b> ${free.map(r=>esc(r[2])+" — "+r[3]).join("; ")}. Фраза для освобождения — в шаге 7.</p>`;
+  if(proc.length) h+=`<p class="fc-flag warn"><b>Нарушения порядка.</b> Доказательства, полученные с нарушением, недопустимы (УПК 7 ч.3). Остальных хватает — решение по УПК 226.7 п.1; не хватает — прекратить преследование (УПК 226.7 п.2). Если в действиях сотрудника есть признаки преступления (УК 286, 302) — это отдельное дело.</p>`;
+  if(!on.length) h=`<p class="fc-flag good"><b>Нарушений не отмечено.</b> Задержание законно — переходите к решению.</p>`;
+  if(!free.length) h+=`<div class="fc-acts"><button type="button" class="btn pri" data-go="skcalc">Посчитать наказание</button></div>`;
+  $("skRes").innerHTML=h; linkify($("skRes"));
+}
+function renderSkCall(){
+  const el=$("vSkCall");
+  if(!el.dataset.ready){
+    el.dataset.ready="1";
+    el.innerHTML=`<h2 class="htitle">Вызов на задержание</h2>
+<p class="lead">Задержали госслужащего — вас вызвали по горячей линии Правительства. Порядок по УПК 450.</p>
+<div class="sk-box"><h3>Прибыть за 10 минут</h3><div class="sk-timer" id="skTimer"><span class="v">10:00</span><button type="button" class="btn pri" id="skTStart">Принял вызов — засечь</button><button type="button" class="btn" id="skTReset">Сбросить</button></div><p class="fc-empty" id="skTm"></p></div>
+<p class="fsb-note"><b>Вызов не нужен</b>, если задержание по решению суда, ордеру на арест, требованию сотрудника ГП (УПК 91 ч.2.1) или постановлению СК о задержании; за насильственный захват или удержание власти; если на задержанном нет ни удостоверения, ни опознавательного знака (УПК 450 ч.4).</p>
+<section class="fsb-sec princ"><h3>По шагам</h3>
+<ol class="pr-list">${SK_CALL.map(([h,t,law,say],i)=>`<li class="pr${i===1?" warn":""}"><span class="pr-n">${i+1}</span><div class="pr-main"><h4>${h}</h4><p class="pr-rule">${t}</p>${say?`<p class="say"><b>Сказать</b>${esc(say)}</p>`:""}${i===SK_CALL.length-1?`<p class="say"><b>Сказать — наказание</b>${esc(SK_SAY_OK)}</p><p class="say"><b>Сказать — освобождение</b>${esc(SK_SAY_FREE)}</p>`:""}<p class="pr-law">${law}</p></div></li>`).join("")}</ol></section>
+<section class="fsb-sec" id="sk-check"><h3>Проверка законности</h3><p class="lead">Отметьте, что нарушено. Ничего — задержание законно.</p>
+<div class="sk-box"><p class="sk-chk-g">Основания для освобождения — УПК 94</p>${SK_CHK.filter(r=>r[0]==="free").map(([,id,t,law])=>`<label class="fc-chk"><input type="checkbox" data-skc="${id}"><span>${esc(t)}<small>${law}</small></span></label>`).join("")}
+<p class="sk-chk-g">Нарушения порядка</p>${SK_CHK.filter(r=>r[0]==="proc").map(([,id,t,law])=>`<label class="fc-chk"><input type="checkbox" data-skc="${id}"><span>${esc(t)}<small>${law}</small></span></label>`).join("")}
+<div class="fc-acts"><button type="button" class="btn" id="skCReset">Сбросить отметки</button></div></div>
+<div class="sk-res" id="skRes" aria-live="polite" style="margin-top:12px"></div></section>
+<p class="fsb-warn"><b>Решение — ваше.</b> Срок госслужащему возможен, только если преступление выявили вы или прокурор, принявший вызов; штраф — только прокурор, СК или суд (УК 44.1 ч.4). Решение по УПК 226.7 — не приговор, его можно обжаловать в суде.</p>`;
+    $("skTStart").onclick=()=>{ ls(SKTK,String(Date.now()+600000)); skTimerRun(); };
+    $("skTReset").onclick=()=>{ ls(SKTK,""); clearInterval(skTick); skTick=0; skTimerDraw(); };
+    el.addEventListener("change",e=>{ const c=e.target.closest("[data-skc]"); if(c){ SKC[c.dataset.skc]=c.checked; skVerdict(); } });
+    $("skCReset").onclick=()=>{ SKC={}; el.querySelectorAll("[data-skc]").forEach(c=>c.checked=false); skVerdict(); };
+    linkify(el);
+  }
+  if(+(ls(SKTK)||0)) skTimerRun(); else skTimerDraw();
+  skVerdict();
+}
+
+/* ---------- СК: следствие ---------- */
+const SK_STEPS=[
+ ["Сообщение о преступлении","СК принимает к рассмотрению не позднее 24 часов, решение — не позднее 3 суток. Заявителю — документ о принятии: кто принял, дата и время. При проверке можно брать объяснения, истребовать документы, осматривать место, поручать ОРМ.","УПК 144"],
+ ["Возбуждение дела","Постановление: дата, время и место; кто вынес; повод и основание; пункт, часть, статья УК. Копию — прокурору сразу. Против неприкосновенного — сначала ордер о разрешении следствия.","УПК 146; закон о неприкосновенности 3.3"],
+ ["Следственные действия","Ход расследования направляете сами. Полиции — обязательные поручения. Что и на каком основании — ниже.","УПК 38, 164"],
+ ["Привлечение обвиняемого","Доказательств достаточно — постановление о привлечении в качестве обвиняемого. На каждого обвиняемого — своё, по каждому деянию — своя статья.","УПК 171"],
+ ["Приостановление — если нужно","Обвиняемый не установлен или скрылся — только после истечения срока; не может участвовать — в любое время. Постановление, копия прокурору, уведомить потерпевшего. Пока дело приостановлено, следственные действия нельзя.","УПК 208, 209, 211"],
+ ["Обвинительное заключение","Всё сделано, доказательств хватает — составить заключение, согласовать с руководителем следственного органа и передать прокурору.","УПК 220 ч.1–2"],
+ ["Прокурор — сутки","Утверждает и направляет дело в суд — или возвращает с письменными указаниями. Не согласны — письменные возражения или обжалование.","УПК 220 ч.3, 38"]
+];
+const SK_ACTS=[
+ ["Осмотр","Решение следователя. Место происшествия, документы и предметы — можно до возбуждения дела","Видеопротокол","УПК 176, 164, 166"],
+ ["Следственный эксперимент","Решение следователя","Без опасности для здоровья участников. Видеопротокол","УПК 181"],
+ ["Обыск жилища","Решение суда или ордер на обыск от Генпрокурора или его заместителя","Предъявить решение. Предложить выдать добровольно. Изымать только запрещённое, оружие и что важно для дела. Видеопротокол","УПК 182 ч.2–9"],
+ ["Личный обыск","Решение суда, установление личности, задержание, допуск на режимный объект или в суд, ЧП","Неприкосновенных — только по закону о неприкосновенности","УПК 182 ч.1"],
+ ["Обыск машины","Признаки преступления, ордер на обыск ТС, ордер на арест, ЧП","Машины неприкосновенных и их сопровождения — нельзя. Видеозапись","УПК 182 ч.11–15"],
+ ["Выемка","Постановление следователя. У адвоката — только решение суда","Сначала предложить выдать; отказ — изъять принудительно. Видеопротокол","УПК 183"],
+ ["Контроль переговоров","Решение суда, по делам средней тяжести и тяжелее. При угрозе потерпевшему или свидетелю — по их письменному заявлению","Письменный протокол: дата, место, кто, основания, результаты","УПК 186, 166 ч.2"],
+ ["Допрос","Повестка, неявка без причины — привод. Задержанного — без повестки. Нужны достаточные основания","В допросной или служебном помещении, до 60 минут, без наводящих вопросов, с аудио- или видеозаписью. Потребовал защитника — без него не начинать","УПК 187–189"],
+ ["Очная ставка","Существенные противоречия в показаниях","Показания по очереди. Старые протоколы — только после новых показаний","УПК 192"],
+ ["Опознание","Решение следователя","Сначала допросить опознающего. Не меньше 3 лиц, фото или предметов. Повторно — нельзя. Без наводящих вопросов","УПК 193"]
+];
+const SK_TPL=[
+ ["Постановление о возбуждении уголовного дела","УПК 146",`ПОСТАНОВЛЕНИЕ
+о возбуждении уголовного дела
+
+Дата и время: ___
+Место вынесения: ___
+Вынес: следователь Следственного комитета РО ___ (имя, фамилия, должность)
+
+Повод: ___ (сообщение о преступлении, заявление, рапорт…)
+Основание: ___ (данные, указывающие на признаки преступления)
+
+Постановил: возбудить уголовное дело по признакам преступления, предусмотренного пунктом ___ части ___ статьи ___ Уголовного кодекса РО.
+
+Копия постановления направлена прокурору.
+Подпись: ___`],
+ ["Постановление о привлечении в качестве обвиняемого","УПК 171",`ПОСТАНОВЛЕНИЕ
+о привлечении в качестве обвиняемого
+
+Дата и место составления: ___
+Составил: следователь Следственного комитета РО ___ (имя, фамилия, должность)
+
+Обвиняемый: ___ (фамилия, имя, отчество), дата рождения ___, место рождения ___
+
+Описание преступления: ___ (время, место и обстоятельства)
+
+Ответственность предусмотрена пунктом ___ части ___ статьи ___ Уголовного кодекса РО.
+(Если преступлений несколько — какие деяния вменяются по каждой статье.)
+
+Постановил: привлечь ___ в качестве обвиняемого по уголовному делу № ___.
+Подпись: ___`],
+ ["Обвинительное заключение","УПК 220",`ОБВИНИТЕЛЬНОЕ ЗАКЛЮЧЕНИЕ
+по уголовному делу № ___
+
+1. Обвиняемый (обвиняемые): ___
+2. Данные о личности: ___
+3. Существо обвинения: место и время, способ, мотив, цель, последствия: ___
+4. Формулировка обвинения: пункт ___ часть ___ статья ___ УК РО
+5. Доказательства обвинения и их краткое содержание: ___
+6. Доказательства защиты и их краткое содержание (или их нет): ___
+7. Смягчающие и отягчающие обстоятельства: ___
+8. Потерпевший, характер и размер вреда (или его нет): ___
+9. Гражданский истец и ответчик (или их нет): ___
+10. Ссылки на тома и листы дела: ___
+11. Кого вызвать в суд со стороны обвинения и защиты: ___
+12. Дата и место составления, подпись следователя: ___
+13. Отдельным листом — разъяснение права ознакомиться со всеми материалами дела лично или с защитником.
+
+Согласовано: руководитель следственного органа ___
+Направлено прокурору: ___ (дата, время)`]
+];
+const SKDK="sk-dates";
+const skFmt=(d,t)=>d.toLocaleDateString("ru-RU",{day:"numeric",month:"long"})+(t?", "+d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"}):"");
+function skDeadlines(){
+  const msg=$("skMsg").value, cs=$("skCs").value; ls(SKDK,JSON.stringify({msg,cs}));
+  const rows=[];
+  if(msg){ const d=new Date(msg); if(!isNaN(d)){ rows.push(["Принять сообщение",`до ${skFmt(new Date(+d+864e5),1)}`,"24 часа (УПК 144 ч.1)"]); rows.push(["Решение по сообщению",`до ${skFmt(new Date(+d+3*864e5),1)}`,"3 суток (УПК 144 ч.1)"]); } }
+  if(cs){ const d=new Date(cs+"T12:00"); if(!isNaN(d)){ const add=n=>skFmt(new Date(+d+n*864e5));
+    rows.push(["Закончить следствие",`до ${add(5)}`,"5 дней со дня возбуждения (УПК 162 ч.1)"]);
+    rows.push(["Продление до 7 дней",`до ${add(7)}`,"Руководитель следственного органа или его заместитель (УПК 162 ч.4)"]);
+    rows.push(["Продление до 10 дней",`до ${add(10)}`,"Исключительный случай: Председатель СК или заместитель, с утверждения Генпрокурора или его заместителя (УПК 162 ч.4)"]); } }
+  $("skDl").innerHTML=rows.length?`<dl class="fc-rows">${rows.map(([k,v,s])=>`<div class="fc-row"><dt>${k}</dt><dd>${v}<small>${s}</small></dd></div>`).join("")}</dl><p class="fc-empty">Время приостановления и обжалования решения прокурора в срок не входит (УПК 162 ч.3).</p>`:`<p class="fc-empty">Укажите дату — покажу сроки.</p>`;
+}
+let skCaseDone=false;
+function renderSkCase(){
+  if(skCaseDone) return; skCaseDone=true;
+  const el=$("vSkCase");
+  let saved={}; try{ saved=JSON.parse(ls(SKDK)||"{}"); }catch(e){}
+  el.innerHTML=`<h2 class="htitle">Следствие</h2>
+<p class="lead">Дело с письменной отчётностью — от сообщения до обвинительного заключения. Ниже — сроки, следственные действия и шаблоны постановлений.</p>
+<div class="sk-box"><h3>Сроки</h3><div class="sk-dl"><label for="skMsg">Сообщение о преступлении поступило<input type="datetime-local" id="skMsg"></label><label for="skCs">Дело возбуждено<input type="date" id="skCs"></label></div><div id="skDl"></div></div>
+<section class="fsb-sec princ"><h3>Дело по шагам</h3>
+<ol class="pr-list">${SK_STEPS.map(([h,t,law],i)=>`<li class="pr"><span class="pr-n">${i+1}</span><div class="pr-main"><h4>${h}</h4><p class="pr-rule">${t}</p><p class="pr-law">${law}</p></div></li>`).join("")}</ol></section>
+<section class="fsb-sec"><h3>Следственные действия</h3><p class="lead">Осмотр, эксперимент, допрос, очная ставка и опознание — по решению следователя; обыск, выемка и контроль переговоров — по решению суда или ордеру, если статья не говорит иначе (УПК 164).</p>
+<div class="sk-acts">${SK_ACTS.map(([h,base,imp,law])=>`<article class="sk-act"><h4>${h}</h4><p><b>Основание</b>${esc(base)}</p><p><b>Важно</b>${esc(imp)}</p><p class="pr-law">${law}</p></article>`).join("")}</div>
+<p class="fsb-warn"><b>Без насилия, угроз и опасности для жизни</b> (УПК 164 ч.4). Данные следствия не разглашать — с участников берётся подписка (УПК 161, УК 310).</p></section>
+<section class="fsb-sec"><h3>Шаблоны</h3><p class="lead">Что обязано быть в документе по УПК. Если на форуме есть официальные бланки — используйте их.</p>
+<div class="sk-tpl">${SK_TPL.map(([h,law,t],i)=>`<details class="sk-t"><summary><span>${h}</span><small>${law}</small>${CHEV}</summary><div class="body"><pre id="skTpl${i}">${esc(t)}</pre><div class="fc-acts"><button type="button" class="btn pri" data-skcopy="${i}">Копировать</button></div></div></details>`).join("")}</div></section>`;
+  if(saved.msg) $("skMsg").value=saved.msg;
+  $("skCs").value=saved.cs||new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+  ["skMsg","skCs"].forEach(id=>$(id).addEventListener("input",skDeadlines));
+  el.addEventListener("click",e=>{ const b=e.target.closest("[data-skcopy]"); if(b) copyText(SK_TPL[+b.dataset.skcopy][2]); });
+  skDeadlines();
+  linkify(el.querySelector(".pr-list")); el.querySelectorAll(".sk-act").forEach(a=>linkify(a));
+}
+
 favCount();
 /* ---------- header, start ---------- */
 const hdr=document.querySelector(".top");
@@ -3274,7 +3596,7 @@ document.querySelectorAll(".top .tabs").forEach(t=>t.addEventListener("keydown",
 }));
 (function start(){
   document.documentElement.lang="ru"; /* для переносов слов на узком экране */
-  const h=location.hash.slice(1); let tok=viewOf(h)?h:(DEPT==="fsb"?"fsb":"do");
+  const h=location.hash.slice(1); let tok=viewOf(h)?h:DHOME[DEPT];
   cur=tok; try{history.replaceState(null,"","#"+tok)}catch(e){} show(tok,{});
 })();
 
