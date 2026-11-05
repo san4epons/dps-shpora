@@ -3280,6 +3280,7 @@ function renderFsbCalc(){
     [["fcCourt","court"],["fc319","i319"],["fcGos","gos"],["fcRec","rec"]].forEach(([id,k])=>$(id).addEventListener("change",e=>{FC[k]=e.target.checked; fcSave(); renderFsbCalc();}));
     $("fcClear").onclick=()=>{ FC={list:[],w:"auto",court:false,i319:false,gos:false,rec:false}; fcSave(); renderFsbCalc(); };
     $("fcUkGo").onclick=()=>nav(DEPT==="sk"?"skuk":"fsbuk");
+    el.addEventListener("click",e=>{ if(e.target.closest("[data-share]")) fcShare(); });
     el.addEventListener("click",e=>{ const b=e.target.closest("[data-copy]"); if(!b) return; const t=b.dataset.copy==="rep"?fcText(fcCalc()):b.closest(".sayl").querySelector("span").textContent;
       const ok=()=>toast("Скопировано"); try{navigator.clipboard.writeText(t).then(ok,()=>toast("Не удалось скопировать"))}catch(err){toast("Не удалось скопировать")} });
   }
@@ -3316,7 +3317,7 @@ ${r.how?`<p class="fc-empty">${esc(r.how)}</p>`:""}
 ${flags.join("")}
 <div class="fc-say"><p class="sayl"><b>При задержании</b><span>Вы задержаны по подозрению в совершении преступлений, предусмотренных ${esc(arts)} Уголовного кодекса РО. Вы имеете право на защиту и вправе вызвать адвоката. По вашей просьбе указанные статьи будут разъяснены полностью.</span></p>
 <p class="sayl"><b>При аресте</b><span>${r.total?`Вам назначено наказание в виде лишения свободы на (срок) месяцев по ${esc(artsPo)} Уголовного кодекса РО. Решение принято в порядке статьи 226.7 УПК РО и может быть обжаловано в суде.`:`Вам назначено наказание в виде штрафа по ${esc(artsPo)} Уголовного кодекса РО. Решение принято в порядке статьи 226.7 УПК РО и может быть обжаловано в суде.`}</span></p></div>
-<div class="fc-acts"><button type="button" class="btn pri" data-copy="rep">Скопировать итог</button></div>`;
+<div class="fc-acts"><button type="button" class="btn pri" data-copy="rep">Скопировать итог</button><button type="button" class="btn" data-share="calc">Поделиться ссылкой</button></div>`;
   linkify(res);
   res.querySelectorAll(".sayl").forEach(p=>{ const b=document.createElement("button"); b.type="button"; b.className="btn"; b.dataset.copy="say"; b.textContent="Копировать"; b.style.marginTop="8px"; p.append(b); });
 }
@@ -3706,6 +3707,29 @@ document.querySelectorAll(".top .tabs").forEach(t=>t.addEventListener("keydown",
   if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft") return; const o=TABS[DEPT];
   const i=Math.max(0,o.indexOf(curTab)); const n=o[(i+(e.key==="ArrowRight"?1:3))%4]; nav(n); $("tab-"+n).focus(); e.preventDefault();
 }));
+/* ---------- калькулятор: ссылка на расчёт ---------- */
+const fcKey=a=>a.replace(" ч.","-");
+const fcUnkey=k=>k.replace(/-(\d+)$/," ч.$1");
+function fcLink(){
+  const p=new URLSearchParams();
+  p.set("r",FC.list.map(x=>fcKey(x.a)+(Array.isArray(UKPA[x.a].s)&&x.s?":"+x.s:"")).join(","));
+  const f=(FC.court?"c":"")+(FC.i319?"i":"")+(FC.gos?"g":"")+(FC.rec?"r":""); if(f) p.set("f",f);
+  if(FC.w!=="auto") p.set("w",FC.w);
+  return location.origin+location.pathname+"?"+p.toString().replace(/%2C/g,",").replace(/%3A/g,":")+"#"+(DEPT==="sk"?"skcalc":"fsbcalc");
+}
+async function fcShare(){
+  const r=fcCalc(); if(!r) return;
+  const url=fcLink(), text=`Расчёт наказания: ${r.L.map(o=>"УК "+o.p.a).join(", ")} — ${r.total?"до "+r.total+" мес.":"штраф"}`;
+  if(navigator.share){ try{ await navigator.share({title:"Шпаргалка — расчёт",text,url}); return; }catch(e){ if(e&&e.name==="AbortError") return; } }
+  try{ await navigator.clipboard.writeText(text+"\n"+url); toast("Ссылка скопирована"); }catch(e){ prompt("Скопируйте ссылку:",url); }
+}
+(function fcFromUrl(){
+  const q=new URLSearchParams(location.search); if(!q.has("r")) return;
+  const list=[]; q.get("r").split(",").forEach(t=>{ const [k,st]=t.split(":"); const a=fcUnkey(k.trim()); if(UKPA[a]&&!list.some(x=>x.a===a)){ const o={a}; if(st&&/^[1-5]$/.test(st)) o.s=+st; list.push(o); } });
+  const f=q.get("f")||"", w=q.get("w");
+  if(list.length){ FC={list,w:/^[1-5]$/.test(w||"")?w:"auto",court:f.includes("c"),i319:f.includes("i"),gos:f.includes("g"),rec:f.includes("r")}; fcSave(); setTimeout(()=>toast("Открыт расчёт по ссылке"),400); }
+  try{ q.delete("r"); q.delete("f"); q.delete("w"); const rest=q.toString(); history.replaceState(null,"",location.pathname+(rest?"?"+rest:"")+location.hash); }catch(e){}
+})();
 (function start(){
   document.documentElement.lang="ru"; /* для переносов слов на узком экране */
   const h=location.hash.slice(1); let tok=viewOf(h)?h:DHOME[DEPT];
