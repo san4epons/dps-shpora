@@ -1352,6 +1352,14 @@ details.pr-audit li b{font-family:var(--mono);font-size:13px;font-weight:700}
 .inst{margin:12px 0 0}
 .inst-help{margin:8px 0 0;line-height:1.5}
 
+/* ===== метки изменений ===== */
+.chgb{display:inline-block;margin-left:6px;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;line-height:1;padding:3px 5px;border-radius:4px;background:var(--siren-red,var(--stop));color:#fff;vertical-align:2px;white-space:nowrap}
+.lart>.chgb{position:absolute;margin:0;top:14px;right:52px}
+.chgbanner{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px;padding:10px 12px;border-radius:8px;border:1px solid var(--accent);border-left:4px solid var(--siren-red,var(--stop));background:var(--surface);line-height:1.45}
+.chgbanner>span{flex:1 1 220px}
+.chgbanner .btn{text-decoration:none;font-weight:800}
+.chgx{font:inherit;font-size:20px;line-height:1;width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+
 /* ===== СК ===== */
 .sk-box{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;display:grid;gap:10px}
 .sk-box>h3{margin:0;font-size:18px;font-weight:800}
@@ -2193,6 +2201,11 @@ const label=n=>n.replace(/^З(?=\d)/,"Знак ").replace(/^Р(?=\d)/,"Разм.
 
 /* ---------- laws data ---------- */
 let CODES=null, LAW={}; const codesWait=[];
+const CHG=JSON.parse(document.getElementById("law-changes").textContent);
+const CHGN={}; CHG.laws.forEach(l=>l.items.forEach(x=>{ CHGN[l.id+"|"+x.n]=x.summary||"Статья изменена"; }));
+const chgB=(code,n,short)=>{ const t=CHGN[code+"|"+n]; return t?`<span class="chgb" title="${esc(t)}">${short?"изм.":"изменена "+esc(CHG.date)}</span>`:""; };
+function chgBanner(){ let seen=""; try{ seen=localStorage.getItem("shpora-chg-seen")||""; }catch(e){} if(seen===CHG.checked) return ""; return `<div class="chgbanner" role="status"><span><b>Законы обновились</b> — редакции ${esc(CHG.date)}. Изменённые статьи помечены красной меткой.</span><a href="#changes" data-go="changes" class="btn">Что изменилось</a><button type="button" class="chgx" data-chgclose aria-label="Скрыть">×</button></div>`; }
+document.addEventListener("click",e=>{ if(e.target.closest("[data-chgclose]")||e.target.closest(".chgbanner [data-go]")){ try{ localStorage.setItem("shpora-chg-seen",CHG.checked); }catch(err){} document.querySelectorAll(".chgbanner").forEach(b=>b.remove()); } });
 function onCodes(f){CODES?f():codesWait.push(f)}
 Promise.resolve().then(()=>JSON.parse(document.getElementById("codes-data").textContent)).then(d=>{
   CODES=d; d.forEach(c=>{LAW[c.id]=c; c.byN={}; c.g.forEach(g=>g.a.forEach(a=>{a.law=c.id; if(a.n&&!c.byN[a.n]) c.byN[a.n]=a;}))});
@@ -2232,9 +2245,12 @@ function setDept(){
   ls("shpora-dept",DEPT);
   $("tabsG").hidden=DEPT!=="gibdd"; $("tabsF").hidden=DEPT!=="fsb"; $("tabsS").hidden=DEPT!=="sk";
   [["d-gibdd","gibdd"],["d-fsb","fsb"],["d-sk","sk"]].forEach(([id,d])=>$(id).setAttribute("aria-pressed",String(DEPT===d)));
-  document.querySelectorAll("#deptMenu button").forEach(b=>b.setAttribute("aria-current",String(b.dataset.go===DHOME[DEPT])));
+  document.querySelectorAll("#deptMenu button").forEach((b,i)=>b.setAttribute("aria-current",String(["gibdd","fsb","sk"][i]===DEPT)));
   document.querySelector(".dept").classList.remove("open");
   $("brand").dataset.go=DHOME[DEPT];
+  const lastOf=d=>{ const t=ls("shpora-last-"+d); const v=t&&viewOf(t); return v&&v.dept===d?t:DHOME[d]; };
+  [["d-gibdd","gibdd"],["d-fsb","fsb"],["d-sk","sk"]].forEach(([id,d])=>{ if(d!==DEPT) $(id).dataset.go=lastOf(d); else $(id).dataset.go=DHOME[d]; });
+  document.querySelectorAll("#deptMenu button").forEach((b,i)=>{ const d=["gibdd","fsb","sk"][i]; b.dataset.go=d===DEPT?DHOME[d]:lastOf(d); });
   document.title={gibdd:"Шпаргалка ДПС",fsb:"Шпаргалка ФСБ",sk:"Шпаргалка СК"}[DEPT];
   $("gq").placeholder={gibdd:"Поиск: задержание, 319.1, тонировка…",fsb:"Поиск: ордер, 205, неприкосновенный…",sk:"Поиск: вызов, обыск, 315…"}[DEPT];
 }
@@ -2247,7 +2263,7 @@ window.addEventListener("popstate",()=>{const t=location.hash.slice(1)||"do"; if
 window.addEventListener("hashchange",()=>{const t=location.hash.slice(1)||"do"; if(t!==cur) show(t,{})});
 function show(tok,opt){
   const v=viewOf(tok)||viewOf("do"); cur=tok; ls("shpora-route",tok);
-  if(v.dept) DEPT=v.dept; setDept();
+  if(v.dept){ DEPT=v.dept; ls("shpora-last-"+v.dept,tok); } setDept();
   curTab=v.tab||({gibdd:"law",fsb:"fsblaw",sk:"-"}[DEPT]);
   TABS.gibdd.concat(TABS.fsb,TABS.sk).forEach(t=>{const b=$("tab-"+t); const on=t===curTab; b.setAttribute("aria-selected",String(on)); b.tabIndex=on?0:-1;});
   $("vGrid").hidden=!["do","instr","law"].includes(v.kind); $("vScen").hidden=v.kind!=="scen"; $("vArt").hidden=v.kind!=="art"; $("vTopic").hidden=v.kind!=="topic"; $("vLaw").hidden=v.kind!=="lawread"; $("vAsk").hidden=v.kind!=="ask"; $("vFav").hidden=v.kind!=="fav"; $("vArrest").hidden=v.kind!=="arrest"; $("vFsb").hidden=v.kind!=="fsb"; $("vFsbCalc").hidden=v.kind!=="fsbcalc"; $("vFsbUk").hidden=v.kind!=="fsbuk"; $("vSk").hidden=v.kind!=="sk"; $("vSkCall").hidden=v.kind!=="skcall"; $("vSkCase").hidden=v.kind!=="skcase"; $("vChanges").hidden=v.kind!=="changes";
@@ -2358,7 +2374,7 @@ function scTiles(){
   return out;
 }
 function gridDo(){
-  $("vGrid").innerHTML=`<h2 class="htitle">Шпаргалка ДПС</h2><p class="lead">Законы РО — редакции ${esc(CHG.date)}, сверено ${esc(CHG.checked)} (<a href="#changes" data-go="changes">что изменилось</a>). Сначала принципы работы, ниже — ситуации по шагам, памятка и что изменилось.</p>
+  $("vGrid").innerHTML=`${chgBanner()}<h2 class="htitle">Шпаргалка ДПС</h2><p class="lead">Законы РО — редакции ${esc(CHG.date)}, сверено ${esc(CHG.checked)} (<a href="#changes" data-go="changes">что изменилось</a>). Сначала принципы работы, ниже — ситуации по шагам, памятка и что изменилось.</p>
   <div class="tiles"><button type="button" class="tile hot" data-go="arrest"><span class="t">Собрать задержание</span><span class="d">Выберите статьи — получите порядок действий, фразы и итог</span></button><a class="tile hot" href="govorit.html" style="text-decoration:none;color:inherit"><span class="t">Что говорить</span><span class="d">Фразы по порядку задержания и по статье — копируйте</span></a><button type="button" class="tile" data-go="fav"><span class="t">★ Избранное${FAV.length?` (${FAV.length})`:""}</span><span class="d">${FAV.length?"Ваши статьи и ситуации":"Отмечайте ☆ нужные статьи — они соберутся здесь"}</span></button><button type="button" class="tile" data-go="art"><span class="t">Какая статья и сколько?</span><span class="d">КоАП, УК, лишение прав, скорость</span></button><button type="button" class="tile" data-go="law"><span class="t">Полный текст закона</span><span class="d">УК, КоАП, УПК, ПДД и другие</span></button></div>
   ${PRINC}
   <div class="ghead"><b>Что делать в ситуации</b><span>порядок действий по шагам с готовыми фразами</span></div>
@@ -2516,7 +2532,7 @@ function render(el,rows,uk){
     const facts=[warn?"Можно ограничиться предупреждением.":"",lish?"Плюс лишение прав (все категории).":"",uk?"Это преступление: вы задерживаете и передаёте, наказание назначает принимающий.":""].filter(Boolean).join(" ");
     const sc=scenarioFor(code,base);
     ROWINFO[code+"|"+a]={code,a,parts,d,base,facts,note,sc,sancText:parts.map(p=>p===L?"лишение прав":p+(uk||/пред/.test(p)||/₽/.test(p)?"":" ₽")).join(" · ")};
-    return `<details class="arow" id="${id}"><summary><span><span class="art${uk?' uk':''}">${esc(a)}</span></span><span class="d">${esc(d)}</span><span class="s">${starBtn("row|"+code+"|"+a," sm")}${sanc}</span>${CHEV}</summary><div class="rowbody">${facts?`<p>${facts}</p>`:""}${note?`<p>${note}</p>`:""}<div class="acts"><button type="button" class="btn primary" data-go="${sc}">Как оформить: «${S[sc].t}» →</button><button type="button" class="btn" data-law="${code}" data-n="${base}">Текст статьи</button><button type="button" class="btn" data-artoarr="${code}|${a}">+ В задержание</button></div></div></details>`;
+    return `<details class="arow" id="${id}"><summary><span><span class="art${uk?' uk':''}">${esc(a)}</span>${chgB(code,base,1)}</span><span class="d">${esc(d)}</span><span class="s">${starBtn("row|"+code+"|"+a," sm")}${sanc}</span>${CHEV}</summary><div class="rowbody">${facts?`<p>${facts}</p>`:""}${note?`<p>${note}</p>`:""}<div class="acts"><button type="button" class="btn primary" data-go="${sc}">Как оформить: «${S[sc].t}» →</button><button type="button" class="btn" data-law="${code}" data-n="${base}">Текст статьи</button><button type="button" class="btn" data-artoarr="${code}|${a}">+ В задержание</button></div></div></details>`;
   }).join("");
 }
 render($("ukTable"),UK,true);
@@ -2855,7 +2871,7 @@ function renderLaw(id,art){
   const c=LAW[id]; if(!c){ nav("law"); return; }
   if(lawBuilt!==id){
     lawBuilt=id; $("lq").value=""; $("lName").textContent=c.name;
-    $("lBody").innerHTML=c.g.map((g,gi)=>`<section class="lch" id="lch-${gi}"><h3>${esc(g.h)}</h3>${g.a.map(a=>`<div class="lart${a.n?"":" noart"}" id="la-${a.id}">${a.n?`<span class="art">${esc(label(a.n))}</span>${starBtn("law|"+c.id+"|"+a.n," corner")}<p class="lawtxt">${lawText(a)}</p>`:(a.t.length>700?`<details class="ltoc"><summary>${esc(/Содержание|ЧАСТЬ|РАЗДЕЛ|Глава\s+\d/.test(a.t)?"Вводная часть и содержание":"Вводная часть")}${CHEV}</summary><p class="lawtxt">${lawText(a)}</p></details>`:`<p class="lawtxt">${lawText(a)}</p>`)}</div>`).join("")}</section>`).join("");
+    $("lBody").innerHTML=c.g.map((g,gi)=>`<section class="lch" id="lch-${gi}"><h3>${esc(g.h)}</h3>${g.a.map(a=>`<div class="lart${a.n?"":" noart"}" id="la-${a.id}">${a.n?`<span class="art">${esc(label(a.n))}</span>${chgB(c.id,a.n)}${starBtn("law|"+c.id+"|"+a.n," corner")}<p class="lawtxt">${lawText(a)}</p>`:(a.t.length>700?`<details class="ltoc"><summary>${esc(/Содержание|ЧАСТЬ|РАЗДЕЛ|Глава\s+\d/.test(a.t)?"Вводная часть и содержание":"Вводная часть")}${CHEV}</summary><p class="lawtxt">${lawText(a)}</p></details>`:`<p class="lawtxt">${lawText(a)}</p>`)}</div>`).join("")}</section>`).join("");
     $("lSide").innerHTML=`<p class="sg">Главы</p>`+c.g.map((g,gi)=>`<a href="#lch-${gi}" data-ch="${gi}">${esc(g.h.length>70?g.h.slice(0,68)+"…":g.h)}</a>`).join("");
     $("lch").innerHTML=`<option value="">Перейти к главе…</option>`+c.g.map((g,gi)=>`<option value="${gi}">${esc(g.h.slice(0,80))}</option>`).join("");
     lawInfo();
@@ -3248,7 +3264,7 @@ let fsbDone=false;
 function renderFsb(){
   if(fsbDone) return; fsbDone=true;
   const el=$("vFsb");
-  el.innerHTML=`<h2 class="htitle">ФСБ</h2>
+  el.innerHTML=`${chgBanner()}<h2 class="htitle">ФСБ</h2>
 <p class="lead">Чем занимается ФСБ, какие у сотрудника полномочия и какими статьями оперировать. Номера статей нажимаются — откроется текст закона сервера.</p>
 <p class="fsb-note">Ниже — по ФЗ о ФСБ, УК, УПК, законам о территориях и госдокументах и ФКЗ о ЧП.</p>
 <div class="tiles" style="margin-top:16px">
@@ -3424,7 +3440,7 @@ function drawUk(){
   $("ukN").textContent=`${r.length} ${r.length%10===1&&r.length%100!==11?"часть":(r.length%10>=2&&r.length%10<=4&&(r.length%100<10||r.length%100>=20)?"части":"частей")} статей`;
   let ch="",html="";
   r.forEach(p=>{ if(p.ch!==ch){ if(ch) html+="</div>"; ch=p.ch; html+=`<h3 class="uk-ch">${esc(ch.replace(/^Глава\s+/,"Гл. "))}</h3><div class="uk-list">`; }
-    html+=`<details class="ukrow"><summary><span class="art">${esc(p.a)}</span><span class="t">${esc(p.t)}${p.d&&p.d.toLowerCase()!==p.t.toLowerCase()?`<small class="dd">${esc(p.d)}</small>`:""}<small>${esc(p.ss)}</small></span><span class="meta">${jbadge(p.j)}<span class="stars">${fsbStars(p.s)}</span></span>${CHEV}</summary><div class="ukbody"><p>${esc(p.d)}${p.d.length>=255?"…":""}</p><p><b>Санкция:</b> ${esc(p.sanc)}</p><div class="acts"><button type="button" class="btn pri" data-add="${esc(p.a)}">+ В калькулятор</button><button type="button" class="btn" data-law="uk" data-n="${esc(p.art)}">Полный текст</button></div></div></details>`; });
+    html+=`<details class="ukrow"><summary><span class="art">${esc(p.a)}</span>${chgB("uk",p.art,1)}<span class="t">${esc(p.t)}${p.d&&p.d.toLowerCase()!==p.t.toLowerCase()?`<small class="dd">${esc(p.d)}</small>`:""}<small>${esc(p.ss)}</small></span><span class="meta">${jbadge(p.j)}<span class="stars">${fsbStars(p.s)}</span></span>${CHEV}</summary><div class="ukbody"><p>${esc(p.d)}${p.d.length>=255?"…":""}</p><p><b>Санкция:</b> ${esc(p.sanc)}</p><div class="acts"><button type="button" class="btn pri" data-add="${esc(p.a)}">+ В калькулятор</button><button type="button" class="btn" data-law="uk" data-n="${esc(p.art)}">Полный текст</button></div></div></details>`; });
   if(ch) html+="</div>";
   $("ukList").innerHTML=html||`<p class="fc-empty" style="margin-top:16px">Ничего не нашёл. Попробуйте номер статьи или другое слово.</p>`;
 }
@@ -3517,7 +3533,7 @@ let skDone=false;
 function renderSk(){
   if(skDone) return; skDone=true;
   const el=$("vSk");
-  el.innerHTML=`<h2 class="htitle">Следственный комитет</h2>
+  el.innerHTML=`${chgBanner()}<h2 class="htitle">Следственный комитет</h2>
 <p class="lead">Чем занимается СК, какие у следователя полномочия и какими статьями оперировать. Номера статей нажимаются — откроется текст закона сервера.</p>
 <p class="fsb-note">Ниже — по ФЗ о СК, уставу СК, УПК, УК и законам о неприкосновенности, территориях, госдокументах и Генпрокуратуре.</p>
 <div class="tiles" style="margin-top:16px">
@@ -3794,7 +3810,6 @@ if(CK) clockDraw();
 })();
 
 /* ---------- что изменилось в законах ---------- */
-const CHG=JSON.parse(document.getElementById("law-changes").textContent);
 const KINDN={changed:"изменена",added:"новая",removed:"удалена",renumbered:"новый номер"};
 function renderChanges(){
   const el=$("vChanges");
