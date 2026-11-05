@@ -2374,8 +2374,8 @@ function favCount(){ const n=$("favN"); if(n) n.textContent=FAV.length; }
 function favToggle(k){
   FAV=isFav(k)?FAV.filter(x=>x!==k):[k,...FAV]; ls(FKEY,JSON.stringify(FAV)); favCount();
   const on=isFav(k);
-  /* отметили статью УК или КоАП — она сразу попадает в текущее задержание */
-  if(on){ const ak=favArrestKey(k); if(ak&&!AR.arts.includes(ak)){ arAdd(ak); toast(`Добавлено в задержание: ${artLabel(ak)}`,"arrest"); } }
+  /* в задержание не добавляем: избранное — это кнопки «+» на шаге «Статьи», выбираете сами */
+  if(on&&favArrestKey(k)) toast("В избранном — добавить в задержание можно кнопкой «+»","arrest");
   document.querySelectorAll(".star[data-fav]").forEach(b=>{ if(b.dataset.fav!==k) return; b.classList.toggle("on",on); b.textContent=on?"★":"☆"; b.setAttribute("aria-pressed",String(on)); b.title=b.ariaLabel=on?"Убрать из избранного":"В избранное"; b.setAttribute("aria-label",b.title); });
   if(cur==="fav"&&!on) renderFav();
   if(cur==="arrest") renderArrest();
