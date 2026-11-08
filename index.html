@@ -1447,6 +1447,31 @@ nav.chips.st-toc button{white-space:nowrap;flex:none;font-size:13.5px;padding:6p
 .cplaque .sref{display:none}
 .cplaque .gc-key{gap:4px}
 
+/* ===== метки ⚑ ===== */
+.mkbtn{display:inline-flex;align-items:center;gap:5px;font:inherit;font-size:13px;font-weight:700;line-height:1;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;padding:6px 9px;cursor:pointer;min-height:32px}
+.mkbtn svg{width:16px;height:16px}
+.mkbtn:hover{border-color:var(--siren-red,var(--stop));color:var(--ink)}
+.mkbtn.on{background:var(--siren-red,var(--stop));border-color:var(--siren-red,var(--stop));color:#fff}
+.mkbtn.corner2{position:absolute;top:46px;right:6px;padding:6px 8px;min-height:34px}
+.mkbtn.corner2 span{display:none}
+.mkbtn.inline{margin-left:auto}
+.ex-card .meta .mkbtn{margin-left:auto}
+.mknote{display:grid;gap:4px;margin-top:8px}
+.mknote span{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--siren-red,var(--stop))}
+.mknote textarea{font:inherit;font-size:15px;line-height:1.45;padding:9px 11px;border-radius:8px;border:1px solid var(--siren-red,var(--stop));background:var(--bg);color:var(--ink);resize:vertical;min-height:58px;width:100%;box-sizing:border-box}
+.mkdot{display:inline-flex;vertical-align:-3px;margin-right:6px;color:var(--siren-red,var(--stop))}
+.mkdot svg{width:16px;height:16px}
+.mkchip{border-color:var(--siren-red,var(--stop))!important}
+.mkchip b{color:var(--siren-red,var(--stop));margin-left:2px}
+.mklist{display:grid;gap:10px;margin-top:14px}
+.mkitem{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--siren-red,var(--stop));border-radius:8px;padding:12px 14px;display:grid;gap:6px}
+.mkitem h4{margin:0;font-size:17px;line-height:1.35}
+.mksub{margin:0;font-size:12.5px;color:var(--muted);font-weight:700}
+details.mkans>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--link);font-weight:700}
+details.mkans>summary::-webkit-details-marker{display:none}
+details.mkans p{margin:6px 0 0;line-height:1.5}
+.lawtools .mkchip{white-space:nowrap}
+
 /* ===== СК ===== */
 .sk-box{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;display:grid;gap:10px}
 .sk-box>h3{margin:0;font-size:18px;font-weight:800}
@@ -1559,6 +1584,7 @@ details.ukrow[open]>summary .t small.dd{display:none}
     <div id="vFsbExam" class="narrow" hidden></div>
     <div id="vFsbStruct" hidden></div>
     <div id="vFsbCourse" class="narrow" hidden></div>
+    <div id="vMarks" class="narrow" hidden></div>
 
     <div id="vArt" hidden>
       <h2 class="htitle">Статьи</h2>
@@ -1703,7 +1729,7 @@ details.ukrow[open]>summary .t small.dd{display:none}
             <input id="lq" type="search" placeholder="Поиск в этом законе: номер или слово" autocomplete="off">
             <label for="lch" class="hide">Перейти к главе</label>
             <select id="lch"></select>
-            <div class="fsz" role="group" aria-label="Размер текста"><button type="button" data-fs="-1" aria-label="Текст мельче">А−</button><button type="button" data-fs="1" aria-label="Текст крупнее">А+</button></div>
+            <button type="button" class="btn mkchip" data-go="marks">⚑ Мои метки</button><div class="fsz" role="group" aria-label="Размер текста"><button type="button" data-fs="-1" aria-label="Текст мельче">А−</button><button type="button" data-fs="1" aria-label="Текст крупнее">А+</button></div>
           </div>
           <p class="lawinfo" id="lInfo"></p>
         </div>
@@ -2331,6 +2357,7 @@ function viewOf(tok){
   if(tok==="skuk") return {kind:"fsbuk",tab:"-",dept:"sk"};
   if(tok==="fav") return {kind:"fav",tab:"fav"};
   if(tok==="changes") return {kind:"changes",tab:"-"};
+  if(tok==="marks") return {kind:"marks",tab:"-"};
   if(S[tok]) return {kind:"scen",tab:"do",dept:"gibdd",id:tok};
   if(/^law-/.test(tok)) return {kind:"lawread",tab:"",id:tok.slice(4)};
   return null;
@@ -2361,7 +2388,7 @@ function show(tok,opt){
   if(v.dept){ DEPT=v.dept; ls("shpora-last-"+v.dept,tok); } setDept();
   curTab=v.tab||({gibdd:"law",fsb:"fsblaw",sk:"-"}[DEPT]);
   TABS.gibdd.concat(TABS.fsb,TABS.sk).forEach(t=>{const b=$("tab-"+t); const on=t===curTab; b.setAttribute("aria-selected",String(on)); b.tabIndex=on?0:-1;});
-  $("vGrid").hidden=!["do","instr","law"].includes(v.kind); $("vScen").hidden=v.kind!=="scen"; $("vArt").hidden=v.kind!=="art"; $("vTopic").hidden=v.kind!=="topic"; $("vLaw").hidden=v.kind!=="lawread"; $("vAsk").hidden=v.kind!=="ask"; $("vFav").hidden=v.kind!=="fav"; $("vArrest").hidden=v.kind!=="arrest"; $("vFsb").hidden=v.kind!=="fsb"; $("vFsbCalc").hidden=v.kind!=="fsbcalc"; $("vFsbUk").hidden=v.kind!=="fsbuk"; $("vSk").hidden=v.kind!=="sk"; $("vSkCall").hidden=v.kind!=="skcall"; $("vSkCase").hidden=v.kind!=="skcase"; $("vChanges").hidden=v.kind!=="changes"; $("vFsbExam").hidden=v.kind!=="fsbexam"; $("vFsbStruct").hidden=v.kind!=="fsbstruct"; $("vFsbCourse").hidden=v.kind!=="fsbcourse";
+  $("vGrid").hidden=!["do","instr","law"].includes(v.kind); $("vScen").hidden=v.kind!=="scen"; $("vArt").hidden=v.kind!=="art"; $("vTopic").hidden=v.kind!=="topic"; $("vLaw").hidden=v.kind!=="lawread"; $("vAsk").hidden=v.kind!=="ask"; $("vFav").hidden=v.kind!=="fav"; $("vArrest").hidden=v.kind!=="arrest"; $("vFsb").hidden=v.kind!=="fsb"; $("vFsbCalc").hidden=v.kind!=="fsbcalc"; $("vFsbUk").hidden=v.kind!=="fsbuk"; $("vSk").hidden=v.kind!=="sk"; $("vSkCall").hidden=v.kind!=="skcall"; $("vSkCase").hidden=v.kind!=="skcase"; $("vChanges").hidden=v.kind!=="changes"; $("vFsbExam").hidden=v.kind!=="fsbexam"; $("vFsbStruct").hidden=v.kind!=="fsbstruct"; $("vFsbCourse").hidden=v.kind!=="fsbcourse"; $("vMarks").hidden=v.kind!=="marks";
   closeResults();
   if(v.kind==="do") gridDo();
   if(v.kind==="instr") gridInstr();
@@ -2381,6 +2408,7 @@ function show(tok,opt){
   if(v.kind==="fsbexam") renderFsbExam();
   if(v.kind==="fsbstruct") renderFsbStruct();
   if(v.kind==="fsbcourse") renderFsbCourse(v.id);
+  if(v.kind==="marks") renderMarks();
   if(!opt.art&&!opt.row) window.scrollTo({top:0});
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-go]"); if(b){e.preventDefault(); nav(b.dataset.go);}});
@@ -2606,7 +2634,8 @@ function hookBackup(){
   const r=$("favRestore"); if(r) r.onclick=()=>{ const n=favImport($("favCodeIn").value); if(n<0){ $("favMsg").textContent="Не похоже на код избранного. Он начинается с ШПОРА1:"; return; } renderFav(); const m=$("favMsg"); if(m) m.textContent=n?`Восстановлено: ${n}.`:"Всё из кода уже было в избранном."; };
 }
 function renderFav(){
-  const head=`<button type="button" class="backbtn" data-go="do">← Что делать</button><h2 class="htitle">Избранное</h2>`;
+  const mkn=Object.keys(MARKS).length;
+  const head=`<button type="button" class="backbtn" data-go="do">← Что делать</button><h2 class="htitle">Избранное</h2><div class="tiles" style="margin:10px 0 14px"><button type="button" class="tile hot" data-go="marks"><span class="t">⚑ Мои метки${mkn?" ("+mkn+")":""}</span><span class="d">Вопросы экзамена и статьи законов с вашими пометками</span></button></div>`;
   if(!FAV.length){ $("vFav").innerHTML=head+`<div class="favempty"><p><b>Пока пусто.</b></p><p>Нажмите ☆ рядом со статьёй во вкладке «Статьи» или «Законы», или рядом с названием ситуации — она появится здесь. Нажмёте на неё здесь — увидите суть, наказание и что делать по шагам.</p><div class="acts"><button type="button" class="btn primary" data-go="art">Открыть статьи</button><button type="button" class="btn" data-go="do">Ситуации</button></div></div>`+favBackupHTML(); hookBackup(); return; }
   const counts={}; FAV.forEach(k=>{const g=favGroup(k); counts[g]=(counts[g]||0)+1;});
   if(favFilter!=="all"&&!counts[favFilter]) favFilter="all";
@@ -2969,7 +2998,7 @@ function renderLaw(id,art){
   const c=LAW[id]; if(!c){ nav("law"); return; }
   if(lawBuilt!==id){
     lawBuilt=id; $("lq").value=""; $("lName").textContent=c.name;
-    $("lBody").innerHTML=c.g.map((g,gi)=>`<section class="lch" id="lch-${gi}"><h3>${esc(g.h)}</h3>${g.a.map(a=>`<div class="lart${a.n?"":" noart"}" id="la-${a.id}">${a.n?`<span class="art">${esc(label(a.n))}</span>${chgB(c.id,a.n)}${starBtn("law|"+c.id+"|"+a.n," corner")}<p class="lawtxt">${lawText(a)}</p>`:(a.t.length>700?`<details class="ltoc"><summary>${esc(/Содержание|ЧАСТЬ|РАЗДЕЛ|Глава\s+\d/.test(a.t)?"Вводная часть и содержание":"Вводная часть")}${CHEV}</summary><p class="lawtxt">${lawText(a)}</p></details>`:`<p class="lawtxt">${lawText(a)}</p>`)}</div>`).join("")}</section>`).join("");
+    $("lBody").innerHTML=c.g.map((g,gi)=>`<section class="lch" id="lch-${gi}"><h3>${esc(g.h)}</h3>${g.a.map(a=>`<div class="lart${a.n?"":" noart"}" id="la-${a.id}">${a.n?`<span class="art">${esc(label(a.n))}</span>${chgB(c.id,a.n)}${starBtn("law|"+c.id+"|"+a.n," corner")}${mkBtn("law|"+c.id+"|"+a.n," corner2")}<p class="lawtxt">${lawText(a)}</p><div class="mkwrap" data-mkwrap="law|${c.id}|${esc(a.n)}">${mkNote("law|"+c.id+"|"+a.n)}</div>`:(a.t.length>700?`<details class="ltoc"><summary>${esc(/Содержание|ЧАСТЬ|РАЗДЕЛ|Глава\s+\d/.test(a.t)?"Вводная часть и содержание":"Вводная часть")}${CHEV}</summary><p class="lawtxt">${lawText(a)}</p></details>`:`<p class="lawtxt">${lawText(a)}</p>`)}</div>`).join("")}</section>`).join("");
     $("lSide").innerHTML=`<p class="sg">Главы</p>`+c.g.map((g,gi)=>`<a href="#lch-${gi}" data-ch="${gi}">${esc(g.h.length>70?g.h.slice(0,68)+"…":g.h)}</a>`).join("");
     $("lch").innerHTML=`<option value="">Перейти к главе…</option>`+c.g.map((g,gi)=>`<option value="${gi}">${esc(g.h.slice(0,80))}</option>`).join("");
     lawInfo();
@@ -3058,7 +3087,7 @@ function renderResults(){
   if(r.unknownLaw) P.push(`<p class="res-empty">Закона «${esc(r.unknownLaw)}» нет в шпаргалке. Есть: УК, КоАП, УПК, ПДД, «О полиции», неприкосновенность, госдокументы, оружие, территории, прокуратура, ЧП, ФСБ, СК и устав СК, ФСО, адвокатура, Конституция, суды, Правительство, ТК, кодекс этики, ВС, СМИ, бизнес, медучреждения. Пришлите текст — добавлю.</p>`);
   if(r.expanded.length) P.push(`<p class="res-hint">Ищу также: ${esc(r.expanded.join(", "))}</p>`);
   if(r.say.length||r.sayArt.length) P.push(`<p class="res-h">Что говорить<small> · нажмите, чтобы скопировать</small></p>`+r.say.map(x=>SAY.find(y=>y.id===x.doc.id)).sort((p,q)=>(q.key?1:0)-(p.key?1:0)).slice(0,3).map(s=>{ return `<button type="button" class="res" data-r="s|${s.id}"><span class="k tp">Фраза</span><span><b>${esc(s.t)}</b><small class="saytxt">${esc(s.say)}</small></span></button>`}).join("")+r.sayArt.slice(0,3).map(a=>`<button type="button" class="res" data-r="s|ART|${esc(a)}"><span class="k uk">УК ${esc(a)}</span><span><b>Фраза при задержании по этой статье</b><small>Объявить причину и права, передать МВД</small></span></button>`).join("")+`<button type="button" class="res" data-r="s|ALL"><span class="k tp">Все</span><span><b>Все фразы по порядку задержания</b></span></button>`);
-  const dpHtml=r.dp.length?`<p class="res-h">ФСБ и СК</p>`+r.dp.sort((a,b)=>(b.doc.dept===DEPT)-(a.doc.dept===DEPT)).slice(0,5).map(x=>`<button type="button" class="res" data-r="d|${x.doc.go}|${x.doc.anc||""}"><span class="k tp">${x.doc.dept==="sk"?"СК":"ФСБ"}</span><span><b>${esc(x.doc.t)}</b><small>${esc(x.doc.d)}</small></span></button>`).join(""):"";
+  const dpHtml=r.dp.length?`<p class="res-h">ФСБ и СК</p>`+r.dp.sort((a,b)=>((b.doc.dept===DEPT)+(b.doc.dept==="marks")*2)-((a.doc.dept===DEPT)+(a.doc.dept==="marks")*2)).slice(0,5).map(x=>`<button type="button" class="res" data-r="d|${x.doc.go}|${x.doc.anc||""}"><span class="k tp">${x.doc.dept==="sk"?"СК":x.doc.dept==="marks"?"⚑":"ФСБ"}</span><span><b>${esc(x.doc.t)}</b><small>${esc(x.doc.d)}</small></span></button>`).join(""):"";
   if(r.sc.length) P.push(`<p class="res-h">Что делать</p>`+r.sc.slice(0,4).map(x=>{const s=S[x.doc.id]; return `<button type="button" class="res" data-r="g|${s.id}"><span class="k tp">Шаги</span><span><b>${s.t}</b><small>${esc(s.d)}</small></span></button>`}).join(""));
   if(dpHtml&&DEPT==="gibdd") P.push(dpHtml);
   if(r.rows.length) P.push(`<p class="res-h">Статьи</p>`+r.rows.slice(0,14).map(x=>{const d=x.doc; return `<button type="button" class="res" data-r="r|${d.code}|${d.a}"><span class="k${d.code==="uk"?" uk":""}">${d.code==="uk"?"УК":"КоАП"} ${esc(d.a)}</span><span><b>${x.hits?SMART.marks(d.d,x.hits):esc(d.d)}</b>${(ROWINFO[d.code+"|"+d.a]||{}).sancText?`<small>${esc(ROWINFO[d.code+"|"+d.a].sancText)}</small>`:""}</span></button>`}).join(""));
@@ -3909,6 +3938,56 @@ if(CK) clockDraw();
   if(navigator.onLine===false) setTimeout(()=>toast("Нет интернета — открыта сохранённая версия"),600);
 })();
 
+/* ---------- метки: вопросы экзамена и статьи законов ---------- */
+const MKEY="shpora-marks";
+let MARKS=(()=>{ try{ const o=JSON.parse(ls(MKEY)||"{}"); return o&&typeof o==="object"?o:{}; }catch(e){ return {}; } })();
+const FLAG=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h12l-2.5 4L17 12H5"/></svg>`;
+const isMk=k=>!!MARKS[k];
+const mkSave=()=>ls(MKEY,JSON.stringify(MARKS));
+function mkBtn(k,extra){ const on=isMk(k); return `<button type="button" class="mkbtn${on?" on":""}${extra||""}" data-mk="${esc(k)}" aria-pressed="${on}" title="${on?"Снять метку":"Поставить метку"}" aria-label="${on?"Снять метку":"Поставить метку"}">${FLAG}<span>${on?"Снять метку":"Метка"}</span></button>`; }
+function mkNote(k){ if(!isMk(k)) return ""; return `<label class="mknote"><span>Ваш вопрос или заметка</span><textarea data-mknote="${esc(k)}" rows="2" placeholder="Например: уточнить у Инструктора, путаю сроки…">${esc(MARKS[k].note||"")}</textarea></label>`; }
+function mkToggle(k){
+  if(isMk(k)){ delete MARKS[k]; toast("Метка снята"); } else { MARKS[k]={note:"",t:Date.now()}; toast("Метка поставлена — найдёте в «Мои метки»","marks"); }
+  mkSave();
+  document.querySelectorAll(".mkbtn[data-mk]").forEach(b=>{ if(b.dataset.mk!==k) return; const on=isMk(k); b.classList.toggle("on",on); b.setAttribute("aria-pressed",String(on)); b.title=on?"Снять метку":"Поставить метку"; b.setAttribute("aria-label",b.title); const sp=b.querySelector("span"); if(sp) sp.textContent=on?"Снять метку":"Метка"; });
+  document.querySelectorAll("[data-mkwrap]").forEach(w=>{ if(w.dataset.mkwrap!==k) return; w.innerHTML=mkNote(k); const t=w.querySelector("textarea"); if(t&&isMk(k)) t.focus(); });
+  if(cur==="fsbexam"&&typeof exDraw==="function"){ const lb=$("exListBody"); if(lb){ const op=[...lb.querySelectorAll("details[open]")].map(d=>d.id); lb.innerHTML=exListHtml(); linkify(lb); op.forEach(id=>{ const d=document.getElementById(id); if(d) d.open=true; }); } if(EX.topic==="marks"||$("exMkN")) exDraw(); }
+  if(cur==="marks") renderMarks();
+}
+document.addEventListener("click",e=>{ const b=e.target.closest(".mkbtn[data-mk]"); if(!b) return; e.preventDefault(); e.stopPropagation(); mkToggle(b.dataset.mk); },true);
+let mkT=0;
+document.addEventListener("input",e=>{ const t=e.target.closest("textarea[data-mknote]"); if(!t) return; const k=t.dataset.mknote; if(!MARKS[k]) return; MARKS[k].note=t.value; clearTimeout(mkT); mkT=setTimeout(mkSave,300); });
+let MKF={kind:"all",q:""};
+function mkInfo(k){
+  const p=k.split("|");
+  if(p[0]==="ex"){ const c=CARDS.find(x=>x.id===p[1]); if(!c) return null; return {kind:"ex",title:c.q,sub:"Экзамен · "+c.topic,body:c.a,ref:c.ref,open:`<button type="button" class="btn" data-mkopen="${esc(k)}">Открыть вопрос</button>`}; }
+  if(p[0]==="law"){ const lw=p[1], n=p.slice(2).join("|"); const L=LAW[lw]; const a=L&&L.byN[n];
+    return {kind:"law",title:a?artTitle(a):(LAWREF[lw]||lw)+" "+n,sub:(L?L.name:(LAWREF[lw]||lw))+" · "+label(n),body:"",ref:null,open:`<button type="button" class="btn" data-law="${esc(lw)}" data-n="${esc(n)}">Открыть статью</button>`}; }
+  return null;
+}
+function renderMarks(){
+  const el=$("vMarks");
+  if(!CODES){ el.innerHTML=`<h2 class="htitle">Мои метки</h2><p class="loading">Загружаю тексты законов…</p>`; onCodes(()=>{ if(cur==="marks") renderMarks(); }); return; }
+  const keys=Object.keys(MARKS).sort((a,b)=>(MARKS[b].t||0)-(MARKS[a].t||0));
+  const nEx=keys.filter(k=>k.startsWith("ex|")).length, nLaw=keys.filter(k=>k.startsWith("law|")).length;
+  const q=MKF.q.trim().toLowerCase();
+  const items=keys.map(k=>({k,i:mkInfo(k)})).filter(x=>x.i).filter(x=>MKF.kind==="all"||x.i.kind===MKF.kind).filter(x=>!q||(x.i.title+" "+x.i.sub+" "+(MARKS[x.k].note||"")).toLowerCase().includes(q));
+  const keepQ=document.activeElement&&document.activeElement.id==="mkq";
+  el.innerHTML=`<h2 class="htitle">Мои метки</h2><p class="lead">Всё, на чём вы поставили ⚑ — в вопросах экзамена и в статьях законов. Пишите рядом свой вопрос, чтобы потом спросить у Инструктора или повторить. Хранится на этом устройстве.</p>
+<div class="uk-tools"><label for="mkq" class="hide">Поиск по меткам</label><input id="mkq" type="search" placeholder="Поиск по меткам и заметкам" value="${esc(MKF.q)}" autocomplete="off">
+<div class="chips" role="group" aria-label="Что показать">${[["all","Все",keys.length],["ex","Экзамен",nEx],["law","Законы",nLaw]].map(([k,t,n])=>`<button type="button" data-mkf="${k}" aria-pressed="${MKF.kind===k}">${t} (${n})</button>`).join("")}</div></div>
+${nEx?`<div class="ex-acts" style="margin-top:10px"><button type="button" class="btn pri" data-mkdrill="1">Повторить отмеченные вопросы (${nEx})</button></div>`:""}
+<div class="mklist">${items.length?items.map(({k,i})=>`<article class="mkitem"><p class="mksub">${esc(i.sub)}</p><h4>${esc(i.title)}</h4>${i.body?`<details class="mkans"><summary>Ответ${CHEV}</summary><p>${esc(i.body)}</p>${refNorm(i.ref).length?`<small class="sref">${refBtns(i.ref)}</small>`:""}</details>`:""}<div class="mkwrap" data-mkwrap="${esc(k)}">${mkNote(k)}</div><div class="ex-acts">${i.open}${mkBtn(k," inline")}</div></article>`).join(""):`<p class="fc-empty" style="margin-top:16px">${keys.length?"Ничего не нашлось.":"Меток пока нет. Нажмите «⚑ Метка» у вопроса во вкладке «Экзамен» или у статьи в законе."}</p>`}</div>`;
+  if(keepQ){ const i=$("mkq"); i.focus(); i.setSelectionRange(i.value.length,i.value.length); }
+  linkify(el);
+}
+document.addEventListener("input",e=>{ if(e.target.id==="mkq"){ MKF.q=e.target.value; renderMarks(); } });
+document.addEventListener("click",e=>{
+  const f=e.target.closest("[data-mkf]"); if(f){ MKF.kind=f.dataset.mkf; renderMarks(); return; }
+  const o=e.target.closest("[data-mkopen]"); if(o){ const id=o.dataset.mkopen.split("|")[1]; nav("fsbexam"); setTimeout(()=>{ const d=document.getElementById("ex-"+id); if(d){ d.open=true; d.scrollIntoView({behavior:"smooth",block:"start"}); } },120); return; }
+  if(e.target.closest("[data-mkdrill]")){ EX.topic="marks"; EXS.mode="cards"; EXS.i=0; EXS.open=false; EXS.test=null; exSave(); nav("fsbexam"); setTimeout(()=>{ exDraw(); const m=$("exMain"); if(m) m.scrollIntoView({block:"start"}); },80); }
+});
+
 /* ---------- что изменилось в законах ---------- */
 const KINDN={changed:"изменена",added:"новая",removed:"удалена",renumbered:"новый номер"};
 function renderChanges(){
@@ -3992,12 +4071,12 @@ const COURSES=STUDY.courses||[];
 const CARDS=[...COURSES.flatMap(c=>(c.cards||[]).map(x=>Object.assign({},x,{course:c.id,topic:(c.id==="c1"?"Курс I · ":"Курс II · ")+x.topic}))),...(STUDY.cards||[])];
 const inCourse=(c,cid)=>{ const C=COURSES.find(x=>x.id===cid); return !!C&&(c.course===cid||(C.reuse||[]).includes(c.id)); };
 const TOPICS=[...new Set(CARDS.map(c=>c.topic))];
-const exTopicOk=c=>EX.topic==="all"||(EX.topic.startsWith("course:")?inCourse(c,EX.topic.slice(7)):c.topic===EX.topic);
+const exTopicOk=c=>EX.topic==="all"||(EX.topic==="marks"?isMk("ex|"+c.id):EX.topic.startsWith("course:")?inCourse(c,EX.topic.slice(7)):c.topic===EX.topic);
 const exPool=()=>CARDS.filter(exTopicOk).filter(c=>!EX.only||!EX.known[c.id]);
 const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 function exCardHtml(c,num,total,open,test){
-  return `<div class="ex-card"><p class="meta"><span class="tp">${esc(c.topic)}</span><span>${num} из ${total}</span>${EX.known[c.id]?`<span class="known">✓ знаю</span>`:""}</p>
-<p class="q">${esc(c.q)}</p>
+  return `<div class="ex-card"><p class="meta"><span class="tp">${esc(c.topic)}</span><span>${num} из ${total}</span>${EX.known[c.id]?`<span class="known">✓ знаю</span>`:""}${mkBtn("ex|"+c.id," inline")}</p>
+<p class="q">${esc(c.q)}</p><div class="mkwrap" data-mkwrap="ex|${esc(c.id)}">${mkNote("ex|"+c.id)}</div>
 ${open?`<p class="ans">${esc(c.a)}<small>${refBtns(c.ref)}</small></p>`:""}
 <div class="ex-acts">${!open?`<button type="button" class="btn pri" data-ex="show">Показать ответ</button>`:test?`<button type="button" class="btn ok" data-ex="right">Ответил верно</button><button type="button" class="btn" data-ex="wrong">Ошибся</button>`:`<button type="button" class="btn ok" data-ex="know">Знаю ✓</button><button type="button" class="btn" data-ex="again">Повторить</button>`}${test?"":`<button type="button" class="btn" data-ex="prev" aria-label="Предыдущий">←</button><button type="button" class="btn" data-ex="next" aria-label="Следующий">→</button>`}</div></div>`;
 }
@@ -4006,7 +4085,7 @@ function exDraw(){
   const known=CARDS.filter(c=>EX.known[c.id]).length;
   $("exProg").innerHTML=`<div class="bar"><i style="width:${CARDS.length?Math.round(100*known/CARDS.length):0}%"></i></div><small>Знаю ${known} из ${CARDS.length} вопросов</small>`;
   el.querySelectorAll("[data-exmode]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.exmode===EXS.mode)));
-  $("exTopic").value=EX.topic; $("exOnly").checked=EX.only;
+  $("exTopic").value=EX.topic; $("exOnly").checked=EX.only; const mkn=Object.keys(MARKS).filter(k=>k.startsWith("ex|")).length; $("exMkN").textContent=mkn||""; $("exMarksOpt").textContent=`⚑ Мои метки (${mkn})`;
   const main=$("exMain");
   if(!CARDS.length){ main.innerHTML=`<p class="fc-empty" style="margin-top:14px">Вопросы ещё готовятся.</p>`; return; }
   if(EXS.mode==="test"){
@@ -4017,14 +4096,14 @@ function exDraw(){
     const c=CARDS.find(x=>x.id===T.ids[T.i]); main.innerHTML=exCardHtml(c,T.i+1,T.ids.length,EXS.open,true); return;
   }
   const pool=exPool();
-  if(!pool.length){ main.innerHTML=`<div class="ex-card"><p class="q">${EX.only?"Все вопросы этой темы выучены.":"В этой теме нет вопросов."}</p><div class="ex-acts">${EX.only?`<button type="button" class="btn" data-ex="showall">Показать все</button>`:""}</div></div>`; return; }
+  if(!pool.length){ main.innerHTML=`<div class="ex-card"><p class="q">${EX.topic==="marks"?"Меток пока нет. Нажмите «⚑ Метка» у вопроса, который хотите повторить или уточнить.":EX.only?"Все вопросы этой темы выучены.":"В этой теме нет вопросов."}</p><div class="ex-acts">${EX.only?`<button type="button" class="btn" data-ex="showall">Показать все</button>`:""}</div></div>`; return; }
   EXS.i=(EXS.i%pool.length+pool.length)%pool.length;
   main.innerHTML=exCardHtml(pool[EXS.i],EXS.i+1,pool.length,EXS.open,false);
 }
 function exListHtml(){
   let html="",tp="";
   CARDS.forEach(c=>{ if(c.topic!==tp){ tp=c.topic; html+=`<h4 class="uk-ch">${esc(tp)}</h4>`; }
-    html+=`<details class="exrow" id="ex-${esc(c.id)}"><summary><span>${esc(c.q)}</span><span class="k">${EX.known[c.id]?"✓":""}</span>${CHEV}</summary><div class="b">${esc(c.a)}<small>${refBtns(c.ref)}</small></div></details>`; });
+    html+=`<details class="exrow" id="ex-${esc(c.id)}"><summary><span>${isMk("ex|"+c.id)?`<i class="mkdot" title="Метка">${FLAG}</i>`:""}${esc(c.q)}</span><span class="k">${EX.known[c.id]?"✓":""}</span>${CHEV}</summary><div class="b">${esc(c.a)}<small>${refBtns(c.ref)}</small><div class="ex-acts" style="margin-top:8px">${mkBtn("ex|"+c.id," inline")}</div><div class="mkwrap" data-mkwrap="ex|${esc(c.id)}">${mkNote("ex|"+c.id)}</div></div></details>`; });
   return html;
 }
 function renderFsbExam(){
@@ -4034,8 +4113,8 @@ function renderFsbExam(){
     el.innerHTML=`<h2 class="htitle">Экзамен ФСБ</h2>
 <p class="lead">Ниже — два курса Академии Управления «М»: что сдать, как проходит экзамен и темы. «Конспект курса» — всё, что нужно выучить, со ссылками на устав ФСБ и законы. Тренировка — карточки и тест; отмечайте «Знаю», прогресс сохраняется на этом устройстве.</p>
 ${coursePlaques()}<div class="ex-top"><div class="ex-prog" id="exProg"></div>
-<div class="chips" role="group" aria-label="Режим"><button type="button" data-exmode="cards">Карточки</button><button type="button" data-exmode="test">Тест 20</button><button type="button" data-exscroll="1">Все вопросы</button></div>
-<div class="ex-ctrl"><label class="hide" for="exTopic">Тема</label><select id="exTopic"><option value="all">Все темы (${CARDS.length})</option>${COURSES.length?`<optgroup label="Академия «М»">${COURSES.map(C=>`<option value="course:${C.id}">${esc(C.title)} — все вопросы (${CARDS.filter(c=>inCourse(c,C.id)).length})</option>`).join("")}</optgroup>`:""}${[["C1-","Курс I — темы"],["C2-","Курс II — темы"],["L","Законы ФСБ"],["P","УК и УПК"]].map(([p,g])=>{ const ts=TOPICS.filter(t=>CARDS.some(c=>c.topic===t&&c.id.startsWith(p))); return ts.length?`<optgroup label="${g}">${ts.map(t=>`<option value="${esc(t)}">${esc(t)} (${CARDS.filter(c=>c.topic===t).length})</option>`).join("")}</optgroup>`:""; }).join("")}</select>
+<div class="chips" role="group" aria-label="Режим"><button type="button" data-exmode="cards">Карточки</button><button type="button" data-exmode="test">Тест 20</button><button type="button" data-exscroll="1">Все вопросы</button><button type="button" data-go="marks" class="mkchip">⚑ Мои метки <b id="exMkN"></b></button></div>
+<div class="ex-ctrl"><label class="hide" for="exTopic">Тема</label><select id="exTopic"><option value="all">Все темы (${CARDS.length})</option><option value="marks" id="exMarksOpt">⚑ Мои метки</option>${COURSES.length?`<optgroup label="Академия «М»">${COURSES.map(C=>`<option value="course:${C.id}">${esc(C.title)} — все вопросы (${CARDS.filter(c=>inCourse(c,C.id)).length})</option>`).join("")}</optgroup>`:""}${[["C1-","Курс I — темы"],["C2-","Курс II — темы"],["L","Законы ФСБ"],["P","УК и УПК"]].map(([p,g])=>{ const ts=TOPICS.filter(t=>CARDS.some(c=>c.topic===t&&c.id.startsWith(p))); return ts.length?`<optgroup label="${g}">${ts.map(t=>`<option value="${esc(t)}">${esc(t)} (${CARDS.filter(c=>c.topic===t).length})</option>`).join("")}</optgroup>`:""; }).join("")}</select>
 <label class="fc-chk" style="padding:4px 0"><input type="checkbox" id="exOnly"><span>Только невыученные</span></label></div></div>
 <div id="exMain"></div>
 <section class="ex-list" id="exList"><h3>Все вопросы</h3><p class="lead">Нажмите на вопрос — откроется ответ со ссылкой на статью.</p><div id="exListBody"></div><div class="fc-acts" style="margin-top:16px"><button type="button" class="btn" id="exReset">Сбросить прогресс</button></div></section>`;
@@ -4090,6 +4169,7 @@ document.addEventListener("click",e=>{ const b=e.target.closest("[data-coursego]
 (()=>{ COURSES.forEach(C=>{ (C.topics||[]).forEach(t=>GI.add({k:"dp",dept:"fsb",go:"fsb"+C.id,anc:"cc-"+t.id,t:C.title+": "+t.title,d:"Конспект курса Академии «М»"},C.title+" "+t.title+" курс академия экзамен конспект",(t.notes||[]).map(x=>x.text||x).join(" ")));
   GI.add({k:"dp",dept:"fsb",go:"fsb"+C.id,anc:"cc-ex",t:C.title+": практика и экзамен",d:(C.exam||{}).format||""},C.title+" практика экзамен допуск курс академия управление м",[...(C.practice||[]),...(C.process||[])].map(x=>x.text||x).join(" ")); }); })();
 
+GI.add({k:"dp",dept:"marks",go:"marks",anc:"",t:"Мои метки",d:"Вопросы экзамена и статьи законов, которые вы отметили ⚑"},"метки метка маркер маркеры закладки закладка флажок отметки заметки мои вопросы","");
 (()=>{ /* поиск: вопросы экзамена и подразделения ФСБ */
   const strip=h=>String(h).replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();
   CARDS.forEach(c=>GI.add({k:"dp",dept:"fsb",go:"fsbexam",anc:"ex-"+c.id,t:c.q,d:"Экзамен · "+c.topic},c.q+" "+(c.kw||"")+" экзамен вопрос",c.a));
