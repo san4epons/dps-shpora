@@ -1472,6 +1472,14 @@ details.mkans>summary::-webkit-details-marker{display:none}
 details.mkans p{margin:6px 0 0;line-height:1.5}
 .lawtools .mkchip{white-space:nowrap}
 
+/* ===== короткий ответ в поиске ===== */
+.qa-box{padding:4px 6px 8px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.qa{border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:4px 10px 10px 4px;padding:9px 11px;margin-top:6px}
+.qa-q{margin:0;font-size:13px;color:var(--muted);line-height:1.35}
+.qa-a{margin:4px 0 0;font-size:15.5px;font-weight:700;line-height:1.45;color:var(--ink)}
+.qa-r{margin:6px 0 0;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.qa-r .lnk{font-size:13px}
+
 /* ===== СК ===== */
 .sk-box{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;display:grid;gap:10px}
 .sk-box>h3{margin:0;font-size:18px;font-weight:800}
@@ -2242,7 +2250,11 @@ const SMART=(()=>{
    "сирена маячки спецсигнал мигалки",
    "колонна кортеж сопровождение",
    "тазер электрошокер дубинка спецсредства",
-   "ордер постановление"
+   "ордер постановление",
+   "наказать наказывать наказание взыскание взыскания выговор наложить налагать",
+   "держать длиться длится длительность продолжительность",
+   "замминистра заместитель замминистр зам",
+   "провокация подстрекательство склонение склонять"
   ];
   const cache=new Map();
   const norm=s=>s.toLowerCase().replace(/ё/g,"е");
@@ -3074,7 +3086,7 @@ function search(q){
     if(CODES){const ex=[],rest=[]; CODES.forEach(c=>{ if(only&&c.id!==only) return; c.g.forEach(g=>g.a.forEach(a=>{ if(!a.n) return; if(a.n===num) ex.push(a); else if(a.n.startsWith(num+".")) rest.push(a); })); }); out.laws=ex.concat(rest).map(a=>({doc:{a},hits:new Set()}));}
     return out;
   }
-  const r=GI.search(q); out.expanded=r.expanded;
+  const r=GI.search(q); out.expanded=r.expanded; out.terms=r.terms;
   const best=r.res.length?r.res[0].matched:0; const keep=r.res.filter(x=>x.matched>=Math.max(1,best-(r.terms>2?1:0)));
   keep.forEach(x=>{ const k=x.doc.k; (k==="sc"?out.sc:k==="dp"?out.dp:k==="tp"?out.tp:k==="say"?out.say:k==="row"?out.rows:out.laws).push(x); });
   return out;
@@ -3086,6 +3098,8 @@ function renderResults(){
   const r=search(GQ.value); if(!r){closeResults();return;} const P=[];
   if(r.unknownLaw) P.push(`<p class="res-empty">Закона «${esc(r.unknownLaw)}» нет в шпаргалке. Есть: УК, КоАП, УПК, ПДД, «О полиции», неприкосновенность, госдокументы, оружие, территории, прокуратура, ЧП, ФСБ, СК и устав СК, ФСО, адвокатура, Конституция, суды, Правительство, ТК, кодекс этики, ВС, СМИ, бизнес, медучреждения. Пришлите текст — добавлю.</p>`);
   if(r.expanded.length) P.push(`<p class="res-hint">Ищу также: ${esc(r.expanded.join(", "))}</p>`);
+  const ans=(!r.isNum&&r.terms>=2)?qaSearch(GQ.value):[];
+  if(ans.length) P.push(`<div class="qa-box"><p class="res-h">Короткий ответ<small> · из вопросов экзамена, со ссылкой на статью</small></p>${ans.map(c=>`<div class="qa"><p class="qa-q">${esc(c.q)}</p><p class="qa-a">${esc(c.a)}</p><p class="qa-r">${refBtns(c.ref)}<button type="button" class="lnk" data-mkopen="ex|${esc(c.id)}">в экзамене →</button></p></div>`).join("")}</div>`);
   if(r.say.length||r.sayArt.length) P.push(`<p class="res-h">Что говорить<small> · нажмите, чтобы скопировать</small></p>`+r.say.map(x=>SAY.find(y=>y.id===x.doc.id)).sort((p,q)=>(q.key?1:0)-(p.key?1:0)).slice(0,3).map(s=>{ return `<button type="button" class="res" data-r="s|${s.id}"><span class="k tp">Фраза</span><span><b>${esc(s.t)}</b><small class="saytxt">${esc(s.say)}</small></span></button>`}).join("")+r.sayArt.slice(0,3).map(a=>`<button type="button" class="res" data-r="s|ART|${esc(a)}"><span class="k uk">УК ${esc(a)}</span><span><b>Фраза при задержании по этой статье</b><small>Объявить причину и права, передать МВД</small></span></button>`).join("")+`<button type="button" class="res" data-r="s|ALL"><span class="k tp">Все</span><span><b>Все фразы по порядку задержания</b></span></button>`);
   const dpHtml=r.dp.length?`<p class="res-h">ФСБ и СК</p>`+r.dp.sort((a,b)=>((b.doc.dept===DEPT)+(b.doc.dept==="marks")*2)-((a.doc.dept===DEPT)+(a.doc.dept==="marks")*2)).slice(0,5).map(x=>`<button type="button" class="res" data-r="d|${x.doc.go}|${x.doc.anc||""}"><span class="k tp">${x.doc.dept==="sk"?"СК":x.doc.dept==="marks"?"⚑":"ФСБ"}</span><span><b>${esc(x.doc.t)}</b><small>${esc(x.doc.d)}</small></span></button>`).join(""):"";
   if(r.sc.length) P.push(`<p class="res-h">Что делать</p>`+r.sc.slice(0,4).map(x=>{const s=S[x.doc.id]; return `<button type="button" class="res" data-r="g|${s.id}"><span class="k tp">Шаги</span><span><b>${s.t}</b><small>${esc(s.d)}</small></span></button>`}).join(""));
@@ -3094,7 +3108,7 @@ function renderResults(){
   if(r.tp.length) P.push(`<p class="res-h">Инструктор</p>`+r.tp.slice(0,3).map(x=>{const id=x.doc.id; return `<button type="button" class="res" data-r="g|${id}"><span class="k tp">Инстр.</span><span><b>${ITOP[id][1]}</b><small>${ITOP[id][2]}</small></span></button>`}).join(""));
   if(r.laws.length) P.push(`<p class="res-h">Тексты законов${r.laws.length>10?` · 10 из ${r.laws.length}`:""}</p>`+r.laws.slice(0,10).map(x=>{const a=x.doc.a; return `<button type="button" class="res" data-r="l|${a.law}|${a.n}"><span class="k">${esc(LAW[a.law].s.length>12?LAW[a.law].s.slice(0,11)+"…":LAW[a.law].s)} ${esc(label(a.n))}</span><span><b>${esc(artTitle(a))}</b><small>${x.hits&&x.hits.size?SMART.snippet(a.t.replace(/\s+/g," "),x.hits):esc(LAW[a.law].name)}</small></span></button>`}).join(""));
   else if(!CODES) P.push(`<p class="res-empty">Тексты законов ещё загружаются…</p>`);
-  if(dpHtml&&DEPT!=="gibdd"){ let i=0; while(i<P.length&&/^<p class="res-(hint|empty)"/.test(P[i])) i++; P.splice(i,0,dpHtml); }
+  if(dpHtml&&DEPT!=="gibdd"){ let i=0; while(i<P.length&&/^(<p class="res-(hint|empty)"|<div class="qa-box")/.test(P[i])) i++; P.splice(i,0,dpHtml); }
   if(!P.filter(p=>!p.startsWith('<p class="res-hint"')).length) P.push(`<p class="res-empty">Ничего не найдено. Попробуйте другое слово или номер статьи.</p>`);
   RES.innerHTML=P.join(""); RES.hidden=false;
 }
@@ -3112,6 +3126,7 @@ RES.addEventListener("click",e=>{
   else if(k==="a") askAI(q);
 });
 document.addEventListener("click",e=>{ if(!e.target.closest(".gsearch")) closeResults(); });
+RES.addEventListener("click",e=>{ if(e.target.closest(".qa [data-law], .qa [data-mkopen]")){ closeResults(); GQ.blur(); } });
 
 /* ---------- спросить ИИ (capability sample): ищет и читает статьи сам, ответ проверяется ---------- */
 let SAMPLE=null, askCtl=null;
@@ -3937,6 +3952,16 @@ if(CK) clockDraw();
   addEventListener("appinstalled",()=>{ if(box) box.hidden=true; toast("Шпаргалка установлена"); });
   if(navigator.onLine===false) setTimeout(()=>toast("Нет интернета — открыта сохранённая версия"),600);
 })();
+
+/* ---------- короткий ответ: поиск по вопросам экзамена ---------- */
+let QAI=null;
+function qaSearch(q){
+  if(typeof CARDS==="undefined"||!CARDS.length) return [];
+  if(!QAI){ QAI=new SMART.Index(); CARDS.forEach(c=>QAI.add(c,c.q+" "+(c.kw||""),c.a)); }
+  const r=QAI.search(q); if(!r.terms) return [];
+  const need=Math.max(2,Math.ceil(r.terms*0.6));
+  return r.res.filter(x=>x.matched>=need).slice(0,2).map(x=>x.doc);
+}
 
 /* ---------- метки: вопросы экзамена и статьи законов ---------- */
 const MKEY="shpora-marks";
