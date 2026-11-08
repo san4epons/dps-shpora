@@ -1480,6 +1480,24 @@ details.mkans p{margin:6px 0 0;line-height:1.5}
 .qa-r{margin:6px 0 0;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
 .qa-r .lnk{font-size:13px}
 
+/* ===== «Зачитать при задержании» ===== */
+.miranda{margin-top:16px;background:var(--surface);border:1px solid var(--accent);border-top:4px solid var(--accent);border-radius:10px;padding:14px 16px;display:grid;gap:12px;scroll-margin-top:calc(env(safe-area-inset-top,0px) + var(--hdr) + 12px)}
+.miranda header h3{margin:0;font-size:22px;font-weight:800}
+.miranda header p{margin:4px 0 0;color:var(--muted);font-size:14px;line-height:1.45}
+.mir-fill{display:grid;gap:8px}
+.mir-fill input{width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.mir-fill input:focus{outline:none;border-color:var(--accent);box-shadow:var(--ring)}
+.mir-chips{display:flex;flex-wrap:wrap;gap:6px}
+.mir-chips:empty{display:none}
+.mir-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 6px 5px 10px;border-radius:999px;background:var(--accent-soft);border:1px solid var(--accent);font-size:14px;line-height:1.3;max-width:100%}
+.mir-chip b{font-family:var(--mono)}
+.mir-chip button{font:inherit;font-size:16px;line-height:1;width:26px;height:26px;border-radius:50%;border:0;background:var(--surface);color:var(--muted);cursor:pointer;flex:none}
+.mir-text{background:var(--accent-soft);border-radius:4px 14px 14px 14px;padding:14px 16px;font-size:18px;line-height:1.55;color:var(--ink)}
+.mir-l{margin:0 0 8px}
+.mir-r{margin:0 0 8px;padding-left:24px;display:grid;gap:4px}
+.mir-gap{color:var(--siren-red,var(--stop));font-weight:800}
+@media (max-width:640px){.mir-text{font-size:17px;padding:12px 13px}}
+
 /* ===== СК ===== */
 .sk-box{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;display:grid;gap:10px}
 .sk-box>h3{margin:0;font-size:18px;font-weight:800}
@@ -3408,6 +3426,7 @@ function renderFsb(){
   const el=$("vFsb");
   el.innerHTML=`${chgBanner()}<h2 class="htitle">ФСБ</h2>
 <p class="lead">Чем занимается ФСБ, какие у сотрудника полномочия и какими статьями оперировать. Номера статей нажимаются — откроется текст закона сервера.</p>
+${mirandaHtml()}
 <p class="fsb-note">Ниже — по ФЗ о ФСБ, УК, УПК, законам о территориях и госдокументах и ФКЗ о ЧП.</p>
 <div class="tiles" style="margin-top:16px">
  <button type="button" class="tile hot" data-go="fsbexam"><span class="t">Подготовка к экзамену</span><span class="d">Карточки, тест на 20 вопросов и все вопросы с ответами</span><span class="ref">по законам сервера</span></button>
@@ -3952,6 +3971,54 @@ if(CK) clockDraw();
   addEventListener("appinstalled",()=>{ if(box) box.hidden=true; toast("Шпаргалка установлена"); });
   if(navigator.onLine===false) setTimeout(()=>toast("Нет интернета — открыта сохранённая версия"),600);
 })();
+
+/* ---------- «Зачитать при задержании»: одна плашка (УПК 92 ч.1 «г», примечание; права — УПК 46 ч.2) ---------- */
+const MIR_RIGHTS=["Знать, в чём вас подозревают, и получить копию постановления о возбуждении дела.",
+ "Давать объяснения и показания или отказаться от них. Если согласитесь — сказанное может быть использовано как доказательство, даже если потом откажетесь.",
+ "Пользоваться помощью защитника: до первого допроса поговорить с ним наедине и конфиденциально до 10 минут и сделать один телефонный звонок до 2 минут.",
+ "Представлять доказательства.",
+ "Заявлять ходатайства и отводы.",
+ "Давать показания на русском языке.",
+ "Знакомиться с протоколами следственных действий с вашим участием и подавать на них замечания.",
+ "С разрешения следователя участвовать в следственных действиях по вашему ходатайству, ходатайству вашего защитника или законного представителя.",
+ "Защищаться любыми способами, не запрещёнными законом."];
+const MIRK="shpora-mir";
+let MIR=(()=>{ try{ const o=JSON.parse(ls(MIRK)||"{}"); return {arts:(o.arts||[]).filter(a=>typeof UKPA==="undefined"||UKPA[a]),what:o.what||""}; }catch(e){ return {arts:[],what:""}; } })();
+const mirSave=()=>ls(MIRK,JSON.stringify(MIR));
+const mirArt=a=>{ const m=String(a).match(/^([\d.]+)(?: ч\.(\d+))?$/); return m?(m[2]?`частью ${m[2]} статьи ${m[1]}`:`статьёй ${m[1]}`):a; };
+function mirPhrase(){
+  const arts=MIR.arts.length?MIR.arts.map(mirArt).join(", "):"[пункт, часть, статья]";
+  const many=MIR.arts.length>1;
+  return {head:`Вы задержаны по подозрению в совершении ${many?"преступлений, предусмотренных":"преступления, предусмотренного"} ${arts} Уголовного кодекса РО, за ${MIR.what.trim()||"[что сделал]"}.`,
+    def:"Вы имеете право на защиту и вправе вызвать адвоката.", rights:MIR_RIGHTS, end:"По вашей просьбе указанные статьи и права будут разъяснены полностью."};
+}
+const mirPlain=()=>{ const p=mirPhrase(); return [p.head,p.def,"Ваши права:",...p.rights.map((r,i)=>`${i+1}. ${r}`),p.end].join("\n"); };
+function mirTextHtml(){ const p=mirPhrase(); const hl=t=>esc(t).replace(/\[([^\]]+)\]/g,'<span class="mir-gap">[$1]</span>');
+  return `<p class="mir-l">${hl(p.head)}</p><p class="mir-l">${esc(p.def)}</p><p class="mir-l"><b>Ваши права:</b></p><ol class="mir-r">${p.rights.map(r=>`<li>${esc(r)}</li>`).join("")}</ol><p class="mir-l">${esc(p.end)}</p>`; }
+function mirChips(){ return MIR.arts.map(a=>{ const p=typeof UKPA!=="undefined"&&UKPA[a]; return `<span class="mir-chip"><b>${esc(a)}</b>${p?` ${esc(p.t)}`:""}<button type="button" data-mirdel="${esc(a)}" aria-label="Убрать ${esc(a)}">×</button></span>`; }).join(""); }
+function mirandaHtml(){
+  return `<section class="miranda" id="fsb-miranda" aria-label="Зачитать при задержании"><header><h3>Зачитать при задержании</h3><p>Говорите чётко и в понятном темпе. Форма — УПК 92 ч.1 «г» (примечание), права — УПК 46 ч.2.</p></header>
+<div class="mir-fill"><div class="fc-add"><label for="mirq" class="hide">Статья УК</label><input id="mirq" type="search" placeholder="Статья: номер или слово — 291, взятка, оружие…" autocomplete="off"><div id="mirSug" class="fc-sug" hidden></div></div>
+<div class="mir-chips" id="mirChips">${mirChips()}</div>
+<label for="mirwhat" class="hide">За что</label><input id="mirwhat" type="text" placeholder="За что — коротко: передачу взятки инспектору ГИБДД" value="${esc(MIR.what)}" autocomplete="off"></div>
+<div class="mir-text" id="mirText">${mirTextHtml()}</div>
+<div class="ex-acts"><button type="button" class="btn pri" data-mircopy="1">Копировать текст</button><button type="button" class="btn" data-mirclear="1">Очистить</button></div></section>`;
+}
+function mirRedraw(){ const t=$("mirText"); if(t) t.innerHTML=mirTextHtml(); const c=$("mirChips"); if(c) c.innerHTML=mirChips(); mirSave(); }
+document.addEventListener("input",e=>{
+  if(e.target.id==="mirwhat"){ MIR.what=e.target.value; const t=$("mirText"); if(t) t.innerHTML=mirTextHtml(); mirSave(); }
+  if(e.target.id==="mirq"){ const q=e.target, sug=$("mirSug"); if(!q.value.trim()){ sug.hidden=true; return; } const r=fcSearch(q.value).slice(0,12);
+    sug.innerHTML=r.length?r.map((p,i)=>`<button type="button" class="fc-opt${i===0?" on":""}" data-miradd="${esc(p.a)}"><span class="art">${esc(p.a)}</span><span><b>${esc(p.t)}</b><small>${esc(p.ss)}</small></span><span class="fc-plus" aria-hidden="true">+</span></button>`).join(""):`<p class="res-empty">Не нашёл. Попробуйте номер статьи.</p>`; sug.hidden=false; }
+});
+document.addEventListener("keydown",e=>{ if(e.target.id!=="mirq") return; if(e.key==="Enter"){ const b=$("mirSug").querySelector("[data-miradd]"); if(b){ e.preventDefault(); b.click(); } } if(e.key==="Escape") $("mirSug").hidden=true; });
+document.addEventListener("click",e=>{
+  const ad=e.target.closest("[data-miradd]"); if(ad){ const a=ad.dataset.miradd; if(!MIR.arts.includes(a)) MIR.arts.push(a); const q=$("mirq"); q.value=""; $("mirSug").hidden=true; mirRedraw(); return; }
+  const dl=e.target.closest("[data-mirdel]"); if(dl){ MIR.arts=MIR.arts.filter(x=>x!==dl.dataset.mirdel); mirRedraw(); return; }
+  if(e.target.closest("[data-mircopy]")){ copyText(mirPlain()); return; }
+  if(e.target.closest("[data-mirclear]")){ MIR={arts:[],what:""}; const w=$("mirwhat"); if(w) w.value=""; mirRedraw(); return; }
+  if(!e.target.closest(".miranda .fc-add")){ const sg=$("mirSug"); if(sg) sg.hidden=true; }
+});
+GI.add({k:"dp",dept:"fsb",go:"fsb",anc:"fsb-miranda",t:"Зачитать при задержании",d:"Причина, статья и все права задержанного — одной плашкой (УПК 92 «г», 46 ч.2)"},"миранда зачитать права задержанного разъяснить права задержание фраза что говорить при задержании вы задержаны","ваши права адвокат защита по вашей просьбе статьи и права будут разъяснены полностью");
 
 /* ---------- короткий ответ: поиск по вопросам экзамена ---------- */
 let QAI=null;
