@@ -4514,7 +4514,7 @@ GI.add({k:"dp",dept:"fsb",go:"fsbacad",anc:"ac-met",t:"Академия Упра
 CASES.forEach(c=>GI.add({k:"dp",dept:"fsb",go:"fsbacad",anc:"ac-run",t:"Кейс "+c.id+": "+c.title,d:"Академия · уровень "+c.level},c.title+" "+(c.topic||"")+" кейс академия",c.situation));
 
 /* ---------- Кабинет экзаменатора Академии «М» (Google Таблица через Apps Script) ---------- */
-const ACAD_API_PROD="";
+const ACAD_API_PROD="https://script.google.com/macros/s/AKfycbwN5uTrqarz82G5SezE97uAIITbsW0r203FPjTzGjzeoylRijpTE4UyytLdYZAPdUGc/exec";
 const ACAD_API=(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&ls("acad-api"))||ACAD_API_PROD;
 const KAREAS=[["proc","Процессуалка (УПК)","задержание, подследственность, документы, эксперимент"],["law","Законка (УК, КоАП)","квалификация деяний, должностные преступления"],["ust","Устав и служба","внутренний устав ФСБ, подчинённость, взыскания"],["spec","Спецзаконы и статусы","неприкосновенность, территории, оружие и сила"],["logic","Логика и порядок действий","последовательность, вывод, обоснование"]];
 const KAREA_OF={"Задержание":"proc","Подследственность":"proc","Документы и дела":"proc","Оперативный эксперимент":"proc","Должностные преступления":"law","Устав и служба":"ust","Неприкосновенность":"spec","Территории и доступ":"spec","Сила и оружие":"spec"};
