@@ -5,7 +5,46 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0a1322"><link rel="icon" href="icon-192.png" type="image/png"><link rel="apple-touch-icon" href="icon-180.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Шпаргалка">
 <script>if("serviceWorker" in navigator) addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script>
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif}img{max-width:100%}[hidden]{display:none!important}
+/* ===== только ФСБ ===== */
+.only-fsb .dept{display:none!important}
+/* ===== кабинет экзаменатора ===== */
+.kb-me{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin:10px 0 6px;font-size:15px}
+.kb-tabs{margin:6px 0 4px}
+.kb-tabs button{white-space:nowrap;flex:none}
+.kb-login h3,.kb-total h3{margin:0;font-size:20px;font-weight:800}
+.kb-form{max-width:520px}
+.kb-note{margin:0;color:var(--muted);font-size:13.5px;line-height:1.45;grid-column:1/-1}
+.kb-err{margin:6px 0 0;color:var(--stop);font-weight:700;grid-column:1/-1}
+.kb-warn{margin:8px 0;padding:10px 12px;border-radius:8px;background:var(--stop-soft);color:var(--ink);border-left:4px solid var(--stop);font-weight:600}
+.kb-head p{margin:0}
+.kb-code{font-size:15px;margin:0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.kb-code b{font-size:22px;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.kb-case{margin-top:14px}
+.kb-model{margin-top:8px}
+.kb-row{display:grid;gap:6px;padding-top:10px}
+.kb-auto{color:var(--muted);font-size:13px}
+.kb-total{margin-top:18px}
+.kb-pill{display:inline-block;font-size:12.5px;font-weight:800;letter-spacing:.03em;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.kb-ok{background:var(--ok);border-color:var(--ok);color:var(--ok-ink)}
+.kb-mid{background:var(--ok-soft);border-color:var(--accent);color:var(--ink)}
+.kb-bad{background:var(--stop);border-color:var(--stop);color:#fff}
+.kb-dl{display:grid;grid-template-columns:minmax(110px,auto) minmax(0,1fr);gap:6px 12px;margin:6px 0}
+.kb-dl dt{color:var(--muted);font-weight:700;font-size:14px}
+.kb-dl dd{margin:0}
+.kb-qs{margin:4px 0;padding-left:22px;display:grid;gap:8px}
+.kb-qs p{margin:0;line-height:1.45}
+.kb-marks{font-size:13.5px;color:var(--muted)}
+.kb-noteq{font-size:14px;border-left:3px solid var(--accent);padding-left:8px;margin-top:4px!important}
+.kb-tbl{display:grid;gap:6px;margin-top:6px}
+.kb-tr{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;color:var(--ink);text-align:left}
+.kb-tr small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.kb-li{cursor:pointer;grid-template-columns:minmax(0,1fr) auto}
+.kb-li:hover,.kb-li:focus-visible{border-color:var(--accent);outline:none}
+.kb-bar{display:inline-block;width:90px;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.kb-bar i{display:block;height:100%;background:var(--stop)}
+@media (max-width:520px){.kb-tr{grid-template-columns:minmax(0,1fr) auto}.kb-tr .kb-bar{display:none}}
+</style>
 <title>Шпаргалка ДПС</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1641,6 +1680,8 @@ details.ukrow[open]>summary .t small.dd{display:none}
     <div id="vMarks" class="narrow" hidden></div>
     <div id="vFsbCheck" class="narrow" hidden></div>
     <div id="vFsbAcad" class="narrow" hidden></div>
+    <div id="vKab" class="narrow" hidden></div>
+    <div id="vBilet" class="narrow" hidden></div>
 
     <div id="vArt" hidden>
       <h2 class="htitle">Статьи</h2>
@@ -2403,10 +2444,15 @@ function lawText(a){
 
 /* ---------- router ---------- */
 let cur="";
-let DEPT=(d=>d==="fsb"||d==="sk"?d:"gibdd")(ls("shpora-dept"));
+const ONLY_FSB=true; /* ГИБДД и СК скрыты; вернуть — false */
+if(ONLY_FSB) document.documentElement.classList.add("only-fsb");
+let DEPT=ONLY_FSB?"fsb":(d=>d==="fsb"||d==="sk"?d:"gibdd")(ls("shpora-dept"));
 const TABS={gibdd:["do","arrest","art","law"],fsb:["fsb","fsbexam","fsbcalc","fsbuk","fsblaw"],sk:["sk","skcall","skcase","skcalc"]};
 const DHOME={gibdd:"do",fsb:"fsb",sk:"sk"};
-function viewOf(tok){
+function viewOf(tok){ const v=viewOf0(tok); return ONLY_FSB&&v&&v.dept&&v.dept!=="fsb"?null:v; }
+function viewOf0(tok){
+  if(tok==="kab") return {kind:"kab",tab:"fsbexam",dept:"fsb"};
+  if(/^bilet-/i.test(tok)) return {kind:"bilet",tab:"-",dept:"fsb",id:tok.slice(6)};
   if(tok==="do"||tok==="art"||tok==="law"||tok==="arrest") return {kind:tok,tab:tok,dept:"gibdd"};
   if(tok==="fsb"||tok==="fsbcalc"||tok==="fsbuk"||tok==="fsbexam") return {kind:tok,tab:tok,dept:"fsb"};
   if(tok==="fsbstruct") return {kind:tok,tab:"fsb",dept:"fsb"};
@@ -2438,18 +2484,18 @@ function setDept(){
   $("gq").placeholder={gibdd:"Поиск: задержание, 319.1, тонировка…",fsb:"Поиск: ордер, 205, неприкосновенный…",sk:"Поиск: вызов, обыск, 315…"}[DEPT];
 }
 function nav(tok,opt={}){
-  if(!viewOf(tok)) tok="do";
+  if(!viewOf(tok)) tok=DHOME[DEPT];
   if(location.hash.slice(1)!==tok){ cur=tok; try{history.pushState(null,"","#"+tok)}catch(e){location.hash=tok} }
   show(tok,opt);
 }
 window.addEventListener("popstate",()=>{const t=location.hash.slice(1)||"do"; if(t!==cur) show(t,{})});
 window.addEventListener("hashchange",()=>{const t=location.hash.slice(1)||"do"; if(t!==cur) show(t,{})});
 function show(tok,opt){
-  const v=viewOf(tok)||viewOf("do"); cur=tok; ls("shpora-route",tok);
+  const v=viewOf(tok)||viewOf(DHOME[DEPT]); cur=tok; ls("shpora-route",tok);
   if(v.dept){ DEPT=v.dept; ls("shpora-last-"+v.dept,tok); } setDept();
   curTab=v.tab||({gibdd:"law",fsb:"fsblaw",sk:"-"}[DEPT]);
   TABS.gibdd.concat(TABS.fsb,TABS.sk).forEach(t=>{const b=$("tab-"+t); const on=t===curTab; b.setAttribute("aria-selected",String(on)); b.tabIndex=on?0:-1;});
-  $("vGrid").hidden=!["do","instr","law"].includes(v.kind); $("vScen").hidden=v.kind!=="scen"; $("vArt").hidden=v.kind!=="art"; $("vTopic").hidden=v.kind!=="topic"; $("vLaw").hidden=v.kind!=="lawread"; $("vAsk").hidden=v.kind!=="ask"; $("vFav").hidden=v.kind!=="fav"; $("vArrest").hidden=v.kind!=="arrest"; $("vFsb").hidden=v.kind!=="fsb"; $("vFsbCalc").hidden=v.kind!=="fsbcalc"; $("vFsbUk").hidden=v.kind!=="fsbuk"; $("vSk").hidden=v.kind!=="sk"; $("vSkCall").hidden=v.kind!=="skcall"; $("vSkCase").hidden=v.kind!=="skcase"; $("vChanges").hidden=v.kind!=="changes"; $("vFsbExam").hidden=v.kind!=="fsbexam"; $("vFsbStruct").hidden=v.kind!=="fsbstruct"; $("vFsbCourse").hidden=v.kind!=="fsbcourse"; $("vMarks").hidden=v.kind!=="marks"; $("vFsbCheck").hidden=v.kind!=="fsbcheck"; $("vFsbAcad").hidden=v.kind!=="fsbacad";
+  $("vGrid").hidden=!["do","instr","law"].includes(v.kind); $("vScen").hidden=v.kind!=="scen"; $("vArt").hidden=v.kind!=="art"; $("vTopic").hidden=v.kind!=="topic"; $("vLaw").hidden=v.kind!=="lawread"; $("vAsk").hidden=v.kind!=="ask"; $("vFav").hidden=v.kind!=="fav"; $("vArrest").hidden=v.kind!=="arrest"; $("vFsb").hidden=v.kind!=="fsb"; $("vFsbCalc").hidden=v.kind!=="fsbcalc"; $("vFsbUk").hidden=v.kind!=="fsbuk"; $("vSk").hidden=v.kind!=="sk"; $("vSkCall").hidden=v.kind!=="skcall"; $("vSkCase").hidden=v.kind!=="skcase"; $("vChanges").hidden=v.kind!=="changes"; $("vFsbExam").hidden=v.kind!=="fsbexam"; $("vFsbStruct").hidden=v.kind!=="fsbstruct"; $("vFsbCourse").hidden=v.kind!=="fsbcourse"; $("vMarks").hidden=v.kind!=="marks"; $("vFsbCheck").hidden=v.kind!=="fsbcheck"; $("vFsbAcad").hidden=v.kind!=="fsbacad"; $("vKab").hidden=v.kind!=="kab"; $("vBilet").hidden=v.kind!=="bilet";
   closeResults();
   if(v.kind==="do") gridDo();
   if(v.kind==="instr") gridInstr();
@@ -2472,6 +2518,8 @@ function show(tok,opt){
   if(v.kind==="marks") renderMarks();
   if(v.kind==="fsbcheck") renderFsbCheck();
   if(v.kind==="fsbacad") renderFsbAcad();
+  if(v.kind==="kab") renderKab();
+  if(v.kind==="bilet") renderBilet(v.id);
   if(!opt.art&&!opt.row) window.scrollTo({top:0});
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-go]"); if(b){e.preventDefault(); nav(b.dataset.go);}});
@@ -3146,13 +3194,14 @@ const RES=$("results"), GQ=$("gq");
 function closeResults(){RES.hidden=true;}
 function artTitle(a){const f=a.t.split("\n")[0].replace(/^Статья\s+[\d.]+\.?\s*/,"").replace(/^[\d.]+\.?\s*/,""); return f.length>110?f.slice(0,108)+"…":f;}
 function renderResults(){
-  const r=search(GQ.value); if(!r){closeResults();return;} const P=[];
+  const r=search(GQ.value); if(!r){closeResults();return;}
+  if(ONLY_FSB){ r.sc=[]; r.tp=[]; r.say=[]; r.sayArt=[]; r.dp=r.dp.filter(x=>x.doc.dept!=="sk"); } const P=[];
   if(r.unknownLaw) P.push(`<p class="res-empty">Закона «${esc(r.unknownLaw)}» нет в шпаргалке. Есть: УК, КоАП, УПК, ПДД, «О полиции», неприкосновенность, госдокументы, оружие, территории, прокуратура, ЧП, ФСБ, СК и устав СК, ФСО, адвокатура, Конституция, суды, Правительство, ТК, кодекс этики, ВС, СМИ, бизнес, медучреждения. Пришлите текст — добавлю.</p>`);
   if(r.expanded.length) P.push(`<p class="res-hint">Ищу также: ${esc(r.expanded.join(", "))}</p>`);
   const ans=(!r.isNum&&r.terms>=2)?qaSearch(GQ.value):[];
   if(ans.length) P.push(`<div class="qa-box"><p class="res-h">Короткий ответ<small> · из вопросов экзамена, со ссылкой на статью</small></p>${ans.map(c=>`<div class="qa"><p class="qa-q">${esc(c.q)}</p><p class="qa-a">${esc(c.a)}</p><p class="qa-r">${refBtns(c.ref)}<button type="button" class="lnk" data-mkopen="ex|${esc(c.id)}">в экзамене →</button></p></div>`).join("")}</div>`);
   if(r.say.length||r.sayArt.length) P.push(`<p class="res-h">Что говорить<small> · нажмите, чтобы скопировать</small></p>`+r.say.map(x=>SAY.find(y=>y.id===x.doc.id)).sort((p,q)=>(q.key?1:0)-(p.key?1:0)).slice(0,3).map(s=>{ return `<button type="button" class="res" data-r="s|${s.id}"><span class="k tp">Фраза</span><span><b>${esc(s.t)}</b><small class="saytxt">${esc(s.say)}</small></span></button>`}).join("")+r.sayArt.slice(0,3).map(a=>`<button type="button" class="res" data-r="s|ART|${esc(a)}"><span class="k uk">УК ${esc(a)}</span><span><b>Фраза при задержании по этой статье</b><small>Объявить причину и права, передать МВД</small></span></button>`).join("")+`<button type="button" class="res" data-r="s|ALL"><span class="k tp">Все</span><span><b>Все фразы по порядку задержания</b></span></button>`);
-  const dpHtml=r.dp.length?`<p class="res-h">ФСБ и СК</p>`+r.dp.sort((a,b)=>((b.doc.dept===DEPT)+(b.doc.dept==="marks")*2)-((a.doc.dept===DEPT)+(a.doc.dept==="marks")*2)).slice(0,5).map(x=>`<button type="button" class="res" data-r="d|${x.doc.go}|${x.doc.anc||""}"><span class="k tp">${x.doc.dept==="sk"?"СК":x.doc.dept==="marks"?"⚑":"ФСБ"}</span><span><b>${esc(x.doc.t)}</b><small>${esc(x.doc.d)}</small></span></button>`).join(""):"";
+  const dpHtml=r.dp.length?`<p class="res-h">${ONLY_FSB?"ФСБ":"ФСБ и СК"}</p>`+r.dp.sort((a,b)=>((b.doc.dept===DEPT)+(b.doc.dept==="marks")*2)-((a.doc.dept===DEPT)+(a.doc.dept==="marks")*2)).slice(0,5).map(x=>`<button type="button" class="res" data-r="d|${x.doc.go}|${x.doc.anc||""}"><span class="k tp">${x.doc.dept==="sk"?"СК":x.doc.dept==="marks"?"⚑":"ФСБ"}</span><span><b>${esc(x.doc.t)}</b><small>${esc(x.doc.d)}</small></span></button>`).join(""):"";
   if(r.sc.length) P.push(`<p class="res-h">Что делать</p>`+r.sc.slice(0,4).map(x=>{const s=S[x.doc.id]; return `<button type="button" class="res" data-r="g|${s.id}"><span class="k tp">Шаги</span><span><b>${s.t}</b><small>${esc(s.d)}</small></span></button>`}).join(""));
   if(dpHtml&&DEPT==="gibdd") P.push(dpHtml);
   if(r.rows.length) P.push(`<p class="res-h">Статьи</p>`+r.rows.slice(0,14).map(x=>{const d=x.doc; return `<button type="button" class="res" data-r="r|${d.code}|${d.a}"><span class="k${d.code==="uk"?" uk":""}">${d.code==="uk"?"УК":"КоАП"} ${esc(d.a)}</span><span><b>${x.hits?SMART.marks(d.d,x.hits):esc(d.d)}</b>${(ROWINFO[d.code+"|"+d.a]||{}).sancText?`<small>${esc(ROWINFO[d.code+"|"+d.a].sancText)}</small>`:""}</span></button>`}).join(""));
@@ -4406,7 +4455,7 @@ const METOD=[
  ["Учёт и обжалование",["По каждому уровню — протокол: кейсы, оценки по критериям, комментарий о логике, решение.","Сотрудник вправе обжаловать решение, если считает, что оно противоречит закону или уставу (Устав ФСБ I.5.14, п. 5.14.4). Порядок в Академии: рапорт начальнику Академии, на его решение — Начальнику Управления."]]
 ];
 const metodPlain=()=>["МЕТОДИКА АКАДЕМИИ УПРАВЛЕНИЯ «М»",...METOD.flatMap(([h,it],i)=>["",`${i+1}. ${h}`,...it.map(x=>"— "+x)])].join("\n");
-function acadPlaque(){ return `<div class="cplaques"><article class="cplaque"><header><p class="ck">Академия Управления «М»</p><h3>Методика: 4 уровня</h3><p class="cs">знание → применение → анализ → коллизии</p></header><ol class="ctopics">${ACAD_LV.map(([n,t,d])=>`<li><b>${t}</b><small>${esc(d)} · кейсов: ${CASES.filter(c=>c.level===n).length}</small></li>`).join("")}</ol><p class="cwho">Без порога «X из Y»: экзаменатор оценивает логику рассуждения по закону. Надзорная практика на чужих задержаниях отменена — УПК 92 ч.6–7.</p><div class="ex-acts"><button type="button" class="btn pri" data-go="fsbacad">Методика и кейсы</button></div></article></div>`; }
+function acadPlaque(){ return `<div class="cplaques"><article class="cplaque"><header><p class="ck">Академия Управления «М»</p><h3>Методика: 4 уровня</h3><p class="cs">знание → применение → анализ → коллизии</p></header><ol class="ctopics">${ACAD_LV.map(([n,t,d])=>`<li><b>${t}</b><small>${esc(d)} · кейсов: ${CASES.filter(c=>c.level===n).length}</small></li>`).join("")}</ol><p class="cwho">Без порога «X из Y»: экзаменатор оценивает логику рассуждения по закону. Надзорная практика на чужих задержаниях отменена — УПК 92 ч.6–7.</p><div class="ex-acts"><button type="button" class="btn pri" data-go="kab">Кабинет экзаменатора</button><button type="button" class="btn" data-go="fsbacad">Методика и кейсы</button></div></article></div>`; }
 let AC={mode:"exam",lv:1,id:"",show:false,marks:{},crit:{},note:"",log:[]};
 const acCase=()=>CASES.find(c=>c.id===AC.id);
 function acPick(lv){ const pool=CASES.filter(c=>c.level===lv&&!AC.log.some(l=>l.id===c.id)&&c.id!==AC.id); const all=pool.length?pool:CASES.filter(c=>c.level===lv); if(!all.length) return ""; return all[Math.floor(Math.random()*all.length)].id; }
@@ -4438,6 +4487,7 @@ function renderFsbAcad(){
   const el=$("vFsbAcad");
   if(el.dataset.ready){ acDraw(); return; } el.dataset.ready="1";
   el.innerHTML=`<button type="button" class="backbtn" data-go="fsbexam">← Экзамен ФСБ</button><h2 class="htitle">Академия Управления «М»</h2><p class="lead">Новая методика: кейсы четырёх уровней сложности, оценивается логика рассуждения по закону. Порога «X из Y» нет. Практика — только законная: без присутствия на чужих задержаниях.</p>
+<div class="ex-acts"><button type="button" class="btn pri" data-go="kab">Кабинет экзаменатора — вход по ключу</button></div>
 <section class="cc-sec" id="ac-run"><h3>Кейсы</h3>
 <div class="chips" role="group" aria-label="Режим"><button type="button" data-acmode="exam">Экзаменатор</button><button type="button" data-acmode="train">Тренировка курсанта</button></div>
 <div class="chips" role="group" aria-label="Уровень" style="margin-top:8px">${ACAD_LV.map(([n,t])=>`<button type="button" data-aclv="${n}">${n}. ${t}</button>`).join("")}</div>
@@ -4462,6 +4512,222 @@ function renderFsbAcad(){
 }
 GI.add({k:"dp",dept:"fsb",go:"fsbacad",anc:"ac-met",t:"Академия Управления «М»: методика",d:"4 уровня, оценка логики по закону, законная практика"},"академия методика курсанты уровни кейсы обучение экзамен академии управление м проверка логики","");
 CASES.forEach(c=>GI.add({k:"dp",dept:"fsb",go:"fsbacad",anc:"ac-run",t:"Кейс "+c.id+": "+c.title,d:"Академия · уровень "+c.level},c.title+" "+(c.topic||"")+" кейс академия",c.situation));
+
+/* ---------- Кабинет экзаменатора Академии «М» (Google Таблица через Apps Script) ---------- */
+const ACAD_API_PROD="";
+const ACAD_API=(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&ls("acad-api"))||ACAD_API_PROD;
+const KAREAS=[["proc","Процессуалка (УПК)","задержание, подследственность, документы, эксперимент"],["law","Законка (УК, КоАП)","квалификация деяний, должностные преступления"],["ust","Устав и служба","внутренний устав ФСБ, подчинённость, взыскания"],["spec","Спецзаконы и статусы","неприкосновенность, территории, оружие и сила"],["logic","Логика и порядок действий","последовательность, вывод, обоснование"]];
+const KAREA_OF={"Задержание":"proc","Подследственность":"proc","Документы и дела":"proc","Оперативный эксперимент":"proc","Должностные преступления":"law","Устав и служба":"ust","Неприкосновенность":"spec","Территории и доступ":"spec","Сила и оружие":"spec"};
+const KMARKS=["слабо","средне","хорошо","отлично"];
+const KTYPES={base:["Допуск к работе",[1,2,2,3,3]],senior:["Наставник / старший состав",[2,3,3,4,4]]};
+const KVERD=["засчитан","доработка","не засчитан"];
+let KS={key:ls("acad-key")||"",me:null,tab:"new",exam:null,card:null,draft:null,busy:false,err:""};
+const kRnd=n=>{ try{ const a=new Uint32Array(1); crypto.getRandomValues(a); return a[0]%n; }catch(e){ return Math.floor(Math.random()*n); } };
+function kShuffle(a){ for(let i=a.length-1;i>0;i--){ const j=kRnd(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+async function kApi(action,p={}){
+  if(!ACAD_API) throw new Error("Таблица ещё не подключена: в сайт не вставлен адрес веб-приложения Google.");
+  let r; try{ r=await fetch(ACAD_API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action,key:KS.key,...p})}); }catch(e){ throw new Error("Нет связи с таблицей. Проверьте интернет и повторите."); }
+  if(!r.ok) throw new Error("Таблица ответила ошибкой "+r.status);
+  let j; try{ j=await r.json(); }catch(e){ throw new Error("Таблица вернула не тот ответ. Проверьте, что веб-приложение развёрнуто с доступом «Все»."); }
+  if(j.auth===false&&action!=="login"&&action!=="ticket"){ kLogout(true); }
+  if(!j.ok) throw new Error(j.error||"Ошибка");
+  return j;
+}
+function kLogout(silent){ KS.key=""; KS.me=null; KS.exam=null; KS.card=null; try{localStorage.removeItem("acad-key")}catch(e){} if(!silent) toast("Вы вышли из кабинета"); kDraw(); }
+function kPick(type,order){
+  const out=[], used=new Set(), topics=new Set();
+  KTYPES[type][1].forEach(L=>{ let pool=CASES.filter(c=>c.level===L&&!used.has(c.id)); const fresh=pool.filter(c=>!topics.has(c.topic)); if(fresh.length) pool=fresh; if(!pool.length) return; const c=pool[kRnd(pool.length)]; used.add(c.id); topics.add(c.topic); out.push(c); });
+  return order==="mix"?kShuffle(out):out;
+}
+const kCase=id=>CASES.find(c=>c.id===id);
+const kDraftKey=code=>"acad-draft-"+code;
+function kLoadDraft(exam){
+  let d=null; try{ d=JSON.parse(ls(kDraftKey(exam.code))||"null"); }catch(e){}
+  if(!d){ const r=exam.result; d={cases:{},areas:{},touched:{},total:"",totalTouched:false,comment:""};
+    if(r){ (r.cases||[]).forEach(c=>d.cases[c.id]={crit:{...c.crit},critErr:!!c.critErr,note:c.note||"",verdict:c.verdict||""}); d.areas={...r.areas}; KAREAS.forEach(([k])=>{ if(d.areas[k]) d.touched[k]=true; }); d.total=r.total||""; d.totalTouched=!!r.total; d.comment=r.comment||""; } }
+  exam.cases.forEach(c=>{ d.cases[c.id]=d.cases[c.id]||{crit:{},critErr:false,note:"",verdict:""}; });
+  return d;
+}
+const kSaveDraft=()=>{ if(KS.exam&&KS.draft) ls(kDraftKey(KS.exam.code),JSON.stringify(KS.draft)); };
+function kAutoVerdict(r){ if(!r) return ""; if(r.critErr) return "не засчитан"; const key=["k1","k2","k4"]; if(key.some(k=>r.crit[k]==="0")) return "не засчитан"; if(!key.every(k=>r.crit[k])) return ""; return key.every(k=>r.crit[k]==="2")?"засчитан":"доработка"; }
+const kVerdict=r=>r.verdict||kAutoVerdict(r);
+function kAutoAreas(){
+  const ex=KS.exam, d=KS.draft, out={};
+  KAREAS.forEach(([a])=>{
+    const vals=[]; let crit=false;
+    ex.cases.forEach(m=>{ const r=d.cases[m.id]; if(!r) return; const c=r.crit; const nums=k=>c[k]!==undefined&&c[k]!==""?[+c[k]]:[];
+      if(a==="logic") vals.push(...nums("k4"),...nums("k5"));
+      else if(KAREA_OF[m.topic]===a){ ["k1","k2","k3","k4","k5"].forEach(k=>vals.push(...nums(k))); if(r.critErr) crit=true; }
+      else if(a==="law") vals.push(...nums("k1"));
+    });
+    if(crit){ out[a]="слабо"; return; }
+    if(!vals.length){ out[a]=""; return; }
+    const avg=vals.reduce((s,v)=>s+v,0)/vals.length;
+    out[a]=avg<0.75?"слабо":avg<1.35?"средне":avg<1.85?"хорошо":"отлично";
+  });
+  return out;
+}
+function kAutoTotal(){
+  const vs=KS.exam.cases.map(m=>kVerdict(KS.draft.cases[m.id]));
+  if(vs.some(v=>!v)) return "";
+  if(KS.exam.cases.some(m=>KS.draft.cases[m.id].critErr)) return "не засчитан";
+  if(vs.every(v=>v==="засчитан")) return "засчитан";
+  if(vs.filter(v=>v==="не засчитан").length>=2) return "не засчитан";
+  return "доработка";
+}
+function kSync(){ const d=KS.draft; if(!d) return; const auto=kAutoAreas(); KAREAS.forEach(([k])=>{ if(!d.touched[k]) d.areas[k]=auto[k]; }); if(!d.totalTouched) d.total=kAutoTotal(); }
+const kLink=code=>location.origin+location.pathname+"#bilet-"+code;
+const kD=s=>{ const t=new Date(s); return isNaN(t)?String(s||""):t.toLocaleString("ru-RU",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",timeZone:"Europe/Moscow"})+" МСК"; };
+const kLvName=n=>(ACAD_LV.find(x=>x[0]===n)||[])[1]||"";
+function kChips(attr,opts,cur,extra=""){ return `<div class="chips" role="group">${opts.map(([v,l])=>`<button type="button" ${attr}="${esc(v)}" ${extra} aria-pressed="${cur===v}">${esc(l)}</button>`).join("")}</div>`; }
+const kPill=v=>v?`<span class="kb-pill kb-${v==="засчитан"||v==="отлично"||v==="хорошо"?"ok":v==="доработка"||v==="средне"?"mid":"bad"}">${esc(v)}</span>`:`<span class="kb-pill">—</span>`;
+
+function kLoginHtml(){
+  return `<div class="sk-box kb-login"><h3>Вход по ключу</h3><p class="lead">Ключ выдаёт начальник Академии. Каждый вход и каждое действие записываются в журнал таблицы.</p>
+${ACAD_API?"":`<p class="kb-warn">Таблица ещё не подключена. Вход заработает, когда в сайт будет вставлен адрес веб-приложения Google.</p>`}
+<form class="qc-form kb-form" id="kbLogin"><label>Ключ<input id="kbKey" type="password" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="UM-XXXX-XXXX-XXXX-XXXX"></label><div class="ex-acts"><button type="submit" class="btn pri"${KS.busy?" disabled":""}>${KS.busy?"Проверяю…":"Войти"}</button></div></form>${KS.err?`<p class="kb-err">${esc(KS.err)}</p>`:""}</div>`;
+}
+function kNewHtml(){
+  return `<form class="sk-box qc-form" id="kbNew"><label>ФИО кандидата<input id="kbCadet" type="text" autocomplete="off" required></label><label>Статик<input id="kbStatic" type="text" inputmode="numeric" autocomplete="off"></label>
+<label>Тип экзамена<select id="kbType">${Object.entries(KTYPES).map(([k,[t,l]])=>`<option value="${k}">${esc(t)} — уровни ${l.join(", ")}</option>`).join("")}</select></label>
+<label>Порядок вопросов<select id="kbOrder"><option value="up">По возрастанию сложности</option><option value="mix">Вперемешку</option></select></label>
+<p class="kb-note">Кейсы выбираются случайно из банка (${CASES.length}), по возможности на разные темы. Вариант получает номер, по нему открывается карточка экзамена, а кандидат — свой билет без эталонов.</p>
+<div class="ex-acts"><button type="submit" class="btn pri"${KS.busy?" disabled":""}>${KS.busy?"Выдаю…":"Выдать вариант"}</button></div>${KS.err?`<p class="kb-err">${esc(KS.err)}</p>`:""}</form>`;
+}
+function kGradeHtml(){
+  const ex=KS.exam, d=KS.draft; kSync();
+  const cases=ex.cases.map((m,i)=>{ const c=kCase(m.id)||{situation:"Кейс удалён из банка",task:"",model:[],checkpoints:[],critical:[],followups:[]}; const r=d.cases[m.id]; const auto=kAutoVerdict(r), v=kVerdict(r);
+    return `<article class="ex-card kb-case" id="kbc-${esc(m.id)}"><p class="meta"><span class="tp">${i+1} · Уровень ${m.level} «${esc(kLvName(m.level))}» · ${esc(m.topic||"")}</span><span>${esc(m.id)}</span></p><p class="q">${esc(m.title)}</p><p class="ac-sit">${esc(c.situation)}</p><p class="ac-task"><b>Задание:</b> ${esc(c.task)}</p>
+<details class="mkans kb-model" data-kbm="${esc(m.id)}"${(KS.openM||{})[m.id]?" open":""}><summary>Эталон для экзаменатора${CHEV}</summary><div class="ac-model"><h5>Эталон рассуждения</h5>${acStepList(c.model)}<h5>Обязан назвать</h5>${cList(c.checkpoints)}${(c.critical||[]).length?`<h5>Критические ошибки</h5>${cList(c.critical,"no")}`:""}${(c.followups||[]).length?`<h5>Вопросы «а если…»</h5>${c.followups.map(f=>`<details class="mkans"><summary>${esc(f.q)}${CHEV}</summary><p>${esc(f.a)}</p>${refNorm(f.ref).length?`<small class="sref">${refBtns(f.ref)}</small>`:""}</details>`).join("")}`:""}</div></details>
+<div class="ac-rub">${ACAD_CRIT.map(([k,t,dd])=>`<div class="ac-crit"><p><b>${t}</b><small>${esc(dd)}</small></p>${kChips("data-kbcrit",ACAD_MARK,r.crit[k],`data-case="${esc(m.id)}" data-k="${k}"`)}</div>`).join("")}
+<label class="fc-chk"><input type="checkbox" data-kbcerr="${esc(m.id)}"${r.critErr?" checked":""}><span>Критическая ошибка<small>Решение нарушает закон или права — кейс не засчитывается</small></span></label>
+<label class="mknote"><span>Логика кандидата</span><textarea rows="2" data-kbnote="${esc(m.id)}">${esc(r.note||"")}</textarea></label>
+<div class="kb-row"><b>Решение по кейсу</b>${kChips("data-kbverd",KVERD.map(x=>[x,x]),v,`data-case="${esc(m.id)}"`)}<small class="kb-auto">${auto?"по критериям: "+auto:"заполните критерии"}${r.verdict&&r.verdict!==auto?` · <button type="button" class="lnk" data-kbvreset="${esc(m.id)}">вернуть авто</button>`:""}</small></div></div></article>`; }).join("");
+  const areas=KAREAS.map(([k,t,dd])=>`<div class="ac-crit"><p><b>${esc(t)}</b><small>${esc(dd)}${d.touched[k]?"":d.areas[k]?" · авто по кейсам":" · не проверялось в кейсах"}</small></p>${kChips("data-kbarea",KMARKS.map(x=>[x,x]),d.areas[k],`data-k="${k}"`)}</div>`).join("");
+  return `<div class="kb-head sk-box"><p class="kb-code">Вариант <b>${esc(ex.code)}</b></p><p>${esc(ex.cadet)}${ex.static?" · статик "+esc(ex.static):""} · ${esc((KTYPES[ex.type]||[""])[0])} · принимает ${esc(ex.examiner)}</p>
+<div class="ex-acts"><button type="button" class="btn pri" data-kbcopy="link">Ссылка-билет для кандидата</button><button type="button" class="btn" data-kbcopy="code">Номер варианта</button></div><p class="kb-note">Кандидат видит по ссылке только ситуации и задания — без эталонов и оценок. Черновик оценок сохраняется на этом устройстве, пока вы не отправите его в таблицу.</p></div>
+${cases}
+<section class="sk-box kb-total"><h3>Общая оценка</h3><p class="kb-note">Заполняется по кейсам автоматически — измените, если видите иначе. Слабые области попадут в лист «Слабые темы» для лекций.</p>${areas}
+<div class="ex-acts"><button type="button" class="btn" data-kbperfect="1">Знает всё идеально</button><button type="button" class="btn" data-kbareaauto="1">Вернуть авто</button></div>
+<div class="kb-row"><b>Итог экзамена</b>${kChips("data-kbtotal",KVERD.map(x=>[x,x]),d.total)}<small class="kb-auto">по кейсам: ${kAutoTotal()||"оцените все кейсы"}</small></div>
+<label class="mknote"><span>Комментарий: что подтянуть</span><textarea rows="3" id="kbComment">${esc(d.comment||"")}</textarea></label>
+<div class="ex-acts"><button type="button" class="btn pri" data-kbsubmit="1"${KS.busy?" disabled":""}>${KS.busy?"Отправляю…":"Отправить в таблицу"}</button><button type="button" class="btn" data-kbclose="1">Отложить</button></div>${KS.err?`<p class="kb-err">${esc(KS.err)}</p>`:""}</section>`;
+}
+function kCardHtml(e){
+  const r=e.result, chief=KS.me&&KS.me.chief, mine=KS.me&&KS.me.name===e.examiner;
+  const rc=id=>r&&(r.cases||[]).find(x=>x.id===id);
+  return `<article class="sk-box kb-card"><p class="kb-code">Вариант <b>${esc(e.code)}</b> ${kPill(e.status==="завершён"?(r&&r.total):"")}</p>
+<dl class="kb-dl"><dt>Кандидат</dt><dd>${esc(e.cadet)}${e.static?" · статик "+esc(e.static):""}</dd><dt>Тип</dt><dd>${esc(e.typeName||"")}</dd><dt>Принимал</dt><dd>${esc(e.examiner)}</dd><dt>Начат</dt><dd>${esc(kD(e.started))}</dd><dt>Статус</dt><dd>${esc(e.status)}${r?" · "+esc(kD(r.finished)):""}</dd></dl>
+<h5>Вопросы</h5><ol class="kb-qs">${e.cases.map(m=>{ const x=rc(m.id); return `<li><p><b>${esc(m.id)}</b> «${esc(m.title)}» <small>· ур. ${m.level} · ${esc(m.topic||"")}</small> ${x?kPill(x.verdict):""}${x&&x.critErr?` <span class="kb-pill kb-bad">крит. ошибка</span>`:""}</p>${x?`<p class="kb-marks">${ACAD_CRIT.map(([k,t])=>`${t}: <b>${acMarkTxt(x.crit[k])}</b>`).join(" · ")}</p>${x.note?`<p class="kb-noteq">${esc(x.note)}</p>`:""}`:""}</li>`; }).join("")}</ol>
+${r?`<h5>Общая оценка</h5><dl class="kb-dl">${KAREAS.map(([k,t])=>`<dt>${esc(t)}</dt><dd>${kPill(r.areas[k])}</dd>`).join("")}</dl>${r.comment?`<h5>Комментарий</h5><p>${esc(r.comment)}</p>`:""}`:""}
+<div class="ex-acts">${e.status!=="завершён"&&(mine||chief)?`<button type="button" class="btn pri" data-kbresume="1">Продолжить оценку</button>`:""}${e.status==="завершён"&&chief?`<button type="button" class="btn" data-kbresume="1">Исправить оценку</button>`:""}<button type="button" class="btn" data-kbcopy="card">Копировать карточку</button><button type="button" class="btn" data-kbcopy="clink">Ссылка-билет</button></div></article>`;
+}
+function kCardPlain(e){ const r=e.result; const rc=id=>r&&(r.cases||[]).find(x=>x.id===id);
+  return [`ЭКЗАМЕН АКАДЕМИИ УПРАВЛЕНИЯ «М» · вариант ${e.code}`,`Кандидат: ${e.cadet}${e.static?" · статик "+e.static:""}`,`Тип: ${e.typeName||""} · принимал: ${e.examiner}`,`Статус: ${e.status}`,
+    ...e.cases.map((m,i)=>{ const x=rc(m.id); return `${i+1}) ${m.id} «${m.title}» (ур. ${m.level})${x?` — ${x.verdict||"—"}${x.critErr?", крит. ошибка":""}`:""}`; }),
+    ...(r?["Общая оценка: "+KAREAS.map(([k,t])=>`${t} — ${r.areas[k]||"—"}`).join("; "),`Итог: ${r.total}`,r.comment?"Комментарий: "+r.comment:""]:[])].filter(Boolean).join("\n"); }
+function kStatsHtml(s){
+  const bar=p=>`<span class="kb-bar"><i style="width:${Math.max(0,Math.min(100,p))}%"></i></span><b>${p}%</b>`;
+  return `<div class="sk-box"><p>Закрыто экзаменов: <b>${s.totals.exams}</b> · засчитан ${s.totals["засчитан"]} · доработка ${s.totals["доработка"]} · не засчитан ${s.totals["не засчитан"]}</p><p class="kb-note">Проблемность: «слабо» и «не засчитан» — полностью, «средне» и «доработка» — наполовину. Сверху — что разбирать на лекциях в первую очередь.</p></div>
+<h4 class="uk-ch">Общая оценка по областям</h4><div class="kb-tbl">${s.areas.map(a=>`<div class="kb-tr"><span>${esc(a.area)}<small>слабо ${a["слабо"]} · средне ${a["средне"]} · хорошо ${a["хорошо"]} · отлично ${a["отлично"]}</small></span>${bar(a.weakShare)}</div>`).join("")||`<p class="fc-empty">Пока нет данных</p>`}</div>
+<h4 class="uk-ch">Темы кейсов</h4><div class="kb-tbl">${s.topics.map(t=>`<div class="kb-tr"><span>${esc(t.topic)}<small>не засчитан ${t.fail} · доработка ${t.rework} · засчитан ${t.ok}</small></span>${bar(t.problem)}</div>`).join("")||`<p class="fc-empty">Пока нет данных</p>`}</div>
+<h4 class="uk-ch">Критерии рассуждения</h4><div class="kb-tbl">${s.crit.map(c=>`<div class="kb-tr"><span>${esc(c.name)}<small>не «уверенно»: ${c.weak} из ${c.total}</small></span>${bar(c.share)}</div>`).join("")}</div>
+<h4 class="uk-ch">Самые трудные кейсы — разобрать на лекции</h4><div class="kb-tbl">${s.cases.map(c=>`<div class="kb-tr"><span>${esc(c.title)}<small>ур. ${c.level} · ${esc(c.topic)} · не засчитано ${c.fail} из ${c.total}</small></span>${bar(c.share)}</div>`).join("")||`<p class="fc-empty">Пока нет данных</p>`}</div>`;
+}
+function kDraw(){
+  const el=$("kbMain"); if(!el) return;
+  if(!KS.me){ el.innerHTML=kLoginHtml(); return; }
+  const tabs=[["new",KS.exam?"Идёт: "+KS.exam.code:"Новый экзамен"],["find","Найти вариант"],["list","Последние"],["stats","Слабые темы"]].concat(KS.me.chief?[["log","Журнал входов"]]:[]);
+  let body="";
+  if(KS.tab==="new") body=KS.exam?kGradeHtml():kNewHtml();
+  if(KS.tab==="find") body=`<form class="sk-box qc-form kb-form" id="kbFind"><label>Номер варианта<input id="kbCode" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="AM-XXXXXX" value="${esc(KS.findCode||"")}"></label><div class="ex-acts"><button type="submit" class="btn pri"${KS.busy?" disabled":""}>${KS.busy?"Ищу…":"Открыть карточку"}</button></div>${KS.err?`<p class="kb-err">${esc(KS.err)}</p>`:""}</form>${KS.card?kCardHtml(KS.card):""}`;
+  if(KS.tab==="list") body=KS.list?`<div class="kb-tbl">${KS.list.map(x=>`<button type="button" class="kb-tr kb-li" data-kbopen="${esc(x.code)}"><span><b>${esc(x.code)}</b> · ${esc(x.cadet)}${x.static?" · "+esc(x.static):""}<small>${esc(kD(x.started))} · ${esc(x.type)} · ${esc(x.examiner)}</small></span>${kPill(x.status==="завершён"?x.total:"")}</button>`).join("")||`<p class="fc-empty">Экзаменов пока нет</p>`}</div>`:`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
+  if(KS.tab==="stats") body=KS.stats?kStatsHtml(KS.stats):`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
+  if(KS.tab==="log") body=KS.log?`<div class="kb-tbl">${KS.log.map(x=>`<div class="kb-tr"><span><b>${esc(x.name)}</b> · ${esc(x.what)}<small>${esc(kD(x.time))}${x.role&&x.role!=="—"?" · "+esc(x.role):""}${x.details?" · "+esc(x.details):""}</small></span></div>`).join("")||`<p class="fc-empty">Записей нет</p>`}</div>`:`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
+  el.innerHTML=`<div class="kb-me"><span>Экзаменатор: <b>${esc(KS.me.name)}</b> · ${esc(KS.me.role)}</span><button type="button" class="lnk" data-kblogout="1">Выйти</button></div>
+<nav class="chips st-toc kb-tabs" aria-label="Разделы кабинета">${tabs.map(([k,t])=>`<button type="button" data-kbtab="${k}" aria-pressed="${KS.tab===k}">${esc(t)}</button>`).join("")}</nav><div id="kbBody">${body}</div>`;
+  const b=el.querySelector("#kbBody"); if(b&&KS.tab==="new"&&KS.exam) linkify(b);
+}
+async function kLoadTab(){
+  KS.err="";
+  const t=KS.tab;
+  try{
+    if(t==="list"){ KS.list=null; kDraw(); KS.list=(await kApi("list",{})).items; }
+    if(t==="stats"){ KS.stats=null; kDraw(); KS.stats=(await kApi("stats")).stats; }
+    if(t==="log"){ KS.log=null; kDraw(); KS.log=(await kApi("log")).items; }
+  }catch(e){ KS.err=e.message; }
+  if(KS.tab===t) kDraw();
+}
+async function kOpen(code){
+  KS.tab="find"; KS.findCode=code; KS.busy=true; KS.err=""; KS.card=null; kDraw();
+  try{ KS.card=(await kApi("get",{code})).exam; }catch(e){ KS.err=e.message; }
+  KS.busy=false; kDraw();
+}
+function renderKab(){
+  const el=$("vKab");
+  if(!el.dataset.ready){ el.dataset.ready="1";
+    el.innerHTML=`<button type="button" class="backbtn" data-go="fsbacad">← Академия Управления «М»</button><h2 class="htitle">Кабинет экзаменатора</h2><p class="lead">Выдать вариант, оценить кейсы, отправить итог в Google Таблицу, найти карточку по номеру варианта.</p><div id="kbMain"></div>`;
+    el.addEventListener("submit",async e=>{ e.preventDefault(); if(KS.busy) return;
+      if(e.target.id==="kbLogin"){ const k=$("kbKey").value.trim().toUpperCase(); if(!k) return; KS.key=k; KS.busy=true; KS.err=""; kDraw();
+        try{ const j=await kApi("login"); KS.me={name:j.name,role:j.role,chief:!!j.chief}; ls("acad-key",k); const open=ls("acad-open"); if(open){ try{ const ex=JSON.parse(open); if(ex&&ex.code){ KS.exam=ex; KS.draft=kLoadDraft(ex); } }catch(_){} } }catch(err){ KS.key=""; KS.err=err.message; }
+        KS.busy=false; kDraw(); return; }
+      if(e.target.id==="kbNew"){ const cadet=$("kbCadet").value.trim(); if(!cadet){ KS.err="Укажите ФИО кандидата"; kDraw(); return; }
+        const type=$("kbType").value, order=$("kbOrder").value, st=$("kbStatic").value.trim(); const picked=kPick(type,order);
+        KS.busy=true; KS.err=""; kDraw();
+        try{ const j=await kApi("create",{cadet,static:st,type,order,cases:picked.map(c=>({id:c.id,level:c.level,title:c.title,topic:c.topic}))}); KS.exam=j.exam; KS.draft=kLoadDraft(j.exam); ls("acad-open",JSON.stringify(j.exam)); toast("Вариант "+j.code+" выдан и записан в таблицу"); }catch(err){ KS.err=err.message; }
+        KS.busy=false; kDraw(); window.scrollTo({top:0}); return; }
+      if(e.target.id==="kbFind"){ const c=$("kbCode").value.trim().toUpperCase(); if(c) kOpen(c); }
+    });
+    el.addEventListener("click",async e=>{
+      const g=x=>e.target.closest(x);
+      if(g("[data-kblogout]")){ kLogout(); return; }
+      const tb=g("[data-kbtab]"); if(tb){ KS.tab=tb.dataset.kbtab; KS.err=""; kDraw(); kLoadTab(); return; }
+      const cr=g("[data-kbcrit]"); if(cr){ const r=KS.draft.cases[cr.dataset.case]; r.crit[cr.dataset.k]=cr.dataset.kbcrit; kSaveDraft(); kKeep(()=>kDraw()); return; }
+      const vd=g("[data-kbverd]"); if(vd){ const r=KS.draft.cases[vd.dataset.case]; r.verdict=vd.dataset.kbverd===kAutoVerdict(r)?"":vd.dataset.kbverd; kSaveDraft(); kKeep(()=>kDraw()); return; }
+      const vr=g("[data-kbvreset]"); if(vr){ KS.draft.cases[vr.dataset.kbvreset].verdict=""; kSaveDraft(); kKeep(()=>kDraw()); return; }
+      const ar=g("[data-kbarea]"); if(ar){ KS.draft.areas[ar.dataset.k]=ar.dataset.kbarea; KS.draft.touched[ar.dataset.k]=true; kSaveDraft(); kKeep(()=>kDraw()); return; }
+      if(g("[data-kbperfect]")){ KAREAS.forEach(([k])=>{ KS.draft.areas[k]="отлично"; KS.draft.touched[k]=true; }); kSaveDraft(); kKeep(()=>kDraw()); return; }
+      if(g("[data-kbareaauto]")){ KS.draft.touched={}; kSaveDraft(); kKeep(()=>kDraw()); return; }
+      const tt=g("[data-kbtotal]"); if(tt){ KS.draft.total=tt.dataset.kbtotal; KS.draft.totalTouched=true; kSaveDraft(); kKeep(()=>kDraw()); return; }
+      const cp=g("[data-kbcopy]"); if(cp){ const w=cp.dataset.kbcopy; if(w==="link") copyText(kLink(KS.exam.code)); if(w==="code") copyText(KS.exam.code); if(w==="card") copyText(kCardPlain(KS.card)); if(w==="clink") copyText(kLink(KS.card.code)); return; }
+      if(g("[data-kbclose]")){ KS.exam=null; KS.draft=null; try{localStorage.removeItem("acad-open")}catch(_){} toast("Черновик сохранён на устройстве. Вернуться — «Найти вариант»."); kDraw(); return; }
+      const op=g("[data-kbopen]"); if(op){ kOpen(op.dataset.kbopen); return; }
+      if(g("[data-kbresume]")&&KS.card){ const c=KS.card; KS.exam={code:c.code,type:c.type,examiner:c.examiner,cadet:c.cadet,static:c.static,order:c.order,cases:c.cases,result:c.result}; KS.draft=kLoadDraft(KS.exam); ls("acad-open",JSON.stringify(KS.exam)); KS.tab="new"; kDraw(); window.scrollTo({top:0}); return; }
+      if(g("[data-kbsubmit]")){ if(KS.busy) return; kSync(); const d=KS.draft, ex=KS.exam;
+        const miss=ex.cases.filter(m=>!kVerdict(d.cases[m.id])); if(miss.length){ KS.err="Нет решения по кейсам: "+miss.map(m=>m.id).join(", "); kDraw(); const n=$("kbc-"+miss[0].id); if(n) n.scrollIntoView({block:"start"}); return; }
+        if(!d.total){ KS.err="Выберите итог экзамена"; kDraw(); return; }
+        KS.busy=true; KS.err=""; kKeep(()=>kDraw());
+        try{ await kApi("submit",{code:ex.code,result:{cases:ex.cases.map(m=>({id:m.id,crit:d.cases[m.id].crit,critErr:d.cases[m.id].critErr,note:d.cases[m.id].note,verdict:kVerdict(d.cases[m.id])})),areas:d.areas,total:d.total,comment:d.comment}});
+          try{ localStorage.removeItem(kDraftKey(ex.code)); localStorage.removeItem("acad-open"); }catch(_){}
+          const code=ex.code; KS.exam=null; KS.draft=null; KS.busy=false; toast("Экзамен "+code+" записан в таблицу"); kOpen(code); window.scrollTo({top:0}); return;
+        }catch(err){ KS.err=err.message; }
+        KS.busy=false; kKeep(()=>kDraw()); return; }
+    });
+    el.addEventListener("input",e=>{ const t=e.target; if(!KS.draft) return;
+      if(t.dataset.kbnote){ KS.draft.cases[t.dataset.kbnote].note=t.value; kSaveDraft(); }
+      if(t.id==="kbComment"){ KS.draft.comment=t.value; kSaveDraft(); } });
+    el.addEventListener("toggle",e=>{ const d=e.target; if(d.dataset&&d.dataset.kbm){ KS.openM=KS.openM||{}; KS.openM[d.dataset.kbm]=d.open; } },true);
+    el.addEventListener("change",e=>{ const t=e.target; if(t.dataset.kbcerr&&KS.draft){ KS.draft.cases[t.dataset.kbcerr].critErr=t.checked; kSaveDraft(); kKeep(()=>kDraw()); } });
+  }
+  if(KS.key&&!KS.me&&!KS.busy){ KS.busy=true; kDraw(); kApi("login").then(j=>{ KS.me={name:j.name,role:j.role,chief:!!j.chief}; const open=ls("acad-open"); if(open){ try{ const ex=JSON.parse(open); if(ex&&ex.code){ KS.exam=ex; KS.draft=kLoadDraft(ex); } }catch(_){} } }).catch(err=>{ KS.err=err.message; KS.key=""; }).finally(()=>{ KS.busy=false; kDraw(); }); return; }
+  kDraw();
+}
+/* перерисовка без прыжка страницы: держим на месте элемент под пальцем */
+function kKeep(fn){ const a=document.activeElement; const id=a&&a.closest&&a.closest(".kb-case,.kb-total"); const key=id&&(id.id||"kb-total"); const top=id?id.getBoundingClientRect().top:null; fn(); if(key){ const n=key==="kb-total"?document.querySelector(".kb-total"):$(key); if(n&&top!==null) window.scrollBy(0,n.getBoundingClientRect().top-top); } }
+
+/* ---------- Билет кандидата: только ситуации и задания ---------- */
+async function renderBilet(code){
+  const el=$("vBilet"); code=String(code||"").toUpperCase();
+  el.innerHTML=`<h2 class="htitle">Экзаменационный билет</h2><p class="lead">Академия Управления «М» · вариант ${esc(code)}</p><p class="fc-empty">Загружаю…</p>`;
+  let t; try{ t=(await kApi("ticket",{code})).ticket; }catch(e){ el.innerHTML=`<h2 class="htitle">Экзаменационный билет</h2><p class="kb-err">${esc(e.message)}</p>`; return; }
+  if(cur!=="bilet-"+code&&cur.toUpperCase()!=="BILET-"+code) return;
+  el.innerHTML=`<h2 class="htitle">Экзаменационный билет</h2><p class="lead">Академия Управления «М» · вариант <b>${esc(t.code)}</b> · ${esc(t.cadet)}${t.typeName?" · "+esc(t.typeName):""}</p>
+${t.status==="завершён"?`<p class="kb-warn">Экзамен по этому варианту закрыт.</p>`:""}
+<div class="sk-box"><p><b>Как отвечать.</b> По каждой ситуации рассуждайте по шагам: что произошло → какая норма (закон, статья, часть) → исключения и особые субъекты → что делать по порядку → вывод. Важен ход мысли, а не заученная фраза. Экзаменатор может задать уточняющие вопросы.</p></div>
+${t.cases.map((id,i)=>{ const c=kCase(id); return c?`<article class="ex-card kb-case"><p class="meta"><span class="tp">Ситуация ${i+1} из ${t.cases.length}</span></p><p class="ac-sit">${esc(c.situation)}</p><p class="ac-task"><b>Задание:</b> ${esc(c.task)}</p></article>`:`<article class="ex-card"><p>Ситуация ${i+1}: уточните у экзаменатора.</p></article>`; }).join("")}`;
+}
+
+GI.add({k:"dp",dept:"fsb",go:"kab",t:"Кабинет экзаменатора Академии",d:"вход по ключу, выдать вариант, найти карточку, слабые темы"},"кабинет экзаменатора ключ вход вариант билет карточка экзамен академия таблица слабые темы","");
 
 favCount();
 /* ---------- header, start ---------- */
