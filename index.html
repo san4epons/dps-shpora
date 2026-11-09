@@ -1498,6 +1498,24 @@ details.mkans p{margin:6px 0 0;line-height:1.5}
 .mir-gap{color:var(--siren-red,var(--stop));font-weight:800}
 @media (max-width:640px){.mir-text{font-size:17px;padding:12px 13px}}
 
+/* ===== проверка знаний Управления ===== */
+.qc-regl{margin:0;padding-left:22px;display:grid;gap:10px;line-height:1.5}
+.qc-regl ul{margin:4px 0 0;padding-left:18px;display:grid;gap:4px}
+.qc-form{display:grid;gap:10px}
+.qc-form label{display:grid;gap:4px;font-weight:700;font-size:14px}
+.qc-form input,.qc-form select{font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box}
+@media (min-width:760px){.qc-form{grid-template-columns:1fr 1fr}.qc-form .ex-acts{grid-column:1/-1}}
+.qc-score{margin:14px 0 0;font-size:16px}
+.qc-score b{font-size:20px}
+.qc-q{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:8px;display:grid;gap:6px}
+.qc-q.ok{border-left-color:var(--ok)}
+.qc-q.no{border-left-color:var(--siren-red,var(--stop))}
+.qc-h{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start}
+.qc-h p{margin:0;font-weight:700;line-height:1.4}
+.qc-n{font-family:var(--mono);font-weight:700;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);border:1px solid var(--line);font-size:13px}
+.qc-q .btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.qc-q .btn.ok.on{background:var(--ok);border-color:var(--ok);color:var(--ok-ink)}
+
 /* ===== СК ===== */
 .sk-box{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;display:grid;gap:10px}
 .sk-box>h3{margin:0;font-size:18px;font-weight:800}
@@ -1611,6 +1629,7 @@ details.ukrow[open]>summary .t small.dd{display:none}
     <div id="vFsbStruct" hidden></div>
     <div id="vFsbCourse" class="narrow" hidden></div>
     <div id="vMarks" class="narrow" hidden></div>
+    <div id="vFsbCheck" class="narrow" hidden></div>
 
     <div id="vArt" hidden>
       <h2 class="htitle">Статьи</h2>
@@ -2380,6 +2399,7 @@ function viewOf(tok){
   if(tok==="do"||tok==="art"||tok==="law"||tok==="arrest") return {kind:tok,tab:tok,dept:"gibdd"};
   if(tok==="fsb"||tok==="fsbcalc"||tok==="fsbuk"||tok==="fsbexam") return {kind:tok,tab:tok,dept:"fsb"};
   if(tok==="fsbstruct") return {kind:tok,tab:"fsb",dept:"fsb"};
+  if(tok==="fsbcheck") return {kind:"fsbcheck",tab:"fsbexam",dept:"fsb"};
   if(tok==="fsbc1"||tok==="fsbc2") return {kind:"fsbcourse",tab:"fsbexam",dept:"fsb",id:tok.slice(3)};
   if(tok==="fsblaw") return {kind:"law",tab:tok,dept:"fsb"};
   if(tok==="sk"||tok==="skcall"||tok==="skcase") return {kind:tok,tab:tok,dept:"sk"};
@@ -2418,7 +2438,7 @@ function show(tok,opt){
   if(v.dept){ DEPT=v.dept; ls("shpora-last-"+v.dept,tok); } setDept();
   curTab=v.tab||({gibdd:"law",fsb:"fsblaw",sk:"-"}[DEPT]);
   TABS.gibdd.concat(TABS.fsb,TABS.sk).forEach(t=>{const b=$("tab-"+t); const on=t===curTab; b.setAttribute("aria-selected",String(on)); b.tabIndex=on?0:-1;});
-  $("vGrid").hidden=!["do","instr","law"].includes(v.kind); $("vScen").hidden=v.kind!=="scen"; $("vArt").hidden=v.kind!=="art"; $("vTopic").hidden=v.kind!=="topic"; $("vLaw").hidden=v.kind!=="lawread"; $("vAsk").hidden=v.kind!=="ask"; $("vFav").hidden=v.kind!=="fav"; $("vArrest").hidden=v.kind!=="arrest"; $("vFsb").hidden=v.kind!=="fsb"; $("vFsbCalc").hidden=v.kind!=="fsbcalc"; $("vFsbUk").hidden=v.kind!=="fsbuk"; $("vSk").hidden=v.kind!=="sk"; $("vSkCall").hidden=v.kind!=="skcall"; $("vSkCase").hidden=v.kind!=="skcase"; $("vChanges").hidden=v.kind!=="changes"; $("vFsbExam").hidden=v.kind!=="fsbexam"; $("vFsbStruct").hidden=v.kind!=="fsbstruct"; $("vFsbCourse").hidden=v.kind!=="fsbcourse"; $("vMarks").hidden=v.kind!=="marks";
+  $("vGrid").hidden=!["do","instr","law"].includes(v.kind); $("vScen").hidden=v.kind!=="scen"; $("vArt").hidden=v.kind!=="art"; $("vTopic").hidden=v.kind!=="topic"; $("vLaw").hidden=v.kind!=="lawread"; $("vAsk").hidden=v.kind!=="ask"; $("vFav").hidden=v.kind!=="fav"; $("vArrest").hidden=v.kind!=="arrest"; $("vFsb").hidden=v.kind!=="fsb"; $("vFsbCalc").hidden=v.kind!=="fsbcalc"; $("vFsbUk").hidden=v.kind!=="fsbuk"; $("vSk").hidden=v.kind!=="sk"; $("vSkCall").hidden=v.kind!=="skcall"; $("vSkCase").hidden=v.kind!=="skcase"; $("vChanges").hidden=v.kind!=="changes"; $("vFsbExam").hidden=v.kind!=="fsbexam"; $("vFsbStruct").hidden=v.kind!=="fsbstruct"; $("vFsbCourse").hidden=v.kind!=="fsbcourse"; $("vMarks").hidden=v.kind!=="marks"; $("vFsbCheck").hidden=v.kind!=="fsbcheck";
   closeResults();
   if(v.kind==="do") gridDo();
   if(v.kind==="instr") gridInstr();
@@ -2439,6 +2459,7 @@ function show(tok,opt){
   if(v.kind==="fsbstruct") renderFsbStruct();
   if(v.kind==="fsbcourse") renderFsbCourse(v.id);
   if(v.kind==="marks") renderMarks();
+  if(v.kind==="fsbcheck") renderFsbCheck();
   if(!opt.art&&!opt.row) window.scrollTo({top:0});
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-go]"); if(b){e.preventDefault(); nav(b.dataset.go);}});
@@ -3972,6 +3993,92 @@ if(CK) clockDraw();
   if(navigator.onLine===false) setTimeout(()=>toast("Нет интернета — открыта сохранённая версия"),600);
 })();
 
+/* ---------- проверка знаний Управления: регламент и генератор билетов ---------- */
+const REGL=[
+ ["Основание",["Начальник Управления назначает служебные проверки сотрудников с проверкой теоретических и практических навыков (Устав ФСБ I.5.8 — п. 5.8.2) и издаёт регламенты (п. 5.8.4). Вопросы — только по служебной деятельности (ТК 51.2)."]],
+ ["Кого проверяют",["Весь личный состав Управления «М». Инструкторов и заместителей проверяет Начальник Управления."]],
+ ["Сроки и попытки",["Срок — 5 календарных дней с момента уведомления (приказ в канале + упоминание сотрудника).","За срок — не больше 2 попыток. Между попытками — не меньше 2 часов, чтобы разобрать ошибки.","Не уложился в 5 дней — неиспользованные попытки сгорают. Отпуск или отгул, оформленный до приказа (Устав ФСБ III.2), продлевает срок на время отсутствия."]],
+ ["Кто принимает",["Инструктор Управления (Устав ФСБ I.5.12 — п. 5.12.2) или старший состав; итог утверждает Начальник Управления.","Экзаменатор не принимает проверку, если у него личная заинтересованность — друг, родственник, бывший напарник (Кодекс этики 15)."]],
+ ["Формат одной попытки (~30 минут)",["Часть 1 — теория: 20 вопросов, вариант случайный и у каждой попытки свой. Состав: устав и служба — 5, УПК — 6, УК — 4, спецзаконы (ФЗ о ФСБ, территории, неприкосновенность, госдокументы, оружие, ЧП) — 5.","Отвечать устно, своими словами, без шпаргалок и подсказок; на вопрос — до 1 минуты. Экзаменатор отмечает «верно / неверно».","Часть 2 — практика: разбор ситуации или видеозаписи задержания — назвать минимум 3 нарушения и статьи к ним.","Ход проверки записывается; запись и протокол хранятся не меньше 72 часов (ТК 45.1)."]],
+ ["Критерии",["Часть 1 — зачтено при 16 верных из 20 (80%); 19–20 — «отлично».","Часть 2 — зачтено, если названы 3 нарушения с верными статьями.","Проверка сдана, только если зачтены обе части."]],
+ ["После попытки",["Экзаменатор сразу называет номера ошибок и правильные ответы со статьями.","Протокол № УМ-Пр-год-№ — в канал и в канцелярию; номер даёт канцелярия, самому не придумывать."]],
+ ["Если не сдал",["Не сдал 2 попытки или не явился в срок — назначается обучение (лекции Инструктора, Специальный учебный отдел) и повторная проверка по этому же регламенту.","Не сдал после назначенного обучения — исключение из Управления «М» с направлением в ОПС (Устав ФСБ I.5.8 — п. 5.8.3 и примечание).","Сама проверка знаний — не взыскание. Взыскания, в том числе «направление на обязательную переаттестацию», налагает только старший состав и руководство (Устав ФСБ ВЗ.1, ВЗ.2 — пп. 2.4, 2.12)."]],
+ ["Обжалование",["Рапорт Начальнику Управления в течение 72 часов (Устав ФСБ I.5.14 — п. 5.14.4; ТК 45.2)."]],
+ ["Учёт и качество",["Инструктор ведёт реестр: сотрудник, попытка, балл, вопросы с ошибками (Устав ФСБ I.5.11 — п. 5.11.3).","Раз в неделю — сводка частых ошибок по блокам; по слабым темам — лекции и тренировки (п. 5.11.1). Вопросы-банк — «Экзамен ФСБ» в шпаргалке, у каждого ответа ссылка на статью."]]
+];
+const reglPlain=()=>["РЕГЛАМЕНТ ПРОВЕРКИ ЗНАНИЙ СОТРУДНИКОВ УПРАВЛЕНИЯ «М» ФСБ РО",...REGL.flatMap(([h,it],i)=>["",`${i+1}. ${h}`,...it.map(x=>"— "+x)])].join("\n");
+const QBLOCKS=[["ust","Устав и служба",5],["upk","УПК",6],["uk","УК",4],["spec","Спецзаконы",5]];
+const qBlock=c=>{ const r=(refNorm(c.ref)[0]||[])[0]||""; return ({ustavfsb:"ust",tk:"ust",etika:"ust",discord:"ust",upk:"upk",uk:"uk"})[r]||"spec"; };
+function seedRng(str){ let h=1779033703^str.length; for(let i=0;i<str.length;i++){ h=Math.imul(h^str.charCodeAt(i),3432918353); h=h<<13|h>>>19; } return ()=>{ h=Math.imul(h^h>>>16,2246822507); h=Math.imul(h^h>>>13,3266489909); h^=h>>>16; let t=(h+=0x6D2B79F5); t=Math.imul(t^t>>>15,t|1); t^=t+Math.imul(t^t>>>7,t|61); return ((t^t>>>14)>>>0)/4294967296; }; }
+function qVariant(code,exclude){
+  const used=new Set(exclude?qVariant(exclude).map(c=>c.id):[]);
+  const rnd=seedRng(String(code).toUpperCase());
+  const out=[];
+  QBLOCKS.forEach(([b,,n])=>{ const pool=CARDS.filter(c=>qBlock(c)===b&&!used.has(c.id)); const a=pool.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } out.push(...a.slice(0,n)); });
+  return out;
+}
+const newCode=()=>Math.random().toString(36).slice(2,7).toUpperCase();
+let QC={code:"",excl:"",marks:{},prac:false};
+const fmtD=d=>d.toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit",year:"numeric"});
+function qcFields(){ const v=id=>($(id)||{}).value||""; return {who:v("qcWho"),rank:v("qcRank"),att:v("qcAtt")||"1",start:v("qcStart"),ex:v("qcEx")}; }
+function qcProtocol(list){
+  const F=qcFields(); const ok=list.filter(c=>QC.marks[c.id]===1).length, total=list.length, need=Math.ceil(total*0.8);
+  const wrong=list.map((c,i)=>QC.marks[c.id]===0?`№${i+1} (${refNorm(c.ref).slice(0,1).map(r=>(LAWREF[r[0]]||r[0])+" "+r[1]).join("")})`:null).filter(Boolean);
+  const st=F.start?new Date(F.start+"T12:00"):new Date(); const dl=new Date(+st+5*864e5);
+  const p1=ok>=need, done=list.every(c=>QC.marks[c.id]!==undefined);
+  return ["ПРОТОКОЛ ПРОВЕРКИ ЗНАНИЙ № УМ-Пр-"+new Date().getFullYear()+"-___","Управление «М» ФСБ РО · основание: гл. I п. 5.8.2 Устава ФСБ",
+   `Сотрудник: ${F.who||"___"}${F.rank?", "+F.rank:""}`,`Попытка: ${F.att} из 2 · уведомлён ${fmtD(st)} · срок до ${fmtD(dl)}`,`Вариант: ${QC.code}`,
+   `Часть 1 (теория): ${ok}/${total} — ${done?(p1?(ok>=total-1?"зачтено, отлично":"зачтено"):"не зачтено"):"в процессе"} (порог ${need})`,
+   wrong.length?`Ошибки: ${wrong.join(", ")}`:"Ошибки: нет",
+   `Часть 2 (практика, 3 нарушения со статьями): ${QC.prac?"зачтено":"не зачтено"}`,
+   `Итог: ${done?(p1&&QC.prac?"СДАНО":"НЕ СДАНО"+(F.att==="1"?" — вторая попытка не раньше чем через 2 часа, до "+fmtD(dl):" — назначается обучение (п. 5.8.3)")):"—"}`,
+   `Экзаменатор: ${F.ex||"___"} · ${fmtD(new Date())}`].join("\n");
+}
+function qcDraw(){
+  const box=$("qcVariant"); if(!box) return;
+  if(!QC.code){ box.innerHTML=`<p class="fc-empty">Нажмите «Новый вариант».</p>`; $("qcProt").textContent=""; return; }
+  const list=qVariant(QC.code,QC.excl.trim()||null);
+  const ok=list.filter(c=>QC.marks[c.id]===1).length, bad=list.filter(c=>QC.marks[c.id]===0).length;
+  let i=0;
+  box.innerHTML=`<p class="qc-score">Верно <b>${ok}</b> · неверно <b>${bad}</b> · осталось ${list.length-ok-bad} из ${list.length} <small>(зачёт с ${Math.ceil(list.length*0.8)})</small></p>`+QBLOCKS.map(([b,t])=>{ const part=list.filter(c=>qBlock(c)===b); return `<h4 class="uk-ch">${t} · ${part.length}</h4>`+part.map(c=>{ i++; const m=QC.marks[c.id]; return `<div class="qc-q${m===1?" ok":m===0?" no":""}"><div class="qc-h"><span class="qc-n">${i}</span><p>${esc(c.q)}</p></div><details class="mkans"><summary>Ответ для экзаменатора${CHEV}</summary><p>${esc(c.a)}</p><small class="sref">${refBtns(c.ref)}</small></details><div class="ex-acts"><button type="button" class="btn ok${m===1?" on":""}" data-qc="${esc(c.id)}" data-v="1">Верно</button><button type="button" class="btn${m===0?" on":""}" data-qc="${esc(c.id)}" data-v="0">Неверно</button></div></div>`; }).join(""); }).join("")+`<label class="fc-chk" style="margin-top:12px"><input type="checkbox" id="qcPrac"${QC.prac?" checked":""}><span>Часть 2 зачтена<small>Разбор ситуации или видео: названы 3 нарушения с верными статьями</small></span></label>`;
+  $("qcProt").textContent=qcProtocol(list);
+  linkify(box);
+}
+function renderFsbCheck(){
+  const el=$("vFsbCheck");
+  if(el.dataset.ready){ qcDraw(); return; } el.dataset.ready="1";
+  el.innerHTML=`<button type="button" class="backbtn" data-go="fsbexam">← Экзамен ФСБ</button><h2 class="htitle">Проверка знаний Управления</h2><p class="lead">Для Начальника, старшего состава и Инструкторов: готовый регламент на 5 дней и 2 попытки и генератор билетов из 353 проверенных вопросов. Вариант определяется кодом — у второй попытки свой код и другие вопросы.</p>
+<section class="cc-sec"><h3>Регламент</h3><ol class="qc-regl">${REGL.map(([h,it])=>`<li><b>${esc(h)}</b><ul>${it.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></li>`).join("")}</ol><div class="ex-acts"><button type="button" class="btn pri" data-qccopy="regl">Копировать регламент</button></div></section>
+<section class="cc-sec"><h3>Генератор билета</h3><div class="sk-box qc-form">
+<label>Сотрудник (имя, UID)<input id="qcWho" type="text" autocomplete="off"></label>
+<label>Звание<input id="qcRank" type="text" autocomplete="off"></label>
+<label>Попытка<select id="qcAtt"><option value="1">1 из 2</option><option value="2">2 из 2</option></select></label>
+<label>Дата уведомления<input id="qcStart" type="date"></label>
+<label>Экзаменатор<input id="qcEx" type="text" autocomplete="off" value="${esc(ls("qc-ex")||"")}"></label>
+<label>Код варианта<input id="qcCode" type="text" autocomplete="off" placeholder="например, K7Q2M"></label>
+<label>Не повторять вопросы варианта (код 1-й попытки)<input id="qcExcl" type="text" autocomplete="off" placeholder="необязательно"></label>
+<div class="ex-acts"><button type="button" class="btn pri" data-qcnew="1">Новый вариант</button><button type="button" class="btn" data-qcreset="1">Сбросить отметки</button></div></div>
+<div id="qcVariant"></div>
+<h4 class="uk-ch">Протокол</h4><pre class="cc-tpl" id="qcProt"></pre><div class="ex-acts"><button type="button" class="btn pri" data-qccopy="prot">Копировать протокол</button></div></section>`;
+  $("qcStart").value=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+  el.addEventListener("click",e=>{
+    const b=e.target.closest("[data-qc]"); if(b){ const id=b.dataset.qc, v=+b.dataset.v; QC.marks[id]=QC.marks[id]===v?undefined:v; if(QC.marks[id]===undefined) delete QC.marks[id]; qcDraw(); return; }
+    if(e.target.closest("[data-qcnew]")){ QC.code=newCode(); QC.marks={}; QC.prac=false; $("qcCode").value=QC.code; qcDraw(); return; }
+    if(e.target.closest("[data-qcreset]")){ QC.marks={}; QC.prac=false; qcDraw(); return; }
+    const c=e.target.closest("[data-qccopy]"); if(c){ copyText(c.dataset.qccopy==="regl"?reglPlain():$("qcProt").textContent); }
+  });
+  el.addEventListener("input",e=>{
+    if(e.target.id==="qcCode"){ QC.code=e.target.value.trim().toUpperCase(); QC.marks={}; qcDraw(); }
+    else if(e.target.id==="qcExcl"){ QC.excl=e.target.value.trim().toUpperCase(); QC.marks={}; qcDraw(); }
+    else if(e.target.id==="qcEx"){ ls("qc-ex",e.target.value); $("qcProt").textContent=QC.code?qcProtocol(qVariant(QC.code,QC.excl||null)):""; }
+    else if(["qcWho","qcRank","qcAtt","qcStart"].includes(e.target.id)){ if(QC.code) $("qcProt").textContent=qcProtocol(qVariant(QC.code,QC.excl||null)); }
+  });
+  el.addEventListener("change",e=>{ if(e.target.id==="qcPrac"){ QC.prac=e.target.checked; qcDraw(); } if(e.target.id==="qcAtt"&&QC.code) $("qcProt").textContent=qcProtocol(qVariant(QC.code,QC.excl||null)); });
+  linkify(el.querySelector(".qc-regl"));
+  qcDraw();
+}
+GI.add({k:"dp",dept:"fsb",go:"fsbcheck",anc:"",t:"Проверка знаний Управления (для руководства)",d:"Регламент 5 дней / 2 попытки, генератор билетов, протокол"},"проверка знаний переаттестация аттестация экзамен сотрудников регламент билет билеты генератор протокол начальник управления инструктор","");
+
 /* ---------- «Зачитать при задержании»: одна плашка (УПК 92 ч.1 «г», примечание; права — УПК 46 ч.2) ---------- */
 const MIR_RIGHTS=["Знать, в чём вас подозревают, и получить копию постановления о возбуждении дела.",
  "Давать объяснения и показания или отказаться от них. Если согласитесь — сказанное может быть использовано как доказательство, даже если потом откажетесь.",
@@ -4204,7 +4311,7 @@ function renderFsbExam(){
     el.dataset.ready="1";
     el.innerHTML=`<h2 class="htitle">Экзамен ФСБ</h2>
 <p class="lead">Ниже — два курса Академии Управления «М»: что сдать, как проходит экзамен и темы. «Конспект курса» — всё, что нужно выучить, со ссылками на устав ФСБ и законы. Тренировка — карточки и тест; отмечайте «Знаю», прогресс сохраняется на этом устройстве.</p>
-${coursePlaques()}<div class="ex-top"><div class="ex-prog" id="exProg"></div>
+${coursePlaques()}<div class="tiles" style="margin-top:12px"><button type="button" class="tile" data-go="fsbcheck"><span class="t">Для руководства: проверка знаний</span><span class="d">Регламент на 5 дней и 2 попытки, генератор билетов, подсчёт и протокол</span><span class="ref">устав ФСБ гл. I п. 5.8.2</span></button></div><div class="ex-top"><div class="ex-prog" id="exProg"></div>
 <div class="chips" role="group" aria-label="Режим"><button type="button" data-exmode="cards">Карточки</button><button type="button" data-exmode="test">Тест 20</button><button type="button" data-exscroll="1">Все вопросы</button><button type="button" data-go="marks" class="mkchip">⚑ Мои метки <b id="exMkN"></b></button></div>
 <div class="ex-ctrl"><label class="hide" for="exTopic">Тема</label><select id="exTopic"><option value="all">Все темы (${CARDS.length})</option><option value="marks" id="exMarksOpt">⚑ Мои метки</option>${COURSES.length?`<optgroup label="Академия «М»">${COURSES.map(C=>`<option value="course:${C.id}">${esc(C.title)} — все вопросы (${CARDS.filter(c=>inCourse(c,C.id)).length})</option>`).join("")}</optgroup>`:""}${[["C1-","Курс I — темы"],["C2-","Курс II — темы"],["L","Законы ФСБ"],["P","УК и УПК"]].map(([p,g])=>{ const ts=TOPICS.filter(t=>CARDS.some(c=>c.topic===t&&c.id.startsWith(p))); return ts.length?`<optgroup label="${g}">${ts.map(t=>`<option value="${esc(t)}">${esc(t)} (${CARDS.filter(c=>c.topic===t).length})</option>`).join("")}</optgroup>`:""; }).join("")}</select>
 <label class="fc-chk" style="padding:4px 0"><input type="checkbox" id="exOnly"><span>Только невыученные</span></label></div></div>
