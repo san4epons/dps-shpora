@@ -29,6 +29,10 @@
 .kb-score{margin-top:12px;text-align:center}
 .kb-pend{margin-top:12px;border-top-color:var(--stop)}
 .kb-pend p{margin:0}
+.kb-qsr{margin-top:12px}
+.kb-ans{border-top:1px solid var(--line);padding-top:8px;margin-top:6px}
+.kb-ans h5{margin:0 0 4px;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.kb-ans p{margin:0;line-height:1.5}
 .kb-qa{margin:4px 0 8px}
 .kb-okbtns [data-v="good"][aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--ok-ink)}
 .kb-okbtns [data-v="mid"][aria-pressed="true"]{background:var(--sign);border-color:var(--sign);color:var(--sign-ink)}
@@ -4720,6 +4724,20 @@ function kTimerHtml(ex){ const t=ex.timer; const left=kTimerLeft(t);
   return `<div class="sk-box kb-timer${t&&left===0?" over":""}"><p class="kb-tm" id="kbTimer" data-start="${t?t.start:""}" data-min="${t?t.min:EXAM_MIN}">${t?(left>0?kMMSS(left):"Время вышло"):kMMSS(EXAM_MIN*60000)}</p><p class="kb-note">${t?`Таймер запущен ${esc(kD(t.start))}${t.by?" · "+esc(t.by):""}. Кандидат видит то же время в своём билете; когда время выйдет, вопросы у него скроются.`:`Таймер на ${EXAM_MIN} минут ещё не запущен. Кандидат не видит вопросы, пока вы его не запустите.`}</p>${t?(KS.me&&KS.me.chief?`<div class="ex-acts"><button type="button" class="btn" data-kbtimer="restart">Перезапустить (только начальник)</button></div>`:""):``}</div>`; }
 function kTick(){ document.querySelectorAll("[data-start]").forEach(el=>{ const st=+el.dataset.start; if(!st) return; const left=kTimerLeft({start:st,min:+el.dataset.min}); el.textContent=left>0?kMMSS(left):"Время вышло"; const box=el.closest(".kb-timer"); if(box) box.classList.toggle("over",left===0); if(left===0&&el.dataset.onover){ const f=el.dataset.onover; el.dataset.onover=""; if(f==="bilet") renderBilet(BILET_CODE); } }); }
 function kTimerOn(){ if(!KT.iv) KT.iv=setInterval(kTick,1000); }
+/* поиск вопроса для экзаменатора: вопросы с ответом и задачи с эталоном */
+const kNorm=s=>String(s||"").toLowerCase().replace(/ё/g,"е");
+function kQsFind(q){ const raw=String(q||"").trim(); if(raw.length<2) return null; const id=raw.toUpperCase();
+  const exact=[...CARDS.filter(c=>c.id.toUpperCase()===id).map(c=>({k:"q",c})),...CASES.filter(c=>c.id.toUpperCase()===id).map(c=>({k:"t",c}))]; if(exact.length) return exact;
+  const terms=kNorm(raw).split(/\s+/).filter(t=>t.length>1||/\d/.test(t)); if(!terms.length) return [];
+  const score=(title,body)=>{ const T=kNorm(title), B=kNorm(body); let s=0; for(const t of terms){ if(T.includes(t)) s+=3; else if(B.includes(t)) s+=1; else return 0; } return s; };
+  const out=[];
+  CARDS.forEach(c=>{ const s=score(c.q,c.a+" "+(c.kw||"")+" "+c.topic+" "+refNorm(c.ref).map(r=>r.join(" ")).join(" ")); if(s) out.push({k:"q",c,s}); });
+  CASES.forEach(c=>{ const s=score(c.title+" "+c.task,c.situation+" "+c.topic+" "+(c.model||[]).map(m=>m.text).join(" ")+" "+(c.checkpoints||[]).join(" ")); if(s) out.push({k:"t",c,s}); });
+  return out.sort((a,b)=>b.s-a.s).slice(0,25); }
+function kQsHtml(q){ const r=kQsFind(q); if(r===null) return `<p class="fc-empty">Введите хотя бы 2 символа.</p>`; if(!r.length) return `<p class="fc-empty">Ничего не нашли. Попробуйте другое слово или номер статьи.</p>`;
+  return `<p class="kb-note" style="margin:10px 0 6px">Найдено: ${r.length}${r.length===25?" (показаны первые 25)":""}</p>`+r.map(({k,c})=>k==="q"?`<article class="ex-card kb-qsr"><p class="meta"><span class="tp">Вопрос · ${c.level===1?"1 балл":c.level===2?"2 балла":"сложный, на экзамене не выдаётся"} · ${esc(c.topic)}</span><span>${esc(c.id)}</span></p><p class="q">${esc(c.q)}</p><div class="kb-ans"><h5>Правильный ответ</h5><p>${esc(c.a)}</p>${refNorm(c.ref).length?`<small class="sref">${refBtns(c.ref)}</small>`:""}</div></article>`
+   :`<article class="ex-card kb-qsr"><p class="meta"><span class="tp">Задача · уровень ${c.level} «${esc(kLvName(c.level))}» · ${esc(c.topic||"")}${TRAIN.has(c.id)?" · в тренажёре, на экзамене не выдаётся":""}</span><span>${esc(c.id)}</span></p><p class="q">${esc(c.title)}</p><p class="ac-sit">${esc(c.situation)}</p><p class="ac-task"><b>Задание:</b> ${esc(c.task)}</p><div class="ac-model"><h5>Эталон рассуждения</h5>${acStepList(c.model)}<h5>Обязан назвать</h5>${cList(c.checkpoints)}${(c.critical||[]).length?`<h5>Критические ошибки</h5>${cList(c.critical,"no")}`:""}${(c.followups||[]).length?`<h5>Вопросы «а если…»</h5>${c.followups.map(f=>`<details class="mkans"><summary>${esc(f.q)}${CHEV}</summary><p>${esc(f.a)}</p>${refNorm(f.ref).length?`<small class="sref">${refBtns(f.ref)}</small>`:""}</details>`).join("")}`:""}</div></article>`).join(""); }
+let KQS=0;
 function kCardHtml(e){
   const r=e.result, chief=KS.me&&KS.me.chief, mine=kIsMine(e);
   const rc=id=>r&&(r.cases||[]).find(x=>x.id===id);
@@ -4748,18 +4766,19 @@ function kStatsHtml(s){
 function kDraw(){
   const el=$("kbMain"); if(!el) return;
   if(!KS.me){ el.innerHTML=kLoginHtml(); return; }
-  const tabs=[["new",KS.exam?"Идёт: "+KS.exam.code:"Новый экзамен"],["find","Поиск"],["list","Последние"],["stats","Слабые темы"],["log","Журнал входов"],["met","Методика"]];
+  const tabs=[["new",KS.exam?"Идёт: "+KS.exam.code:"Новый экзамен"],["find","Поиск"],["qs","Поиск вопроса"],["list","Последние"],["stats","Слабые темы"],["log","Журнал входов"],["met","Методика"]];
   let body="";
   if(KS.tab==="new") body=KS.exam?(KS.exam.timer?kGradeHtml():kStageHtml()):kNewHtml();
   if(KS.tab==="find") body=`<form class="sk-box qc-form kb-form" id="kbFind"><label>Статик, ФИО или номер варианта<input id="kbCode" type="text" maxlength="40" autocomplete="off" spellcheck="false" placeholder="55123, Петров или AM-XXXXXX" value="${esc(KS.findCode||"")}"></label><div class="ex-acts"><button type="submit" class="btn pri"${KS.busy?" disabled":""}>${KS.busy?"Ищу…":"Найти"}</button></div>${KS.err?`<p class="kb-err">${esc(KS.err)}</p>`:""}</form>${KS.found&&!KS.card?(KS.found.length?`<p class="kb-note" style="margin:10px 0 0">Найдено экзаменов: ${KS.found.length}</p>${kListHtml(KS.found)}`:`<p class="fc-empty">Никого не нашли</p>`):""}${KS.card?kCardHtml(KS.card):""}`;
   if(KS.tab==="list") body=KS.list?kListHtml(KS.list):`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
+  if(KS.tab==="qs") body=`<div class="sk-box qc-form kb-form"><label>Поиск вопроса или задачи<input id="kbQs" type="search" maxlength="60" autocomplete="off" spellcheck="false" placeholder="слово из вопроса, статья или номер: «60 минут», 92, F03, K2-13" value="${esc(KS.qsQ||"")}"></label><p class="kb-note">Ищет по всем ${CARDS.length} вопросам и ${CASES.length} задачам — с правильным ответом и эталоном рассуждения.</p></div><div id="kbQRes">${kQsHtml(KS.qsQ||"")}</div>`;
   if(KS.tab==="met") body=`<div class="sk-box"><ol class="qc-regl">${METOD.map(([hh,it])=>`<li><b>${esc(hh)}</b><ul>${it.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></li>`).join("")}</ol><div class="ex-acts"><button type="button" class="btn pri" data-kbcopy="met">Копировать методику</button></div></div>
 <h4 class="uk-ch">Регламент экзамена</h4><div class="sk-box"><ol class="qc-regl">${REGL.map(([hh,it])=>`<li><b>${esc(hh)}</b><ul>${it.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></li>`).join("")}</ol><div class="ex-acts"><button type="button" class="btn pri" data-kbcopy="regl">Копировать регламент</button></div></div>`;
   if(KS.tab==="stats") body=KS.stats?kStatsHtml(KS.stats):`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
   if(KS.tab==="log") body=KS.log?`<div class="kb-tbl">${KS.log.map(x=>`<div class="kb-tr"><span><b>${esc(x.name)}</b> · ${esc(x.what)}<small>${esc(kD(x.time))}${x.role&&x.role!=="—"?" · "+esc(x.role):""}${x.details?" · "+esc(x.details):""}</small></span></div>`).join("")||`<p class="fc-empty">Записей нет</p>`}</div>`:`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
   el.innerHTML=`<div class="kb-me"><span>Экзаменатор: <b>${esc(KS.me.name)}</b> · ${esc(KS.me.role)}</span><button type="button" class="lnk" data-kblogout="1">Выйти</button></div>
 <nav class="chips st-toc kb-tabs" aria-label="Разделы кабинета">${tabs.map(([k,t])=>`<button type="button" data-kbtab="${k}" aria-pressed="${KS.tab===k}">${esc(t)}</button>`).join("")}</nav><div id="kbBody">${body}</div>`;
-  const b=el.querySelector("#kbBody"); if(b&&((KS.tab==="new"&&KS.exam)||KS.tab==="met")) linkify(b); kTimerOn(); kJoinPoll();
+  const b=el.querySelector("#kbBody"); if(b&&((KS.tab==="new"&&KS.exam)||KS.tab==="met"||KS.tab==="qs")) linkify(b); kTimerOn(); kJoinPoll();
 }
 async function kLoadTab(){
   KS.err="";
@@ -4838,6 +4857,7 @@ function renderKab(){
         KS.busy=false; kKeep(()=>kDraw()); return; }
     });
     el.addEventListener("input",e=>{ const t=e.target;
+      if(t.id==="kbQs"){ KS.qsQ=t.value; clearTimeout(KQS); KQS=setTimeout(()=>{ const box=$("kbQRes"); if(box){ box.innerHTML=kQsHtml(KS.qsQ); linkify(box); } },200); return; }
       if(t.id==="kbWho"){ const p=kParseWho(t.value), hint=$("kbWhoHint"); if(hint){ hint.textContent=p.err?p.err:"Будет записано: "+p.full; hint.classList.toggle("kb-err",!!p.err&&t.value.length>3); } return; }
       if(!KS.draft) return;
       if(t.dataset.kbnote){ KS.draft.cases[t.dataset.kbnote].note=t.value; kSaveDraft(); }
