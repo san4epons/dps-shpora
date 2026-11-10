@@ -4777,8 +4777,7 @@ function kStatsHtml(s){
 function kDraw(){
   const el=$("kbMain"); if(!el) return;
   if(!KS.me){ el.innerHTML=kLoginHtml(); return; }
-  const tabs=[["new",KS.exam?"Идёт экзамен":"Новый экзамен"]].concat(KS.me.chief?[["find","Поиск экзаменов"],["list","Последние"]]:[],[["qs","Поиск вопроса"],["stats","Слабые темы"],["log","Журнал входов"],["met","Методика"]]);
-  if((KS.tab==="find"||KS.tab==="list")&&!KS.me.chief) KS.tab="new";
+  const tabs=[["new",KS.exam?"Идёт экзамен":"Новый экзамен"],["find","Поиск экзаменов"],["list","Последние"],["qs","Поиск вопроса"],["stats","Слабые темы"],["log","Журнал входов"],["met","Методика"]];
   let body="";
   if(KS.tab==="new") body=KS.exam?(KS.exam.timer?kGradeHtml():kStageHtml()):kNewHtml();
   if(KS.tab==="find") body=`<form class="sk-box qc-form kb-form" id="kbFind"><label>Статик, ФИО или номер варианта<input id="kbCode" type="text" maxlength="40" autocomplete="off" spellcheck="false" placeholder="55123, Петров или AM-XXXXXX" value="${esc(KS.findCode||"")}"></label><div class="ex-acts"><button type="submit" class="btn pri"${KS.busy?" disabled":""}>${KS.busy?"Ищу…":"Найти"}</button></div>${KS.err?`<p class="kb-err">${esc(KS.err)}</p>`:""}</form>${KS.found&&!KS.card?(KS.found.length?`<p class="kb-note" style="margin:10px 0 0">Найдено экзаменов: ${KS.found.length}</p>${kListHtml(KS.found)}`:`<p class="fc-empty">Никого не нашли</p>`):""}${KS.card?kCardHtml(KS.card):""}`;
