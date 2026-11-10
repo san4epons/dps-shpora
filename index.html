@@ -21,15 +21,18 @@
 .kb-qlist{margin:6px 0 0;padding-left:26px;display:grid;gap:10px}
 .kb-qi{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
 .kb-qi.ok{border-left:4px solid var(--ok)}
-.kb-qi.bad{border-left:4px solid var(--stop)}
+.kb-qi.bad,.kb-qi.q-bad{border-left:4px solid var(--stop)}
+.kb-qi.q-good{border-left:4px solid var(--ok)}
+.kb-qi.q-mid{border-left:4px solid var(--sign)}
 .kb-qq{margin:0 0 6px;font-weight:700;line-height:1.45}
 .kb-steps{margin:8px 0 0;padding-left:22px;display:grid;gap:12px;line-height:1.45}
 .kb-score{margin-top:12px;text-align:center}
 .kb-pend{margin-top:12px;border-top-color:var(--stop)}
 .kb-pend p{margin:0}
 .kb-qa{margin:4px 0 8px}
-.kb-okbtns [data-v="1"][aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--ok-ink)}
-.kb-okbtns [data-v="0"][aria-pressed="true"]{background:var(--stop);border-color:var(--stop);color:#fff}
+.kb-okbtns [data-v="good"][aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--ok-ink)}
+.kb-okbtns [data-v="mid"][aria-pressed="true"]{background:var(--sign);border-color:var(--sign);color:var(--sign-ink)}
+.kb-okbtns [data-v="bad"][aria-pressed="true"]{background:var(--stop);border-color:var(--stop);color:#fff}
 .uk-ch small{font-weight:600;text-transform:none;letter-spacing:0}
 /* ===== кабинет экзаменатора ===== */
 .kb-me{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin:10px 0 6px;font-size:15px}
@@ -4085,7 +4088,7 @@ const REGL=[
  ["Сроки",["В Академии кандидат находится не дольше 3 суток (72 часа). Срок считается от первого выданного варианта.","Записаться на экзамен можно не чаще одного раза в 12 часов — от времени предыдущей выдачи варианта. Кабинет не выдаст новый вариант раньше; исключение может сделать только начальник Академии.","Не сдал за 3 суток — дальнейшее обучение или отчисление решает начальник Академии."]],
  ["Время экзамена",["Порядок: экзаменатор входит по своему ключу → формирует вариант → отправляет кандидату ссылку-билет → кандидат открывает билет (экзаменатор это видит) → экзаменатор нажимает «Начать».","На весь экзамен — 20 минут, таймер идёт сам с момента «Начать».","Вопросы кандидат видит в своём билете только пока идёт время; через 20 минут они скрываются, ответы после этого не принимаются.","Отвечать устно, своими словами, без шпаргалок и подсказок."]],
  ["Состав варианта",["Вопросы 1–5 — фундамент, у всех одинаковые: что такое ФСБ; чем занимается ФСБ; что такое Управление «М»; какие ещё управления есть в ФСБ; кто контролирует ФСБ.","Вопросы 6–10 — лёгкие, 11–20 — посложнее, 21–24 — задачи уровней 1–4 на разные темы.","Баллы: вопросы 1–10 — по 1 баллу, 11–20 — по 2 балла, задачи — по 3 балла (засчитан — 3, доработка — 1,5, не засчитан — 0). Всего 42 балла.","Вариант случайный: сначала выдаются вопросы и задачи, которые ещё никому не доставались. Задачи тренажёра на экзамене не выдаются."]],
- ["Оценка",["Вопросы — «верно / неверно»; правильный ответ видит только экзаменатор.","Задачи — пять критериев рассуждения: квалификация, опора на норму, исключения, порядок действий, вывод. Критическая ошибка — задача не засчитывается.","Фиксированного проходного числа нет: итог «засчитан / доработка / не засчитан» выносит экзаменатор по ответам и логике кандидата."]],
+ ["Оценка",["Вопросы 1–20 — «плохо / средне / отлично»: за вопрос в 1 балл — 0 / 0,5 / 1, в 2 балла — 0 / 1 / 2. Правильный ответ видит только экзаменатор.","Задачи — пять критериев рассуждения: квалификация, опора на норму, исключения, порядок действий, вывод. Критическая ошибка — задача не засчитывается.","Фиксированного проходного числа нет: итог «засчитан / доработка / не засчитан» выносит экзаменатор по ответам и логике кандидата."]],
  ["Кто принимает",["Экзаменатор с личным ключом; можно вдвоём — совместный приём.","Экзаменатор не принимает экзамен при личной заинтересованности — друг, родственник, бывший напарник (Кодекс этики 15)."]],
  ["Анкета кандидата",["В формате «имя | статик», до 40 символов; фамилия — если есть. Примеры: Иван Петров | 12345, Марат | 12345."]],
  ["После экзамена",["Итог сразу уходит в таблицу; кандидату называют, что подтянуть.","Обжалование — рапорт в течение 72 часов (Устав ФСБ I.5.14 — п. 5.14.4; ТК 45.2). Порядок в Академии: начальнику Академии, на его решение — Начальнику Управления."]],
@@ -4483,7 +4486,7 @@ const METOD=[
  ["Что отменено и почему",["Надзорная практика на чужих задержаниях отменена: перечень участников задержания закрыт: от Управления «М» в нём назван сотрудник Управления «М» (УПК 92 ч.6 «ж»), наблюдателей и курсантов в перечне нет, присутствие иных лиц не допускается (УПК 92 ч.7). Курсанты на месте задержания — нарушение закона.","Реальные материалы дел и чужие видеозаписи для учёбы не используются: данные следствия не разглашаются (УПК 161), видеозапись представляется по требованию прокурора, следователя СК, суда и адвоката (УПК 166 ч.5) — Академии и курсантов в этом перечне нет."]],
  ["Как учим — только законно",["Лекции и разборы норм.","Учебные кейсы — вымышленные ситуации по законам сервера.","Учебные инсценировки на территории ФСБ между курсантами — без граждан и реальных задержанных; роли: задерживающий, задержанный, адвокат, прокурор, сотрудник СК.","Документы на вымышленном деле — например, учебное постановление по УПК 146."]],
  ["Уровни",ACAD_LV.map(([n,t,d])=>`Уровень ${n} — «${t}»: ${d}.`)],
- ["Как проходит экзамен",["Один вариант: 5 базовых вопросов (у всех одинаковые) и 5 лёгких — по 1 баллу, 10 посложнее — по 2 балла, 4 задачи уровней 1–4 — по 3 балла; всего 42 балла, на всё — 20 минут.","На вопросы — короткий ответ своими словами; экзаменатор отмечает «верно / неверно».","На задачи кандидат рассуждает вслух: что произошло → какая норма → какие исключения → что делать по порядку → вывод. По задаче — 1–2 вопроса «а если…» с изменённым фактом: так видно понимание, а не заучивание.","Фиксированного числа правильных ответов нет: решение выносит экзаменатор."]],
+ ["Как проходит экзамен",["Один вариант: 5 базовых вопросов (у всех одинаковые) и 5 лёгких — по 1 баллу, 10 посложнее — по 2 балла, 4 задачи уровней 1–4 — по 3 балла; всего 42 балла, на всё — 20 минут.","На вопросы — короткий ответ своими словами; экзаменатор ставит «плохо / средне / отлично».","На задачи кандидат рассуждает вслух: что произошло → какая норма → какие исключения → что делать по порядку → вывод. По задаче — 1–2 вопроса «а если…» с изменённым фактом: так видно понимание, а не заучивание.","Фиксированного числа правильных ответов нет: решение выносит экзаменатор."]],
  ["Сроки",["В Академии — не дольше 3 суток; записаться на экзамен — не чаще раза в 12 часов."]],
  ["Критерии оценки рассуждения",ACAD_CRIT.map(([,t,d])=>`${t} — ${d}. Оценка: не владеет / частично / уверенно.`)],
  ["Критические ошибки",["Решение, которое нарушает закон или права человека: задержание без основания УПК 91, провокация вместо эксперимента (УК 42.1 ч.3, 304), разглашение данных следствия (УПК 161), превышение полномочий (УК 286). Уровень не засчитывается, даже если остальное верно."]],
@@ -4594,11 +4597,13 @@ const kIsQ=m=>m&&m.kind==="q";
 const QBAD=/видеозаписи/i; /* тема старых курсов — на экзамене не выдаётся */
 /* фундамент: первые 5 вопросов у всех одинаковые; их дубли в банке не выдаются */
 const BASE_IDS=["F01","F02","F03","F04","F05"], BASE_DUP=new Set(["L001","L007","C1-001","L064","L065"]);
+const QM=[["bad","Плохо"],["mid","Средне"],["good","Отлично"]], QK={good:1,mid:0.5,bad:0}, QTXT={good:"отлично",mid:"средне",bad:"плохо"};
+const kQm=r=>r?(r.q||(r.ok===true?"good":r.ok===false?"bad":"")):"";
 const PT_Q={1:1,2:2}, PT_TASK={"засчитан":3,"доработка":1.5,"не засчитан":0};
 const kIsBase=m=>BASE_IDS.includes(m.id);
 function kGroups(ex){ const q=ex.cases.filter(kIsQ); return [["base","Фундамент — у всех одинаковые",q.filter(kIsBase),1],["easy","Лёгкие вопросы",q.filter(m=>!kIsBase(m)&&m.level===1),1],["mid","Вопросы посложнее",q.filter(m=>m.level===2),2]]; }
 /* баллы: лёгкие и фундамент — 1, средние — 2, задачи — 3 (засчитан 3, доработка 1,5, не засчитан 0) */
-function kPoints(cases,get){ let p1=0,p2=0,pt=0,max=0; cases.forEach(m=>{ const r=get(m)||{}; if(kIsQ(m)){ const v=PT_Q[m.level]||1; max+=v; if(r.ok===true){ if(m.level===2) p2+=v; else p1+=v; } } else { max+=3; pt+=PT_TASK[r.verdict]||0; } }); return {p1,p2,pt,total:p1+p2+pt,max}; }
+function kPoints(cases,get){ let p1=0,p2=0,pt=0,max=0; cases.forEach(m=>{ const r=get(m)||{}; if(kIsQ(m)){ const v=PT_Q[m.level]||1; max+=v; const g=(QK[kQm(r)]||0)*v; if(m.level===2) p2+=g; else p1+=g; } else { max+=3; pt+=PT_TASK[r.verdict]||0; } }); return {p1,p2,pt,total:p1+p2+pt,max}; }
 const kFmtP=x=>String(Math.round(x*10)/10).replace(".",",");
 /* вопросы: сначала те, что выдавались реже всего, и по возможности из разных тем */
 function kPickQ(lv,n,use){ const out=[], topics={}; let pool=CARDS.filter(c=>c.level===lv&&!QBAD.test(c.topic)&&!BASE_IDS.includes(c.id)&&!BASE_DUP.has(c.id));
@@ -4616,18 +4621,18 @@ function kLoadDraft(exam){
   /* общий черновик в таблице (совместный приём) — берём, если он новее своего */
   const sv=exam.draft; if(sv&&sv.data&&sv.data.cases&&(!d||(sv.ts||0)>(d.ts||0))) d={...sv.data,ts:sv.ts};
   if(!d){ const r=exam.result; d={cases:{},areas:{},touched:{},total:"",totalTouched:false,comment:""};
-    if(r){ (r.cases||[]).forEach(c=>d.cases[c.id]={crit:{...(c.crit||{})},critErr:!!c.critErr,note:c.note||"",verdict:c.kind==="q"?"":(c.verdict||""),ok:c.ok===true?true:c.ok===false?false:null}); d.areas={...r.areas}; KAREAS.forEach(([k])=>{ if(d.areas[k]) d.touched[k]=true; }); d.total=r.total||""; d.totalTouched=!!r.total; d.comment=r.comment||""; } }
+    if(r){ (r.cases||[]).forEach(c=>d.cases[c.id]={crit:{...(c.crit||{})},critErr:!!c.critErr,note:c.note||"",verdict:c.kind==="q"?"":(c.verdict||""),q:kQm(c)||null}); d.areas={...r.areas}; KAREAS.forEach(([k])=>{ if(d.areas[k]) d.touched[k]=true; }); d.total=r.total||""; d.totalTouched=!!r.total; d.comment=r.comment||""; } }
   exam.cases.forEach(c=>{ d.cases[c.id]=d.cases[c.id]||{crit:{},critErr:false,note:"",verdict:"",ok:null}; });
   return d;
 }
 const kSaveDraft=()=>{ if(KS.exam&&KS.draft){ KS.draft.ts=Date.now(); ls(kDraftKey(KS.exam.code),JSON.stringify(KS.draft)); } };
 function kAutoVerdict(r){ if(!r) return ""; if(r.critErr) return "не засчитан"; const key=["k1","k2","k4"]; if(key.some(k=>r.crit[k]==="0")) return "не засчитан"; if(!key.every(k=>r.crit[k])) return ""; return key.every(k=>r.crit[k]==="2")?"засчитан":"доработка"; }
-const kVerdict=r=>r.ok===true?"верно":r.ok===false?"неверно":(r.verdict||kAutoVerdict(r));
+const kVerdict=r=>kQm(r)?QTXT[kQm(r)]:(r.verdict||kAutoVerdict(r));
 function kAutoAreas(){
   const ex=KS.exam, d=KS.draft, out={};
   KAREAS.forEach(([a])=>{
     const vals=[]; let crit=false;
-    ex.cases.forEach(m=>{ const r=d.cases[m.id]; if(!r) return; if(kIsQ(m)){ if(r.ok!==null&&r.ok!==undefined&&kQAREA(m.topic)===a&&a!=="logic") vals.push(r.ok?2:0); return; } const c=r.crit; const nums=k=>c[k]!==undefined&&c[k]!==""?[+c[k]]:[];
+    ex.cases.forEach(m=>{ const r=d.cases[m.id]; if(!r) return; if(kIsQ(m)){ const q=kQm(r); if(q&&kQAREA(m.topic)===a&&a!=="logic") vals.push(QK[q]*2); return; } const c=r.crit; const nums=k=>c[k]!==undefined&&c[k]!==""?[+c[k]]:[];
       if(a==="logic") vals.push(...nums("k4"),...nums("k5"));
       else if(KAREA_OF[m.topic]===a){ ["k1","k2","k3","k4","k5"].forEach(k=>vals.push(...nums(k))); if(r.critErr) crit=true; }
       else if(a==="law") vals.push(...nums("k1"));
@@ -4691,8 +4696,9 @@ ${cases}
 function kDraftPoints(){ const ex=KS.exam, d=KS.draft; return kPoints(ex.cases,m=>{ const r=d.cases[m.id]||{}; return kIsQ(m)?r:{verdict:kVerdict(r)}; }); }
 function kQScore(){ const s=kDraftPoints(); return `Баллы: ${kFmtP(s.total)} из ${s.max} · вопросы по 1 баллу — ${s.p1}, по 2 балла — ${s.p2}, задачи — ${kFmtP(s.pt)}`; }
 function kQItem(m){ const c=kCard(m.id)||{q:m.title,a:"—",ref:[]}; const r=KS.draft.cases[m.id];
-  return `<li class="kb-qi${r.ok===true?" ok":r.ok===false?" bad":""}" id="kbc-${esc(m.id)}"><p class="kb-qq">${esc(c.q)}</p><details class="mkans kb-qa"${(KS.openM||{})[m.id]?" open":""} data-kbm="${esc(m.id)}"><summary>Правильный ответ (видит только экзаменатор)${CHEV}</summary><p>${esc(c.a)}</p>${refNorm(c.ref).length?`<small class="sref">${refBtns(c.ref)}</small>`:""}</details><div class="chips kb-okbtns" role="group"><button type="button" data-kbq="${esc(m.id)}" data-v="1" aria-pressed="${r.ok===true}">Верно</button><button type="button" data-kbq="${esc(m.id)}" data-v="0" aria-pressed="${r.ok===false}">Неверно</button></div></li>`; }
-function kQHtml(ex){ let n=0; return kGroups(ex).map(([id,title,list,pt])=>{ const st=n; n+=list.length; return list.length?`<section class="kb-qsec" id="kbq-${id}"><h3 class="uk-ch">${st+1}–${n}. ${title} <small class="kb-auto">· по ${pt} ${pt===1?"баллу":"балла"} · верно ${list.filter(m=>KS.draft.cases[m.id].ok===true).length} из ${list.length}</small></h3><ol class="kb-qlist" start="${st+1}">${list.map(kQItem).join("")}</ol></section>`:""; }).join(""); }
+  return `<li class="kb-qi${kQm(r)?" q-"+kQm(r):""}" id="kbc-${esc(m.id)}"><p class="kb-qq">${esc(c.q)}</p><details class="mkans kb-qa"${(KS.openM||{})[m.id]?" open":""} data-kbm="${esc(m.id)}"><summary>Правильный ответ (видит только экзаменатор)${CHEV}</summary><p>${esc(c.a)}</p>${refNorm(c.ref).length?`<small class="sref">${refBtns(c.ref)}</small>`:""}</details><div class="chips kb-okbtns" role="group">${QM.map(([v,l])=>`<button type="button" data-kbq="${esc(m.id)}" data-v="${v}" aria-pressed="${kQm(r)===v}">${l}</button>`).join("")}</div></li>`; }
+function kQCount(list,get){ const c={good:0,mid:0,bad:0}; let n=0; list.forEach(m=>{ const q=kQm(get(m.id)); if(q){ c[q]++; n++; } }); return `отлично ${c.good} · средне ${c.mid} · плохо ${c.bad}${n<list.length?` · не отмечено ${list.length-n}`:""}`; }
+function kQHtml(ex){ let n=0; return kGroups(ex).map(([id,title,list,pt])=>{ const st=n; n+=list.length; return list.length?`<section class="kb-qsec" id="kbq-${id}"><h3 class="uk-ch">${st+1}–${n}. ${title} <small class="kb-auto">· по ${pt} ${pt===1?"баллу":"балла"} · ${kQCount(list,id=>KS.draft.cases[id])}</small></h3><ol class="kb-qlist" start="${st+1}">${list.map(kQItem).join("")}</ol></section>`:""; }).join(""); }
 /* ожидание: вариант сформирован, кандидат открывает билет, экзаменатор жмёт «Начать» */
 function kStageHtml(){ const ex=KS.exam, j=ex.joined, q=ex.cases.filter(kIsQ).length, t=ex.cases.length-q, mx=kPoints(ex.cases,()=>({})).max;
   return `<div class="kb-head sk-box"><p class="kb-code">Вариант <b>${esc(ex.code)}</b> сформирован</p><p>${esc(ex.cadet)}${ex.static?" | "+esc(ex.static):""} · принимают: ${esc(kNames(ex))}</p>
@@ -4719,7 +4725,7 @@ function kCardHtml(e){
   const rc=id=>r&&(r.cases||[]).find(x=>x.id===id);
   return `<article class="sk-box kb-card"><p class="kb-code">Вариант <b>${esc(e.code)}</b> ${kPill(e.status==="завершён"?(r&&r.total):"")}</p>
 <dl class="kb-dl"><dt>Кандидат</dt><dd>${esc(e.cadet)}${e.static?" · статик "+esc(e.static):""}</dd><dt>Тип</dt><dd>${esc(e.typeName||"")}</dd><dt>Принимали</dt><dd>${esc(kNames(e))}</dd><dt>Начат</dt><dd>${esc(kD(e.started))}</dd><dt>Статус</dt><dd>${esc(e.status)}${r?" · "+esc(kD(r.finished)):""}</dd>${r&&e.cases.some(kIsQ)?(()=>{ const s=kPoints(e.cases,m=>rc(m.id)); return `<dt>Баллы</dt><dd><b>${kFmtP(s.total)} из ${s.max}</b> · по 1 баллу — ${s.p1}, по 2 балла — ${s.p2}, задачи — ${kFmtP(s.pt)}</dd>`; })():""}</dl>
-${e.cases.some(kIsQ)?`<h5>Вопросы</h5><ol class="kb-qs">${e.cases.filter(kIsQ).map(m=>{ const x=rc(m.id); return `<li><p>${x?(x.ok?"✅":"❌")+" ":""}${esc(m.title)} <small>· ${m.level===1?"лёгкий":"средний"} · ${esc(m.topic||"")}</small></p></li>`; }).join("")}</ol>`:""}
+${e.cases.some(kIsQ)?`<h5>Вопросы</h5><ol class="kb-qs">${e.cases.filter(kIsQ).map(m=>{ const x=rc(m.id); return `<li><p>${x&&kQm(x)?({good:"🟢",mid:"🟡",bad:"🔴"})[kQm(x)]+" ":""}${esc(m.title)}${x&&kQm(x)?` <b>${QTXT[kQm(x)]}</b>`:""} <small>· ${m.level===1?"лёгкий":"средний"} · ${esc(m.topic||"")}</small></p></li>`; }).join("")}</ol>`:""}
 <h5>Задачи</h5><ol class="kb-qs">${e.cases.filter(m=>!kIsQ(m)).map(m=>{ const x=rc(m.id); return `<li><p><b>${esc(m.id)}</b> «${esc(m.title)}» <small>· ур. ${m.level} · ${esc(m.topic||"")}</small> ${x?kPill(x.verdict):""}${x&&x.critErr?` <span class="kb-pill kb-bad">крит. ошибка</span>`:""}</p>${x?`<p class="kb-marks">${ACAD_CRIT.map(([k,t])=>`${t}: <b>${acMarkTxt(x.crit[k])}</b>`).join(" · ")}</p>${x.note?`<p class="kb-noteq">${esc(x.note)}</p>`:""}`:""}</li>`; }).join("")}</ol>
 ${r?`<h5>Общая оценка</h5><dl class="kb-dl">${KAREAS.map(([k,t])=>`<dt>${esc(t)}</dt><dd>${kPill(r.areas[k])}</dd>`).join("")}</dl>${r.comment?`<h5>Комментарий</h5><p>${esc(r.comment)}</p>`:""}`:""}
 <div class="ex-acts">${e.status!=="завершён"&&!mine?`<button type="button" class="btn pri" data-kbjoin="1">Присоединиться к приёму</button>`:""}${e.status!=="завершён"&&(mine||chief)?`<button type="button" class="btn${mine?" pri":""}" data-kbresume="1">Продолжить оценку</button>`:""}${e.status==="завершён"&&chief?`<button type="button" class="btn" data-kbresume="1">Исправить оценку</button>`:""}<button type="button" class="btn" data-kbcopy="card">Копировать карточку</button><button type="button" class="btn" data-kbcopy="clink">Ссылка-билет</button></div></article>`;
@@ -4728,7 +4734,7 @@ function kListHtml(items){ return `<div class="kb-tbl">${items.map(x=>`<button t
 function kCardPlain(e){ const r=e.result; const rc=id=>r&&(r.cases||[]).find(x=>x.id===id);
   return [`ЭКЗАМЕН АКАДЕМИИ УПРАВЛЕНИЯ «М» · вариант ${e.code}`,`Кандидат: ${e.cadet}${e.static?" · статик "+e.static:""}`,`Тип: ${e.typeName||""} · принимали: ${kNames(e)}`,`Статус: ${e.status}`,
     ...(e.cases.some(kIsQ)&&r?[(()=>{ const s=kPoints(e.cases,m=>rc(m.id)); return `Баллы: ${kFmtP(s.total)} из ${s.max}`; })()]:[]),
-    ...(e.cases.some(kIsQ)&&r?[1,2].map(lv=>{ const q=e.cases.filter(m=>kIsQ(m)&&m.level===lv); return `${lv===1?"Лёгкие":"Средние"} вопросы: верно ${q.filter(m=>(rc(m.id)||{}).ok).length} из ${q.length}`; }):[]),
+    ...(e.cases.some(kIsQ)&&r?[1,2].map(lv=>{ const q=e.cases.filter(m=>kIsQ(m)&&m.level===lv); return `${lv===1?"Вопросы 1–10":"Вопросы 11–20"}: ${kQCount(q,id=>rc(id)||{})}`; }):[]),
     ...e.cases.filter(m=>!kIsQ(m)).map((m,i)=>{ const x=rc(m.id); return `Задача ${i+1}) ${m.id} «${m.title}» (ур. ${m.level})${x?` — ${x.verdict||"—"}${x.critErr?", крит. ошибка":""}`:""}`; }),
     ...(r?["Общая оценка: "+KAREAS.map(([k,t])=>`${t} — ${r.areas[k]||"—"}`).join("; "),`Итог: ${r.total}`,r.comment?"Комментарий: "+r.comment:""]:[])].filter(Boolean).join("\n"); }
 function kStatsHtml(s){
@@ -4794,7 +4800,7 @@ function renderKab(){
       const tb=g("[data-kbtab]"); if(tb){ KS.tab=tb.dataset.kbtab; KS.err=""; kDraw(); kLoadTab(); return; }
       if(g("[data-kbreopen]")&&KS.pending){ KS.exam=KS.pending; KS.draft=kLoadDraft(KS.exam); KS.pending=null; kDraw(); return; }
       if(g("[data-kbdrop]")){ KS.pending=null; try{localStorage.removeItem("acad-open")}catch(_){} kDraw(); return; }
-      const qb=g("[data-kbq]"); if(qb){ const r=KS.draft.cases[qb.dataset.kbq]; const v=qb.dataset.v==="1"; r.ok=r.ok===v?null:v; kSaveDraft(); kKeep(()=>kDraw()); return; }
+      const qb=g("[data-kbq]"); if(qb){ const r=KS.draft.cases[qb.dataset.kbq]; const v=qb.dataset.v; r.q=kQm(r)===v?null:v; delete r.ok; kSaveDraft(); kKeep(()=>kDraw()); return; }
       const tmb=g("[data-kbtimer]"); if(tmb&&KS.exam){ if(KS.busy) return; if(tmb.dataset.kbtimer==="start"&&!KS.exam.joined&&!confirm("Кандидат ещё не открыл билет. Начать всё равно?")) return; if(tmb.dataset.kbtimer==="restart"&&!confirm("Перезапустить таймер на "+EXAM_MIN+" минут?")) return; KS.busy=true; kKeep(()=>kDraw());
         try{ const j=await kApi("start",{code:KS.exam.code,restart:tmb.dataset.kbtimer==="restart"}); KT.off=j.now-Date.now(); KS.exam.timer=j.timer; ls("acad-open",JSON.stringify(KS.exam)); toast("Таймер запущен: "+EXAM_MIN+" минут"); }catch(err){ toast(err.message); }
         KS.busy=false; kKeep(()=>kDraw()); return; }
@@ -4825,7 +4831,7 @@ function renderKab(){
         const miss=ex.cases.filter(m=>!kVerdict(d.cases[m.id])); if(miss.length){ KS.err="Не отмечено: "+miss.map(m=>kIsQ(m)?"вопрос «"+m.title.slice(0,40)+"…»":"задача "+m.id).slice(0,4).join("; ")+(miss.length>4?" и ещё "+(miss.length-4):""); kDraw(); const n=$("kbc-"+miss[0].id); if(n) n.scrollIntoView({block:"start"}); return; }
         if(!d.total){ KS.err="Выберите итог экзамена"; kDraw(); return; }
         KS.busy=true; KS.err=""; kKeep(()=>kDraw());
-        try{ await kApi("submit",{code:ex.code,result:{cases:ex.cases.map(m=>kIsQ(m)?({id:m.id,ok:d.cases[m.id].ok}):({id:m.id,crit:d.cases[m.id].crit,critErr:d.cases[m.id].critErr,note:d.cases[m.id].note,verdict:kVerdict(d.cases[m.id])})),areas:d.areas,total:d.total,comment:d.comment}});
+        try{ await kApi("submit",{code:ex.code,result:{cases:ex.cases.map(m=>kIsQ(m)?({id:m.id,q:kQm(d.cases[m.id])}):({id:m.id,crit:d.cases[m.id].crit,critErr:d.cases[m.id].critErr,note:d.cases[m.id].note,verdict:kVerdict(d.cases[m.id])})),areas:d.areas,total:d.total,comment:d.comment}});
           try{ localStorage.removeItem(kDraftKey(ex.code)); localStorage.removeItem("acad-open"); }catch(_){}
           const code=ex.code; KS.exam=null; KS.draft=null; KS.busy=false; toast("Экзамен "+code+" записан в таблицу"); kOpen(code); window.scrollTo({top:0}); return;
         }catch(err){ KS.err=err.message; }
