@@ -4538,14 +4538,18 @@ function kPick(type,order,use){
 }
 const kCase=id=>CASES.find(c=>c.id===id);
 const kDraftKey=code=>"acad-draft-"+code;
+const kNames=e=>[e.examiner].concat(e.co||[]).join(", ");
+const kIsMine=e=>!!(KS.me&&(KS.me.name===e.examiner||(e.co||[]).includes(KS.me.name)));
 function kLoadDraft(exam){
   let d=null; try{ d=JSON.parse(ls(kDraftKey(exam.code))||"null"); }catch(e){}
+  /* общий черновик в таблице (совместный приём) — берём, если он новее своего */
+  const sv=exam.draft; if(sv&&sv.data&&sv.data.cases&&(!d||(sv.ts||0)>(d.ts||0))) d={...sv.data,ts:sv.ts};
   if(!d){ const r=exam.result; d={cases:{},areas:{},touched:{},total:"",totalTouched:false,comment:""};
     if(r){ (r.cases||[]).forEach(c=>d.cases[c.id]={crit:{...c.crit},critErr:!!c.critErr,note:c.note||"",verdict:c.verdict||""}); d.areas={...r.areas}; KAREAS.forEach(([k])=>{ if(d.areas[k]) d.touched[k]=true; }); d.total=r.total||""; d.totalTouched=!!r.total; d.comment=r.comment||""; } }
   exam.cases.forEach(c=>{ d.cases[c.id]=d.cases[c.id]||{crit:{},critErr:false,note:"",verdict:""}; });
   return d;
 }
-const kSaveDraft=()=>{ if(KS.exam&&KS.draft) ls(kDraftKey(KS.exam.code),JSON.stringify(KS.draft)); };
+const kSaveDraft=()=>{ if(KS.exam&&KS.draft){ KS.draft.ts=Date.now(); ls(kDraftKey(KS.exam.code),JSON.stringify(KS.draft)); } };
 function kAutoVerdict(r){ if(!r) return ""; if(r.critErr) return "не засчитан"; const key=["k1","k2","k4"]; if(key.some(k=>r.crit[k]==="0")) return "не засчитан"; if(!key.every(k=>r.crit[k])) return ""; return key.every(k=>r.crit[k]==="2")?"засчитан":"доработка"; }
 const kVerdict=r=>r.verdict||kAutoVerdict(r);
 function kAutoAreas(){
@@ -4601,8 +4605,9 @@ function kGradeHtml(){
 <label class="mknote"><span>Логика кандидата</span><textarea rows="2" data-kbnote="${esc(m.id)}">${esc(r.note||"")}</textarea></label>
 <div class="kb-row"><b>Решение по кейсу</b>${kChips("data-kbverd",KVERD.map(x=>[x,x]),v,`data-case="${esc(m.id)}"`)}<small class="kb-auto">${auto?"по критериям: "+auto:"заполните критерии"}${r.verdict&&r.verdict!==auto?` · <button type="button" class="lnk" data-kbvreset="${esc(m.id)}">вернуть авто</button>`:""}</small></div></div></article>`; }).join("");
   const areas=KAREAS.map(([k,t,dd])=>`<div class="ac-crit"><p><b>${esc(t)}</b><small>${esc(dd)}${d.touched[k]?"":d.areas[k]?" · авто по кейсам":" · не проверялось в кейсах"}</small></p>${kChips("data-kbarea",KMARKS.map(x=>[x,x]),d.areas[k],`data-k="${k}"`)}</div>`).join("");
-  return `<div class="kb-head sk-box"><p class="kb-code">Вариант <b>${esc(ex.code)}</b></p><p>${esc(ex.cadet)}${ex.static?" · статик "+esc(ex.static):""} · ${esc((KTYPES[ex.type]||[""])[0])} · принимает ${esc(ex.examiner)}</p>
-<div class="ex-acts"><button type="button" class="btn pri" data-kbcopy="link">Ссылка-билет для кандидата</button><button type="button" class="btn" data-kbcopy="code">Номер варианта</button></div><p class="kb-note">Кандидат видит по ссылке только ситуации и задания — без эталонов и оценок. Черновик оценок сохраняется на этом устройстве, пока вы не отправите его в таблицу.</p></div>
+  return `<div class="kb-head sk-box"><p class="kb-code">Вариант <b>${esc(ex.code)}</b></p><p>${esc(ex.cadet)}${ex.static?" · статик "+esc(ex.static):""} · ${esc((KTYPES[ex.type]||[""])[0])} · принимают: ${esc(kNames(ex))}</p>
+<div class="ex-acts"><button type="button" class="btn pri" data-kbcopy="link">Ссылка-билет для кандидата</button><button type="button" class="btn" data-kbcopy="code">Номер варианта</button></div>
+<div class="ex-acts"><button type="button" class="btn" data-kbpush="1"${KS.busy?" disabled":""}>Сохранить оценки для коллеги</button><button type="button" class="btn" data-kbpull="1"${KS.busy?" disabled":""}>Подтянуть оценки коллеги</button></div><p class="kb-note">Совместный приём: второй экзаменатор находит вариант в «Поиске» по номеру и жмёт «Присоединиться к приёму». Оценки ставите вдвоём: один сохраняет, второй подтягивает; отправить в таблицу может любой из принимающих.</p><p class="kb-note">Кандидат видит по ссылке только ситуации и задания — без эталонов и оценок. Черновик оценок сохраняется на этом устройстве, пока вы не отправите его в таблицу.</p></div>
 ${cases}
 <section class="sk-box kb-total"><h3>Общая оценка</h3><p class="kb-note">Заполняется по кейсам автоматически — измените, если видите иначе. Слабые области попадут в лист «Слабые темы» для лекций.</p>${areas}
 <div class="ex-acts"><button type="button" class="btn" data-kbperfect="1">Знает всё идеально</button><button type="button" class="btn" data-kbareaauto="1">Вернуть авто</button></div>
@@ -4611,17 +4616,17 @@ ${cases}
 <div class="ex-acts"><button type="button" class="btn pri" data-kbsubmit="1"${KS.busy?" disabled":""}>${KS.busy?"Отправляю…":"Отправить в таблицу"}</button><button type="button" class="btn" data-kbclose="1">Отложить</button></div>${KS.err?`<p class="kb-err">${esc(KS.err)}</p>`:""}</section>`;
 }
 function kCardHtml(e){
-  const r=e.result, chief=KS.me&&KS.me.chief, mine=KS.me&&KS.me.name===e.examiner;
+  const r=e.result, chief=KS.me&&KS.me.chief, mine=kIsMine(e);
   const rc=id=>r&&(r.cases||[]).find(x=>x.id===id);
   return `<article class="sk-box kb-card"><p class="kb-code">Вариант <b>${esc(e.code)}</b> ${kPill(e.status==="завершён"?(r&&r.total):"")}</p>
-<dl class="kb-dl"><dt>Кандидат</dt><dd>${esc(e.cadet)}${e.static?" · статик "+esc(e.static):""}</dd><dt>Тип</dt><dd>${esc(e.typeName||"")}</dd><dt>Принимал</dt><dd>${esc(e.examiner)}</dd><dt>Начат</dt><dd>${esc(kD(e.started))}</dd><dt>Статус</dt><dd>${esc(e.status)}${r?" · "+esc(kD(r.finished)):""}</dd></dl>
+<dl class="kb-dl"><dt>Кандидат</dt><dd>${esc(e.cadet)}${e.static?" · статик "+esc(e.static):""}</dd><dt>Тип</dt><dd>${esc(e.typeName||"")}</dd><dt>Принимали</dt><dd>${esc(kNames(e))}</dd><dt>Начат</dt><dd>${esc(kD(e.started))}</dd><dt>Статус</dt><dd>${esc(e.status)}${r?" · "+esc(kD(r.finished)):""}</dd></dl>
 <h5>Вопросы</h5><ol class="kb-qs">${e.cases.map(m=>{ const x=rc(m.id); return `<li><p><b>${esc(m.id)}</b> «${esc(m.title)}» <small>· ур. ${m.level} · ${esc(m.topic||"")}</small> ${x?kPill(x.verdict):""}${x&&x.critErr?` <span class="kb-pill kb-bad">крит. ошибка</span>`:""}</p>${x?`<p class="kb-marks">${ACAD_CRIT.map(([k,t])=>`${t}: <b>${acMarkTxt(x.crit[k])}</b>`).join(" · ")}</p>${x.note?`<p class="kb-noteq">${esc(x.note)}</p>`:""}`:""}</li>`; }).join("")}</ol>
 ${r?`<h5>Общая оценка</h5><dl class="kb-dl">${KAREAS.map(([k,t])=>`<dt>${esc(t)}</dt><dd>${kPill(r.areas[k])}</dd>`).join("")}</dl>${r.comment?`<h5>Комментарий</h5><p>${esc(r.comment)}</p>`:""}`:""}
-<div class="ex-acts">${e.status!=="завершён"&&(mine||chief)?`<button type="button" class="btn pri" data-kbresume="1">Продолжить оценку</button>`:""}${e.status==="завершён"&&chief?`<button type="button" class="btn" data-kbresume="1">Исправить оценку</button>`:""}<button type="button" class="btn" data-kbcopy="card">Копировать карточку</button><button type="button" class="btn" data-kbcopy="clink">Ссылка-билет</button></div></article>`;
+<div class="ex-acts">${e.status!=="завершён"&&!mine?`<button type="button" class="btn pri" data-kbjoin="1">Присоединиться к приёму</button>`:""}${e.status!=="завершён"&&(mine||chief)?`<button type="button" class="btn${mine?" pri":""}" data-kbresume="1">Продолжить оценку</button>`:""}${e.status==="завершён"&&chief?`<button type="button" class="btn" data-kbresume="1">Исправить оценку</button>`:""}<button type="button" class="btn" data-kbcopy="card">Копировать карточку</button><button type="button" class="btn" data-kbcopy="clink">Ссылка-билет</button></div></article>`;
 }
-function kListHtml(items){ return `<div class="kb-tbl">${items.map(x=>`<button type="button" class="kb-tr kb-li" data-kbopen="${esc(x.code)}"><span><b>${esc(x.cadet)}</b>${x.static?" · статик "+esc(x.static):""} · ${esc(x.code)}<small>${esc(kD(x.started))} · ${esc(x.type)} · принимал ${esc(x.examiner)}</small></span>${kPill(x.status==="завершён"?x.total:"")}</button>`).join("")||`<p class="fc-empty">Экзаменов пока нет</p>`}</div>`; }
+function kListHtml(items){ return `<div class="kb-tbl">${items.map(x=>`<button type="button" class="kb-tr kb-li" data-kbopen="${esc(x.code)}"><span><b>${esc(x.cadet)}</b>${x.static?" · статик "+esc(x.static):""} · ${esc(x.code)}<small>${esc(kD(x.started))} · ${esc(x.type)} · принимали: ${esc(x.examiner)}</small></span>${kPill(x.status==="завершён"?x.total:"")}</button>`).join("")||`<p class="fc-empty">Экзаменов пока нет</p>`}</div>`; }
 function kCardPlain(e){ const r=e.result; const rc=id=>r&&(r.cases||[]).find(x=>x.id===id);
-  return [`ЭКЗАМЕН АКАДЕМИИ УПРАВЛЕНИЯ «М» · вариант ${e.code}`,`Кандидат: ${e.cadet}${e.static?" · статик "+e.static:""}`,`Тип: ${e.typeName||""} · принимал: ${e.examiner}`,`Статус: ${e.status}`,
+  return [`ЭКЗАМЕН АКАДЕМИИ УПРАВЛЕНИЯ «М» · вариант ${e.code}`,`Кандидат: ${e.cadet}${e.static?" · статик "+e.static:""}`,`Тип: ${e.typeName||""} · принимали: ${kNames(e)}`,`Статус: ${e.status}`,
     ...e.cases.map((m,i)=>{ const x=rc(m.id); return `${i+1}) ${m.id} «${m.title}» (ур. ${m.level})${x?` — ${x.verdict||"—"}${x.critErr?", крит. ошибка":""}`:""}`; }),
     ...(r?["Общая оценка: "+KAREAS.map(([k,t])=>`${t} — ${r.areas[k]||"—"}`).join("; "),`Итог: ${r.total}`,r.comment?"Комментарий: "+r.comment:""]:[])].filter(Boolean).join("\n"); }
 function kStatsHtml(s){
@@ -4694,7 +4699,19 @@ function renderKab(){
       const cp=g("[data-kbcopy]"); if(cp){ const w=cp.dataset.kbcopy; if(w==="link") copyText(kLink(KS.exam.code)); if(w==="code") copyText(KS.exam.code); if(w==="card") copyText(kCardPlain(KS.card)); if(w==="clink") copyText(kLink(KS.card.code)); if(w==="met") copyText(metodPlain()); return; }
       if(g("[data-kbclose]")){ KS.exam=null; KS.draft=null; try{localStorage.removeItem("acad-open")}catch(_){} toast("Черновик сохранён на устройстве. Вернуться — «Найти вариант»."); kDraw(); return; }
       const op=g("[data-kbopen]"); if(op){ const keep=KS.tab==="find"?KS.found:null; await kOpen(op.dataset.kbopen); KS.found=keep; return; }
-      if(g("[data-kbresume]")&&KS.card){ const c=KS.card; KS.exam={code:c.code,type:c.type,examiner:c.examiner,cadet:c.cadet,static:c.static,order:c.order,cases:c.cases,result:c.result}; KS.draft=kLoadDraft(KS.exam); ls("acad-open",JSON.stringify(KS.exam)); KS.tab="new"; kDraw(); window.scrollTo({top:0}); return; }
+      if(g("[data-kbjoin]")&&KS.card){ if(KS.busy) return; KS.busy=true; KS.err=""; kDraw();
+        try{ const c=(await kApi("join",{code:KS.card.code})).exam; KS.card=c; KS.exam={code:c.code,type:c.type,examiner:c.examiner,co:c.co||[],cadet:c.cadet,static:c.static,order:c.order,cases:c.cases,result:c.result,draft:c.draft}; KS.draft=kLoadDraft(KS.exam); ls("acad-open",JSON.stringify(KS.exam)); KS.tab="new"; toast("Вы присоединились к приёму "+c.code); }catch(err){ KS.err=err.message; }
+        KS.busy=false; kDraw(); window.scrollTo({top:0}); return; }
+      if(g("[data-kbpush]")&&KS.exam){ if(KS.busy) return; KS.busy=true; kKeep(()=>kDraw());
+        try{ kSaveDraft(); const j=await kApi("draft",{code:KS.exam.code,draft:KS.draft}); KS.draft.ts=j.ts; kSaveDraft(); toast("Оценки сохранены — коллега может их подтянуть"); }catch(err){ toast(err.message); }
+        KS.busy=false; kKeep(()=>kDraw()); return; }
+      if(g("[data-kbpull]")&&KS.exam){ if(KS.busy) return; KS.busy=true; kKeep(()=>kDraw());
+        try{ const c=(await kApi("get",{code:KS.exam.code})).exam; KS.exam.co=c.co||[]; const sv=c.draft;
+          if(sv&&sv.data&&(sv.ts||0)>(KS.draft.ts||0)){ KS.draft={...sv.data,ts:sv.ts}; c.cases.forEach(m=>{ KS.draft.cases[m.id]=KS.draft.cases[m.id]||{crit:{},critErr:false,note:"",verdict:""}; }); ls(kDraftKey(KS.exam.code),JSON.stringify(KS.draft)); toast("Подтянуты оценки: "+sv.by); }
+          else toast(sv?"У вас уже самые свежие оценки":"Коллега ещё не сохранял оценки");
+          ls("acad-open",JSON.stringify(KS.exam)); }catch(err){ toast(err.message); }
+        KS.busy=false; kKeep(()=>kDraw()); return; }
+      if(g("[data-kbresume]")&&KS.card){ const c=KS.card; KS.exam={code:c.code,type:c.type,examiner:c.examiner,co:c.co||[],cadet:c.cadet,static:c.static,order:c.order,cases:c.cases,result:c.result,draft:c.draft}; KS.draft=kLoadDraft(KS.exam); ls("acad-open",JSON.stringify(KS.exam)); KS.tab="new"; kDraw(); window.scrollTo({top:0}); return; }
       if(g("[data-kbsubmit]")){ if(KS.busy) return; kSync(); const d=KS.draft, ex=KS.exam;
         const miss=ex.cases.filter(m=>!kVerdict(d.cases[m.id])); if(miss.length){ KS.err="Нет решения по кейсам: "+miss.map(m=>m.id).join(", "); kDraw(); const n=$("kbc-"+miss[0].id); if(n) n.scrollIntoView({block:"start"}); return; }
         if(!d.total){ KS.err="Выберите итог экзамена"; kDraw(); return; }
