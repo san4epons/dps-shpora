@@ -4369,8 +4369,16 @@ function renderFsbExam(){
   if(!el.dataset.ready){
     el.dataset.ready="1";
     el.innerHTML=`<h2 class="htitle">Экзамен ФСБ</h2>
-<p class="lead">Академия Управления «М». На экзамене дают задачи четырёх уровней сложности — нужно разобрать ситуацию по закону. Ниже — вопросы с ответами для подготовки: карточки и тест; отмечайте «Знаю», прогресс сохраняется на этом устройстве.</p>
-${acadPlaque()}<div class="ex-top"><div class="ex-prog" id="exProg"></div>
+<p class="lead">Подготовка к экзамену Академии Управления «М». Начните с базы: что такое ФСБ и Управление «М», затем вопросы с ответами, затем задачи. Отмечайте «Знаю» — прогресс сохраняется на этом устройстве.</p>
+<h3 class="uk-ch">База знаний</h3>
+<div class="tiles ex-base" style="margin-top:8px">
+ <button type="button" class="tile hot" data-go="fsbstruct"><span class="t">1. Что такое ФСБ и Управление «М»</span><span class="d">Структура ФСБ, подразделения, задачи Управления «М», руководство, обязанности и права сотрудника</span><span class="ref">ФЗ о ФСБ, устав</span></button>
+ <button type="button" class="tile" data-exscroll="1"><span class="t">2. Вопросы с ответами — ${CARDS.length}</span><span class="d">По темам: статус и задачи ФСБ, Управление «М» и устав, задержание, неприкосновенность, дела и подследственность…</span><span class="ref">карточки, тест 20, список</span></button>
+ <button type="button" class="tile" data-go="fsbacad"><span class="t">3. Задачи как на экзамене</span><span class="d">По две задачи на каждый из 4 уровней: разберите ситуацию и сверьтесь с ответом</span><span class="ref">тренажёр</span></button>
+ <button type="button" class="tile" data-go="fsblaw"><span class="t">Законы сервера</span><span class="d">Полные тексты: ФЗ о ФСБ, устав ФСБ, УК, УПК и другие</span><span class="ref">первоисточник</span></button>
+</div>
+<p class="kb-note" style="margin:10px 0 0">Экзаменаторам: <button type="button" class="lnk" data-go="kab">кабинет экзаменатора</button>.</p>
+<h3 class="uk-ch" id="exBaseQ">Вопросы с ответами</h3><div class="ex-top"><div class="ex-prog" id="exProg"></div>
 <div class="chips" role="group" aria-label="Режим"><button type="button" data-exmode="cards">Карточки</button><button type="button" data-exmode="test">Тест 20</button><button type="button" data-exscroll="1">Все вопросы</button><button type="button" data-go="marks" class="mkchip">⚑ Мои метки <b id="exMkN"></b></button></div>
 <div class="ex-ctrl"><label class="hide" for="exTopic">Тема</label><select id="exTopic"><option value="all">Все темы (${CARDS.length})</option><option value="marks" id="exMarksOpt">⚑ Мои метки</option>${COURSES.length?`<optgroup label="Академия «М»">${COURSES.map(C=>`<option value="course:${C.id}">${esc(C.title)} — все вопросы (${CARDS.filter(c=>inCourse(c,C.id)).length})</option>`).join("")}</optgroup>`:""}${[["C1-","Устав, задержание, должностные"],["C2-","Проверки, дела, эксперимент"],["L","Законы ФСБ"],["P","УК и УПК"]].map(([p,g])=>{ const ts=TOPICS.filter(t=>CARDS.some(c=>c.topic===t&&c.id.startsWith(p))); return ts.length?`<optgroup label="${g}">${ts.map(t=>`<option value="${esc(t)}">${esc(t)} (${CARDS.filter(c=>c.topic===t).length})</option>`).join("")}</optgroup>`:""; }).join("")}</select>
 <label class="fc-chk" style="padding:4px 0"><input type="checkbox" id="exOnly"><span>Только невыученные</span></label></div></div>
