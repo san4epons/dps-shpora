@@ -30,6 +30,7 @@
 .kb-pend{margin-top:12px;border-top-color:var(--stop)}
 .kb-pend p{margin:0}
 .kb-delo{margin-top:12px}
+.kb-evf{margin:6px 0 4px}
 .kb-ltopic{margin:4px 0 6px;font-size:22px;line-height:1.25}
 .kb-lplan .kb-qlist li{margin-bottom:10px}
 .kb-delo-t{white-space:pre-wrap;font:inherit;font-size:15px;line-height:1.5;margin:6px 0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
@@ -4599,7 +4600,7 @@ async function kApi(action,p={}){
   if(!j.ok) throw new Error(j.error||"Ошибка");
   return j;
 }
-function kLogout(silent){ KS.L={topics:null,i:0,open:null,done:[],last:null,err:"",busy:false}; KS.key=""; KS.me=null; KS.exam=null; KS.card=null; try{localStorage.removeItem("acad-key")}catch(e){} if(!silent) toast("Вы вышли из кабинета"); kDraw(); }
+function kLogout(silent){ KS.L={topics:null,i:0,f:"",open:null,done:[],last:null,err:"",busy:false}; KS.key=""; KS.me=null; KS.exam=null; KS.card=null; try{localStorage.removeItem("acad-key")}catch(e){} if(!silent) toast("Вы вышли из кабинета"); kDraw(); }
 function kPick(type,order,use){
   use=use||{}; const out=[], used=new Set(), topics=new Set();
   /* сначала кейсы, которые выдавались меньше всего: пока банк уровня не исчерпан, у кандидатов нет повторов */
@@ -4781,49 +4782,67 @@ function kStatsHtml(s){
 <h4 class="uk-ch">Критерии рассуждения</h4><div class="kb-tbl">${s.crit.map(c=>`<div class="kb-tr"><span>${esc(c.name)}<small>не «уверенно»: ${c.weak} из ${c.total}</small></span>${bar(c.share)}</div>`).join("")}</div>
 <h4 class="uk-ch">Самые трудные кейсы — разобрать на лекции</h4><div class="kb-tbl">${s.cases.map(c=>`<div class="kb-tr"><span>${esc(c.title)}<small>ур. ${c.level} · ${esc(c.topic)} · не засчитано ${c.fail} из ${c.total}</small></span>${bar(c.share)}</div>`).join("")||`<p class="fc-empty">Пока нет данных</p>`}</div>`;
 }
-/* ---------- лекции инструктора ---------- */
+/* ---------- мероприятия по слабым темам (для всех ключей) ---------- */
 const LECT_MIN=30;
-KS.L={topics:null,i:0,open:null,done:[],last:null,err:"",busy:false};
+const EVF=[
+ {k:"lect",n:"Лекция",min:30,why:"тему нужно объяснить с нуля"},
+ {k:"blitz",n:"Блиц-опрос",min:15,why:"быстро освежить нормы, мало времени"},
+ {k:"case",n:"Разбор ситуации",min:20,why:"знают нормы, но путаются в порядке действий"},
+ {k:"role",n:"Ролевая отработка",min:30,why:"закрепить действия на практике"},
+ {k:"quiz",n:"Мини-зачёт",min:15,why:"проверить, усвоили ли тему после лекции"}];
+const evF=k=>EVF.find(f=>f.k===k)||EVF[0];
+KS.L={topics:null,i:0,f:"",open:null,done:[],last:null,err:"",busy:false};
 async function kLectLoad(){ KS.L.err=""; try{ const j=await kApi("lecture"); KS.L.topics=(j.topics||[]).filter(t=>kLectCards(t.topic).length>=3).slice(0,6); KS.L.recent=j.recent||[]; KS.L.open=j.open||null; KS.L.done=j.done||[]; if(j.open&&j.open.now) KT.off=j.open.now-Date.now();
     if(!KS.L.topics.length){ const seen=new Set(KS.L.recent); const all=[...new Set((STUDY.cards||[]).map(c=>c.topic).filter(t=>t&&!seen.has(t)&&kLectCards(t).length>=3))]; KS.L.fallback=true; KS.L.topics=all.sort(()=>Math.random()-0.5).slice(0,6).map(t=>({topic:t,problem:null,total:0})); }
   }catch(e){ KS.L.err=e.message; } kDraw(); }
 const kHM=ms=>new Date(ms).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Moscow"});
 const kDay=ms=>new Date(ms).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit",year:"numeric",timeZone:"Europe/Moscow"});
-const kLectPlain=l=>[`Лекцию провёл: ${l.name}`,`Тема: ${l.topic}`,`Когда: ${kDay(l.start)}, ${kHM(l.start)}–${kHM(l.end||l.start+LECT_MIN*60000)} МСК`].join("\n");
-function kLectCards(topic){ const n=kNorm(topic); let c=CARDS.filter(x=>x.topic===topic); if(c.length<4) c=c.concat(CARDS.filter(x=>x.topic!==topic&&kNorm(x.topic).includes(n))); return c.slice(0,8); }
-function kLectPlan(topic){
-  const cards=kLectCards(topic), cs=TCASES.filter(c=>c.topic===topic||kNorm(c.topic).includes(kNorm(topic))).slice(0,1);
-  const qa=cards.map(c=>`<li><p class="kb-qq"><b>${esc(c.q)}</b></p><p>${esc(c.a)}</p>${refNorm(c.ref).length?`<small class="sref">${refBtns(c.ref)}</small>`:""}</li>`).join("");
-  return `<div class="kb-lplan"><h4 class="uk-ch">План на ${LECT_MIN} минут</h4>
-<ol class="qc-regl"><li><b>0–3 мин · Вступление.</b> Зачем эта тема в работе Управления «М» и где на экзаменах чаще всего ошибаются.</li>
-<li><b>3–20 мин · Основное.</b> Пройдите вопросы ниже: норма → исключения → порядок действий. Каждый ответ — со ссылкой на статью.</li>
-${cs.length?`<li><b>20–27 мин · Разбор ситуации.</b> Зачитайте задачу, дайте слушателям ответить, затем разберите по эталону.</li>`:`<li><b>20–27 мин · Практика.</b> Дайте слушателям 2–3 жизненных примера по теме и разберите их по шагам.</li>`}
-<li><b>27–30 мин · Проверка.</b> Задайте 3 вопроса из списка вразнобой — кто ответит без подсказки.</li></ol>
-${qa?`<h4 class="uk-ch">Вопросы и ответы по теме</h4><ol class="kb-qlist">${qa}</ol>`:`<p class="fc-empty">В банке нет вопросов с этой темой — возьмите «Другая тема».</p>`}
-${cs.map(c=>`<h4 class="uk-ch">Ситуация для разбора</h4><article class="ex-card kb-case"><p class="ac-sit">${esc(c.situation)}</p><p class="ac-task"><b>Задание:</b> ${esc(c.task)}</p><details class="mkans"><summary>Эталон рассуждения${CHEV}</summary>${acStepList(c.model)}</details></article>`).join("")}</div>`; }
+const kLectPlain=l=>[`Провёл: ${l.name}`,`Мероприятие: ${l.fname||evF(l.format).n} · ${l.topic}`,`Когда: ${kDay(l.start)}, ${kHM(l.start)}–${kHM(l.end||l.start+(l.min||LECT_MIN)*60000)} МСК`].join("\n");
+function kLectCards(topic){ const n=kNorm(topic); let c=CARDS.filter(x=>x.topic===topic); if(c.length<4) c=c.concat(CARDS.filter(x=>x.topic!==topic&&kNorm(x.topic).includes(n))); return c.slice(0,10); }
+function kEvCase(topic){ const n=kNorm(topic); const m=TCASES.filter(c=>c.topic===topic||kNorm(c.topic).includes(n)||n.includes(kNorm(c.topic))); if(m.length) return {c:m[0],own:true};
+  let s=0; for(const ch of topic) s=(s*31+ch.charCodeAt(0))>>>0; return TCASES.length?{c:TCASES[s%TCASES.length],own:false}:null; }
+// формат по умолчанию: тот, что этот ведущий проводил реже всего
+function kEvSuggest(){ const cnt={}; EVF.forEach(f=>cnt[f.k]=0); (KS.L.done||[]).forEach(l=>{ if(cnt[l.format]!==undefined) cnt[l.format]++; }); return EVF.slice().sort((a,b)=>cnt[a.k]-cnt[b.k])[0].k; }
+const qaList=(cards,open)=>`<ol class="kb-qlist">${cards.map(c=>`<li><p class="kb-qq"><b>${esc(c.q)}</b></p>${open?`<p>${esc(c.a)}</p>`:`<details class="mkans"><summary>Ответ${CHEV}</summary><p>${esc(c.a)}</p></details>`}${refNorm(c.ref).length?`<small class="sref">${refBtns(c.ref)}</small>`:""}</li>`).join("")}</ol>`;
+const steps=a=>`<ol class="qc-regl">${a.map(([t,x])=>`<li><b>${t}:</b> ${x}</li>`).join("")}</ol>`;
+function caseBox(E,full){ if(!E) return `<p class="fc-empty">Учебной ситуации нет — возьмите «Лекцию» или «Блиц».</p>`; const c=E.c;
+  return `${E.own?"":`<p class="kb-note">По этой теме своей ситуации в тренажёре нет — взята учебная ситуация из тренажёра.</p>`}<article class="ex-card kb-case"><p class="ac-sit">${esc(c.situation)}</p><p class="ac-task"><b>Задание:</b> ${esc(c.task)}</p>
+${full==="role"?`<h5>Чек-лист наблюдателя — должен сделать</h5>${cList(c.checkpoints)}${(c.critical||[]).length?`<h5>Грубые ошибки</h5>${cList(c.critical,"no")}`:""}`:""}
+<details class="mkans"><summary>Эталон рассуждения${CHEV}</summary>${acStepList(c.model)}${full!=="role"?`<h5>Обязан назвать</h5>${cList(c.checkpoints)}`:""}${(c.followups||[]).length?`<h5>Вопросы «а если…»</h5>${c.followups.map(f=>`<p><b>${esc(f.q)}</b><br>${esc(f.a)}</p>`).join("")}`:""}</details></article>`; }
+function kLectPlan(topic,fk){
+  const f=evF(fk), cards=kLectCards(topic); let p="";
+  if(f.k==="lect") p=steps([["0–3 мин · Вступление","зачем эта тема в работе Управления «М» и где на экзаменах чаще всего ошибаются"],["3–20 мин · Основное","пройдите вопросы ниже: норма → исключения → порядок действий, каждый ответ — со ссылкой на статью"],["20–27 мин · Пример","дайте 2–3 жизненных примера по теме и разберите их по шагам"],["27–30 мин · Проверка","задайте 3 вопроса из списка вразнобой"]])+`<h4 class="uk-ch">Материал: вопросы и ответы</h4>`+qaList(cards.slice(0,8),true);
+  if(f.k==="blitz") p=steps([["0–2 мин · Правила","вопрос — 20 секунд на ответ, отвечает тот, кто первым поднял руку; за верный ответ — балл"],["2–13 мин · Вопросы","зачитайте 10 вопросов ниже, после каждого — правильный ответ и статья"],["13–15 мин · Итог","назовите лучших и ещё раз разберите вопрос, на котором ошиблись больше всего"]])+`<h4 class="uk-ch">Вопросы блица</h4>`+qaList(cards.slice(0,10),false);
+  if(f.k==="case") p=steps([["0–3 мин","зачитайте ситуацию и задание"],["3–8 мин","участники в парах решают по схеме: что произошло → норма → исключения → порядок действий → вывод"],["8–16 мин","каждая пара отвечает за 1 минуту, остальные дополняют"],["16–20 мин","разбор по эталону: что обязан был назвать каждый, вопросы «а если…»"]])+`<h4 class="uk-ch">Ситуация</h4>`+caseBox(kEvCase(topic),"case");
+  if(f.k==="role") p=steps([["0–5 мин · Роли","сотрудник «М», вторая сторона (задержанный, сотрудник другого органа), остальные — наблюдатели с чек-листом"],["5–15 мин · Прогон","разыграйте ситуацию вживую, ведущий не подсказывает"],["15–20 мин · Ошибки","наблюдатели называют, что пропущено по чек-листу и были ли грубые ошибки"],["20–27 мин · Второй прогон","поменяйте роли и пройдите ещё раз"],["27–30 мин · Итог","что запомнить: 3 главных пункта"]])+`<h4 class="uk-ch">Ситуация для отработки</h4>`+caseBox(kEvCase(topic),"role");
+  if(f.k==="quiz") p=steps([["0–1 мин","объявите правила: каждому 3 вопроса, зачёт — 2 верных ответа из 3"],["1–13 мин","задавайте вопросы по очереди, не повторяя одни и те же подряд"],["13–15 мин","объявите, кто сдал; кто не сдал — на ближайшую лекцию или блиц"]])+`<h4 class="uk-ch">Вопросы зачёта</h4>`+qaList(cards.slice(0,9),false);
+  return `<div class="kb-lplan"><h4 class="uk-ch">${esc(f.n)} · план на ${f.min} минут</h4>${p}</div>`; }
 function kLectHtml(){
-  const L=KS.L, me=`<div class="kb-me"><span>Инструктор: <b>${esc(KS.me.name)}</b></span><button type="button" class="lnk" data-kblogout="1">Выйти</button></div>`;
-  if(L.err&&!L.topics) return me+`<p class="kb-err">${esc(L.err)}</p><div class="ex-acts"><button type="button" class="btn" data-lreload="1">Повторить</button></div>`;
-  if(!L.topics) return me+`<p class="fc-empty">Подбираю тему лекции…</p>`;
+  const L=KS.L;
+  if(L.err&&!L.topics) return `<p class="kb-err">${esc(L.err)}</p><div class="ex-acts"><button type="button" class="btn" data-lreload="1">Повторить</button></div>`;
+  if(!L.topics) return `<p class="fc-empty">Подбираю тему…</p>`;
   const err=L.err?`<p class="kb-err">${esc(L.err)}</p>`:"";
-  if(L.last){ const l=L.last; return me+`<div class="sk-box kb-delo"><p class="kb-code">Лекция проведена</p><pre class="kb-delo-t">${esc(kLectPlain(l))}</pre><div class="ex-acts"><button type="button" class="btn pri" data-lcopy="${esc(encodeURIComponent(JSON.stringify(l)))}">Скопировать</button><button type="button" class="btn" data-lnew="1">Новая лекция</button></div></div>`; }
+  if(L.last){ const l=L.last; return `<div class="sk-box kb-delo"><p class="kb-code">Проведено: ${esc(l.fname||evF(l.format).n)}</p><pre class="kb-delo-t">${esc(kLectPlain(l))}</pre><div class="ex-acts"><button type="button" class="btn pri" data-lcopy="${esc(encodeURIComponent(JSON.stringify(l)))}">Скопировать</button><button type="button" class="btn" data-lnew="1">Новое мероприятие</button></div></div>`; }
   if(L.open){ const o=L.open, t={start:o.start,min:o.min||LECT_MIN}, left=kTimerLeft(t);
-    return me+`<div class="sk-box kb-timer kb-sticky${left===0?" over":""}"><p class="kb-code">Идёт лекция · ${esc(o.topic)}</p><p class="kb-tm" data-start="${o.start}" data-min="${t.min}"${left>0?` data-onover="lect"`:""}>${left>0?kMMSS(left):"Время вышло"}</p>
-<p class="kb-note">${left>0?`Начата ${esc(kHM(o.start))} МСК. Кнопка «Завершить» откроется, когда пройдут ${t.min} минут.`:`${t.min} минут прошли — завершите лекцию и скопируйте строки.`}</p>
-<div class="ex-acts"><button type="button" class="btn pri" data-lend="1"${left>0||L.busy?" disabled":""}>Завершить лекцию</button><button type="button" class="lnk" data-lcancel="1">Отменить</button></div>${err}</div>${kLectPlan(o.topic)}`; }
+    return `<div class="sk-box kb-timer kb-sticky${left===0?" over":""}"><p class="kb-code">Идёт: ${esc(o.fname||evF(o.format).n)} · ${esc(o.topic)}</p><p class="kb-tm" data-start="${o.start}" data-min="${t.min}"${left>0?` data-onover="lect"`:""}>${left>0?kMMSS(left):"Время вышло"}</p>
+<p class="kb-note">${left>0?`Начато ${esc(kHM(o.start))} МСК. Кнопка «Завершить» откроется, когда пройдут ${t.min} минут.`:`${t.min} минут прошли — завершите и скопируйте строки.`}</p>
+<div class="ex-acts"><button type="button" class="btn pri" data-lend="1"${left>0||L.busy?" disabled":""}>Завершить</button><button type="button" class="lnk" data-lcancel="1">Отменить</button></div>${err}</div>${kLectPlan(o.topic,o.format)}`; }
   const T=L.topics[L.i%Math.max(1,L.topics.length)];
-  if(!T) return me+`<p class="fc-empty">Пока нет тем для лекции.</p>`;
-  return me+`<div class="sk-box"><p class="kb-code">Тема лекции</p><h3 class="kb-ltopic">${esc(T.topic)}</h3>
+  if(!T) return `<p class="fc-empty">Пока нет тем.</p>`;
+  if(!L.f) L.f=kEvSuggest(); const F=evF(L.f), sug=kEvSuggest();
+  return `<div class="sk-box"><p class="kb-code">Тема</p><h3 class="kb-ltopic">${esc(T.topic)}</h3>
 <p class="kb-note">${T.problem!==null&&T.problem!==undefined?`Слабое место: на экзаменах по этой теме ${T.problem}% ответов — «плохо», «средне» или «доработка» (всего ответов: ${T.total}).`:"По экзаменам пока мало данных — тема выбрана из банка вопросов."}${L.topics.length>1?` Тема ${L.i%L.topics.length+1} из ${L.topics.length}.`:""}</p>
-<div class="ex-acts"><button type="button" class="btn pri" data-lstart="1"${L.busy?" disabled":""}>${L.busy?"Запускаю…":`Начать лекцию · ${LECT_MIN} минут`}</button>${L.topics.length>1?`<button type="button" class="btn" data-lnext="1">Другая тема</button>`:""}</div>${err}</div>
-${kLectPlan(T.topic)}
-${L.done.length?`<h4 class="uk-ch">Мои последние лекции</h4><div class="kb-tbl">${L.done.map(l=>`<div class="kb-tr"><span><b>${esc(l.topic)}</b><small>${esc(kDay(l.start))}, ${esc(kHM(l.start))}–${esc(kHM(l.end||l.start))} МСК</small></span><button type="button" class="lnk" data-lcopy="${esc(encodeURIComponent(JSON.stringify(l)))}">Копировать</button></div>`).join("")}</div>`:""}`; }
+<p class="kb-code">Что провести</p><div class="chips kb-evf" role="group">${EVF.map(f=>`<button type="button" data-lf="${f.k}" aria-pressed="${L.f===f.k}">${esc(f.n)} · ${f.min} мин${f.k===sug?" ★":""}</button>`).join("")}</div>
+<p class="kb-note">${esc(F.n)} — когда ${esc(F.why)}.${L.f===sug?" ★ — предлагаем: вы проводили этот формат реже других.":""}</p>
+<div class="ex-acts"><button type="button" class="btn pri" data-lstart="1"${L.busy?" disabled":""}>${L.busy?"Запускаю…":`Начать · ${F.min} минут`}</button>${L.topics.length>1?`<button type="button" class="btn" data-lnext="1">Другая тема</button>`:""}</div>${err}</div>
+${kLectPlan(T.topic,L.f)}
+${L.done.length?`<h4 class="uk-ch">Мои последние мероприятия</h4><div class="kb-tbl">${L.done.map(l=>`<div class="kb-tr"><span><b>${esc(l.fname||evF(l.format).n)} · ${esc(l.topic)}</b><small>${esc(kDay(l.start))}, ${esc(kHM(l.start))}–${esc(kHM(l.end||l.start))} МСК</small></span><button type="button" class="lnk" data-lcopy="${esc(encodeURIComponent(JSON.stringify(l)))}">Копировать</button></div>`).join("")}</div>`:""}`; }
 
 function kDraw(){
   const el=$("kbMain"); if(!el) return;
   if(!KS.me){ el.innerHTML=kLoginHtml(); return; }
-  if(KS.me.lector){ el.innerHTML=kLectHtml(); const lb=el.querySelector(".kb-lplan"); if(lb) linkify(lb); kTimerOn(); return; }
-  const tabs=[["new",KS.exam?"Идёт экзамен":"Новый экзамен"],["find","Поиск экзаменов"],["list","Последние"],["qs","Поиск вопроса"],["stats","Слабые темы"],["log","Журнал входов"],["met","Методика"]];
+  const tabs=KS.me.lector?[["ev","Мероприятия"],["stats","Слабые темы"]]:[["new",KS.exam?"Идёт экзамен":"Новый экзамен"],["find","Поиск экзаменов"],["list","Последние"],["qs","Поиск вопроса"],["stats","Слабые темы"],["ev","Мероприятия"],["log","Журнал входов"],["met","Методика"]];
+  if(!tabs.some(([k])=>k===KS.tab)) KS.tab=tabs[0][0];
   let body="";
   if(KS.tab==="new") body=KS.exam?(KS.exam.timer?kGradeHtml():kStageHtml()):kNewHtml();
   if(KS.tab==="find") body=`<form class="sk-box qc-form kb-form" id="kbFind"><label>Статик, ФИО или номер варианта<input id="kbCode" type="text" maxlength="40" autocomplete="off" spellcheck="false" placeholder="55123, Петров или AM-XXXXXX" value="${esc(KS.findCode||"")}"></label><div class="ex-acts"><button type="submit" class="btn pri"${KS.busy?" disabled":""}>${KS.busy?"Ищу…":"Найти"}</button></div>${KS.err?`<p class="kb-err">${esc(KS.err)}</p>`:""}</form>${KS.found&&!KS.card?(KS.found.length?`<p class="kb-note" style="margin:10px 0 0">Найдено экзаменов: ${KS.found.length}</p>${kListHtml(KS.found)}`:`<p class="fc-empty">Никого не нашли</p>`):""}${KS.card?kCardHtml(KS.card):""}`;
@@ -4831,11 +4850,12 @@ function kDraw(){
   if(KS.tab==="qs") body=`<div class="sk-box qc-form kb-form"><label>Поиск вопроса или задачи<input id="kbQs" type="search" maxlength="60" autocomplete="off" spellcheck="false" placeholder="слово из вопроса, статья или номер: «60 минут», 92, F03, K2-13" value="${esc(KS.qsQ||"")}"></label><p class="kb-note">Ищет по всем ${CARDS.length} вопросам и ${CASES.length} задачам — с правильным ответом и эталоном рассуждения.</p></div><div id="kbQRes">${kQsHtml(KS.qsQ||"")}</div>`;
   if(KS.tab==="met") body=`<div class="sk-box"><ol class="qc-regl">${METOD.map(([hh,it])=>`<li><b>${esc(hh)}</b><ul>${it.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></li>`).join("")}</ol><div class="ex-acts"><button type="button" class="btn pri" data-kbcopy="met">Копировать методику</button></div></div>
 <h4 class="uk-ch">Регламент экзамена</h4><div class="sk-box"><ol class="qc-regl">${REGL.map(([hh,it])=>`<li><b>${esc(hh)}</b><ul>${it.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></li>`).join("")}</ol><div class="ex-acts"><button type="button" class="btn pri" data-kbcopy="regl">Копировать регламент</button></div></div>`;
+  if(KS.tab==="ev") body=kLectHtml();
   if(KS.tab==="stats") body=KS.stats?kStatsHtml(KS.stats):`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
   if(KS.tab==="log") body=KS.log?`<div class="kb-tbl">${KS.log.map(x=>`<div class="kb-tr"><span><b>${esc(x.name)}</b> · ${esc(x.what)}<small>${esc(kD(x.time))}${x.role&&x.role!=="—"?" · "+esc(x.role):""}${x.details?" · "+esc(x.details):""}</small></span></div>`).join("")||`<p class="fc-empty">Записей нет</p>`}</div>`:`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
-  el.innerHTML=`<div class="kb-me"><span>Экзаменатор: <b>${esc(KS.me.name)}</b> · ${esc(KS.me.role)}</span><button type="button" class="lnk" data-kblogout="1">Выйти</button></div>
+  el.innerHTML=`<div class="kb-me"><span>${KS.me.lector?"Инструктор":"Экзаменатор"}: <b>${esc(KS.me.name)}</b>${KS.me.lector?"":" · "+esc(KS.me.role)}</span><button type="button" class="lnk" data-kblogout="1">Выйти</button></div>
 <nav class="chips st-toc kb-tabs" aria-label="Разделы кабинета">${tabs.map(([k,t])=>`<button type="button" data-kbtab="${k}" aria-pressed="${KS.tab===k}">${esc(t)}</button>`).join("")}</nav><div id="kbBody">${body}</div>`;
-  const b=el.querySelector("#kbBody"); if(b&&((KS.tab==="new"&&KS.exam)||KS.tab==="met"||KS.tab==="qs")) linkify(b); kTimerOn(); kJoinPoll();
+  const b=el.querySelector("#kbBody"); if(b&&((KS.tab==="new"&&KS.exam)||KS.tab==="met"||KS.tab==="qs"||KS.tab==="ev")) linkify(b); kTimerOn(); kJoinPoll();
 }
 async function kLoadTab(){
   KS.err="";
@@ -4844,6 +4864,7 @@ async function kLoadTab(){
     if(t==="list"){ KS.list=null; kDraw(); KS.list=(await kApi("list",{})).items; }
     if(t==="stats"){ KS.stats=null; kDraw(); KS.stats=(await kApi("stats")).stats; }
     if(t==="log"){ KS.log=null; kDraw(); KS.log=(await kApi("log")).items; }
+    if(t==="ev"&&!KS.L.topics&&!KS.L.last){ await kLectLoad(); }
   }catch(e){ KS.err=e.message; }
   if(KS.tab===t) kDraw();
 }
@@ -4858,7 +4879,7 @@ function renderKab(){
     el.innerHTML=`<h2 class="htitle">Экзамен Академии «М»</h2><p class="lead">Кабинет экзаменатора: выдать вариант, запустить таймер, оценить ответы, отправить итог в Google Таблицу, найти карточку по статику или номеру.</p><div id="kbMain"></div>`;
     el.addEventListener("submit",async e=>{ e.preventDefault(); if(KS.busy) return;
       if(e.target.id==="kbLogin"){ const k=$("kbKey").value.trim().toUpperCase(); if(!k) return; KS.key=k; KS.busy=true; KS.err=""; kDraw();
-        try{ const j=await kApi("login"); KS.me={name:j.name,role:j.role,chief:!!j.chief,lector:!!j.lector}; if(KS.me.lector) setTimeout(kLectLoad); ls("acad-key",k); const open=ls("acad-open"); if(open){ try{ const ex=JSON.parse(open); if(ex&&ex.code){ KS.pending=ex; } }catch(_){} } }catch(err){ KS.key=""; KS.err=err.message; }
+        try{ const j=await kApi("login"); KS.me={name:j.name,role:j.role,chief:!!j.chief,lector:!!j.lector}; if(KS.me.lector){ KS.tab="ev"; setTimeout(kLectLoad); } ls("acad-key",k); const open=ls("acad-open"); if(open){ try{ const ex=JSON.parse(open); if(ex&&ex.code){ KS.pending=ex; } }catch(_){} } }catch(err){ KS.key=""; KS.err=err.message; }
         KS.busy=false; kDraw(); return; }
       if(e.target.id==="kbNew"){ const who=kParseWho($("kbWho").value); KS.whoDraft=$("kbWho").value; if(who.err){ KS.err=who.err; kDraw(); $("kbWho").focus(); return; } const cadet=who.name;
         const type=$("kbType").value, order="up", st=who.stat;
@@ -4874,14 +4895,15 @@ function renderKab(){
       const g=x=>e.target.closest(x);
       if(g("[data-kblogout]")){ kLogout(); return; }
       if(g("[data-lreload]")){ KS.L.topics=null; kDraw(); kLectLoad(); return; }
+      const lf=g("[data-lf]"); if(lf){ KS.L.f=lf.dataset.lf; kDraw(); return; }
       if(g("[data-lnext]")){ KS.L.i++; KS.L.err=""; kDraw(); window.scrollTo({top:0}); return; }
-      if(g("[data-lnew]")){ KS.L.last=null; KS.L.topics=null; KS.L.i=0; kDraw(); kLectLoad(); return; }
+      if(g("[data-lnew]")){ KS.L.last=null; KS.L.topics=null; KS.L.i=0; KS.L.f=""; kDraw(); kLectLoad(); return; }
       const lc=g("[data-lcopy]"); if(lc){ try{ copyText(kLectPlain(JSON.parse(decodeURIComponent(lc.dataset.lcopy)))); }catch(_){} return; }
       if(g("[data-lstart]")){ if(KS.L.busy) return; const T=KS.L.topics[KS.L.i%KS.L.topics.length]; KS.L.busy=true; KS.L.err=""; kDraw();
-        try{ const l=(await kApi("lstart",{topic:T.topic,problem:T.problem||0})).lecture; if(l.now) KT.off=l.now-Date.now(); KS.L.open=l; toast("Лекция началась — "+LECT_MIN+" минут"); }catch(err){ KS.L.err=err.message; }
+        try{ const l=(await kApi("lstart",{topic:T.topic,problem:T.problem||0,format:KS.L.f||"lect"})).lecture; if(l.now) KT.off=l.now-Date.now(); KS.L.open=l; toast(evF(l.format).n+" — "+l.min+" минут, время пошло"); }catch(err){ KS.L.err=err.message; }
         KS.L.busy=false; kDraw(); window.scrollTo({top:0}); return; }
-      if(g("[data-lend]")||g("[data-lcancel]")){ const cancel=!!g("[data-lcancel]"); if(cancel&&!confirm("Отменить лекцию? Она не будет засчитана.")) return; if(KS.L.busy) return; KS.L.busy=true; KS.L.err=""; kDraw();
-        try{ const l=(await kApi(cancel?"lcancel":"lend",{id:KS.L.open.id})).lecture; KS.L.open=null; if(cancel){ toast("Лекция отменена"); } else { KS.L.last=l; KS.L.done.unshift(l); } }catch(err){ KS.L.err=err.message; }
+      if(g("[data-lend]")||g("[data-lcancel]")){ const cancel=!!g("[data-lcancel]"); if(cancel&&!confirm("Отменить мероприятие? Оно не будет засчитано.")) return; if(KS.L.busy) return; KS.L.busy=true; KS.L.err=""; kDraw();
+        try{ const l=(await kApi(cancel?"lcancel":"lend",{id:KS.L.open.id})).lecture; KS.L.open=null; if(cancel){ toast("Мероприятие отменено"); } else { KS.L.last=l; KS.L.done.unshift(l); } }catch(err){ KS.L.err=err.message; }
         KS.L.busy=false; kDraw(); window.scrollTo({top:0}); return; }
       const tb=g("[data-kbtab]"); if(tb){ KS.tab=tb.dataset.kbtab; KS.err=""; kDraw(); kLoadTab(); return; }
       if(g("[data-kbreopen]")&&KS.pending){ KS.exam=KS.pending; KS.draft=kLoadDraft(KS.exam); KS.pending=null; kDraw(); return; }
@@ -4940,7 +4962,7 @@ function renderKab(){
     el.addEventListener("toggle",e=>{ const d=e.target; if(d.dataset&&d.dataset.kbm){ KS.openM=KS.openM||{}; KS.openM[d.dataset.kbm]=d.open; } },true);
     el.addEventListener("change",e=>{ const t=e.target; if(t.dataset.kbcerr&&KS.draft){ KS.draft.cases[t.dataset.kbcerr].critErr=t.checked; kSaveDraft(); kKeep(()=>kDraw()); } });
   }
-  if(KS.key&&!KS.me&&!KS.busy){ KS.busy=true; kDraw(); kApi("login").then(j=>{ KS.me={name:j.name,role:j.role,chief:!!j.chief,lector:!!j.lector}; if(KS.me.lector) setTimeout(kLectLoad); const open=ls("acad-open"); if(open){ try{ const ex=JSON.parse(open); if(ex&&ex.code){ KS.pending=ex; } }catch(_){} } }).catch(err=>{ KS.err=err.message; KS.key=""; }).finally(()=>{ KS.busy=false; kDraw(); }); return; }
+  if(KS.key&&!KS.me&&!KS.busy){ KS.busy=true; kDraw(); kApi("login").then(j=>{ KS.me={name:j.name,role:j.role,chief:!!j.chief,lector:!!j.lector}; if(KS.me.lector){ KS.tab="ev"; setTimeout(kLectLoad); } const open=ls("acad-open"); if(open){ try{ const ex=JSON.parse(open); if(ex&&ex.code){ KS.pending=ex; } }catch(_){} } }).catch(err=>{ KS.err=err.message; KS.key=""; }).finally(()=>{ KS.busy=false; kDraw(); }); return; }
   kDraw();
 }
 /* перерисовка без прыжка страницы: держим на месте элемент под пальцем */
