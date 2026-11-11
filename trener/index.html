@@ -29,6 +29,8 @@
 .kb-score{margin-top:12px;text-align:center}
 .kb-pend{margin-top:12px;border-top-color:var(--stop)}
 .kb-pend p{margin:0}
+.kb-delo{margin-top:12px}
+.kb-delo-t{white-space:pre-wrap;font:inherit;font-size:15px;line-height:1.5;margin:6px 0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
 .kb-flag{font-size:13px;margin:2px 0 6px;color:var(--muted)}
 .kb-flag.on{color:var(--stop);font-weight:700}
 .kb-joinbox{margin-top:4px}
@@ -4760,9 +4762,12 @@ function kCardHtml(e){
 <dl class="kb-dl"><dt>Кто сдавал</dt><dd><b>${esc(e.cadet)}</b>${e.static?" | "+esc(e.static):""}</dd><dt>Кто принимал</dt><dd>${esc(kNames(e))}</dd><dt>Когда</dt><dd>${esc(kD(e.started))}${r?" → "+esc(kD(r.finished)):""}${S&&S.mins!==null?` · ${S.mins} мин`:""}</dd>
 ${S?`<dt>Баллы</dt><dd><b>${kFmtP(S.s.total)} из ${S.s.max}</b></dd><dt>Вопросы 1–10</dt><dd>${S.q1}</dd><dt>Вопросы 11–20</dt><dd>${S.q2}</dd><dt>Задачи</dt><dd>${S.tasks}</dd><dt>Слабые области</dt><dd>${S.weak.length?esc(S.weak.join(", ")):"нет"}</dd>${r.comment?`<dt>Комментарий</dt><dd>${esc(r.comment)}</dd>`:""}`:`<dt>Статус</dt><dd>${esc(e.status)}</dd>`}
 ${chief?`<dt>Вариант</dt><dd>${esc(e.code)}</dd>`:""}</dl>
-<div class="ex-acts">${e.status!=="завершён"&&!mine?`<button type="button" class="btn pri" data-kbjoin="1">Присоединиться к приёму</button>`:""}${e.status!=="завершён"&&(mine||chief)?`<button type="button" class="btn${mine?" pri":""}" data-kbresume="1">Продолжить оценку</button>`:""}${e.status==="завершён"&&chief?`<button type="button" class="btn" data-kbresume="1">Исправить оценку</button>`:""}<button type="button" class="btn" data-kbcopy="card">Копировать итог</button>${e.status!=="завершён"?`<button type="button" class="btn" data-kbcopy="clink">Ссылка-билет</button>`:""}</div></article>`;
+<div class="ex-acts">${e.status!=="завершён"&&!mine?`<button type="button" class="btn pri" data-kbjoin="1">Присоединиться к приёму</button>`:""}${e.status!=="завершён"&&(mine||chief)?`<button type="button" class="btn${mine?" pri":""}" data-kbresume="1">Продолжить оценку</button>`:""}${e.status==="завершён"&&chief?`<button type="button" class="btn" data-kbresume="1">Исправить оценку</button>`:""}<button type="button" class="btn" data-kbcopy="card">Копировать итог</button>${e.status!=="завершён"?`<button type="button" class="btn" data-kbcopy="clink">Ссылка-билет</button>`:""}</div>${e.status==="завершён"?kDeloHtml(kDeloOf(e)):""}</article>`;
 }
 function kListHtml(items){ return `<div class="kb-tbl">${items.map(x=>`<button type="button" class="kb-tr kb-li" data-kbopen="${esc(x.code)}"><span><b>${esc(x.cadet)}</b>${x.static?" · статик "+esc(x.static):""} · ${esc(x.code)}<small>${esc(kD(x.started))} · ${esc(x.type)} · принимали: ${esc(x.examiner)}</small></span>${kPill(x.status==="завершён"?x.total:"")}</button>`).join("")||`<p class="fc-empty">Экзаменов пока нет</p>`}</div>`; }
+function kDeloPlain(x){ return [`Кто сдавал: ${x.cadet}${x.static?" | "+x.static:""}`,`Кто принимал: ${x.names}`,`Когда: ${kD(x.when)}`,`Вариант: ${x.code}`].join("\n"); }
+function kDeloHtml(x){ return `<div class="sk-box kb-delo"><p class="kb-code">Для личного дела</p><pre class="kb-delo-t">${esc(kDeloPlain(x))}</pre><div class="ex-acts"><button type="button" class="btn pri" data-kbdelo="${esc(encodeURIComponent(JSON.stringify(x)))}">Скопировать 4 строки</button></div></div>`; }
+const kDeloOf=e=>({cadet:e.cadet,static:e.static||"",names:kNames(e),when:(e.timer&&e.timer.start)||e.started,code:e.code});
 function kCardPlain(e){ const r=e.result, S=kSummary(e);
   return ["ИТОГ ЭКЗАМЕНА · Академия Управления «М»",`Кто сдавал: ${e.cadet}${e.static?" | "+e.static:""}`,`Кто принимал: ${kNames(e)}`,`Когда: ${kD(e.started)}${r?" → "+kD(r.finished):""}${S&&S.mins!==null?` (${S.mins} мин)`:""}`,
     ...(S?[`Баллы: ${kFmtP(S.s.total)} из ${S.s.max}`,`Вопросы 1–10: ${S.q1}`,`Вопросы 11–20: ${S.q2}`,`Задачи: ${S.tasks}`,`Слабые области: ${S.weak.length?S.weak.join(", "):"нет"}`,`Итог: ${r.total}`,r.comment?`Комментарий: ${r.comment}`:""]:[`Статус: ${e.status}`])].filter(Boolean).join("\n"); }
@@ -4902,7 +4907,7 @@ async function renderBilet(code){
   const items=t.items||(t.cases||[]).map(id=>({id,kind:"case"}));
   const left=kTimerLeft(t.timer);
   const top=`${head}<p class="lead">Академия Управления «М» · ${esc(t.cadet)}</p>`;
-  if(t.status==="завершён"){ el.innerHTML=top+`<p class="kb-warn">Экзамен по этому варианту закрыт.</p>`; return; }
+  if(t.status==="завершён"){ el.innerHTML=top+`<p class="kb-warn">Экзамен по этому варианту закрыт.</p>`+(t.delo?`<p class="kb-note">Внесите эти строки в своё личное дело:</p>`+kDeloHtml(t.delo):""); return; }
   if(!t.timer){ el.innerHTML=top+`<div class="sk-box kb-timer"><p class="kb-tm">${kMMSS(EXAM_MIN*60000)}</p><p><b>Вы подключены к экзамену.</b> Экзаменатор видит, что вы открыли билет. Вопросы появятся здесь сами, когда он нажмёт «Начать», — на всё ${EXAM_MIN} минут. Не закрывайте страницу.</p></div>`; BILET_POLL=setTimeout(()=>{ if(cur.toUpperCase()==="BILET-"+code) renderBilet(code); },5000); return; }
   if(left===0){ el.innerHTML=top+`<div class="sk-box kb-timer over"><p class="kb-tm">Время вышло</p><p>${EXAM_MIN} минут истекли. Дождитесь решения экзаменатора.</p></div>`; return; }
   let qn=0;
@@ -4917,6 +4922,7 @@ ${qs()}${tasks.length?`<h3 class="uk-ch">${qn+1}–${qn+tasks.length}. Зада�
 
 GI.add({k:"dp",dept:"fsb",go:"kab",t:"Кабинет экзаменатора Академии",d:"вход по ключу, выдать вариант, найти карточку, слабые темы"},"кабинет экзаменатора ключ вход вариант билет карточка экзамен академия таблица слабые темы","");
 
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-kbdelo]"); if(!b) return; try{ copyText(kDeloPlain(JSON.parse(decodeURIComponent(b.dataset.kbdelo)))); }catch(_){} });
 /* шапка под приложение */
 (function(){ const h1=document.querySelector("#brand h1"); if(h1) h1.textContent=APP==="exam"?"Экзамен «М»":"Тренажёр «М»"; const te=$("tab-fsbexam"); if(te&&APP==="train") te.textContent="Тренажёр"; })();
 favCount();
