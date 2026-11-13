@@ -32,6 +32,8 @@
 .kb-delo{margin-top:12px}
 .kb-evf{margin:6px 0 4px}
 .kb-cdays{margin:0 0 10px}
+#kbNew label.kb-chk{display:flex;flex-direction:row;gap:8px;align-items:flex-start;grid-column:1/-1;margin:8px 0 4px;font-size:14px;line-height:1.4;font-weight:400}
+#kbNew label.kb-chk input{margin:3px 0 0;width:18px;height:18px;flex:none;padding:0}
 .kb-ltopic{overflow-wrap:anywhere;hyphens:auto}
 .kb-cmark textarea,.kb-cmark select{font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box}
 .kb-ckind{display:flex;gap:16px;margin:4px 0 8px}
@@ -4690,8 +4692,9 @@ ${ACAD_API?"":`<p class="kb-warn">Таблица ещё не подключен�
 function kNewHtml(){
   return `${KS.pending?`<div class="sk-box kb-pend"><p>Незавершённый экзамен · <b>${esc(KS.pending.cadet)}</b></p><div class="ex-acts"><button type="button" class="btn" data-kbreopen="1">Открыть</button><button type="button" class="btn" data-kbdrop="1">Скрыть</button></div></div>`:""}<form class="sk-box qc-form" id="kbNew" novalidate><label>Кандидат: имя | статик<input id="kbWho" type="text" maxlength="${WHO_MAX}" autocomplete="off" spellcheck="false" placeholder="Иван Петров | 12345" value="${esc(KS.whoDraft||"")}"></label><p class="kb-note" id="kbWhoHint">Имя (фамилия — если есть), пробел, вертикальная черта «|», пробел, статик. До ${WHO_MAX} символов.</p>
 <input type="hidden" id="kbType" value="std">
+<label class="kb-chk"><input type="checkbox" id="kbEarly"> <span><b>Провести досрочно</b> — пересдача раньше 24 часов после прошлой попытки. Запишется в журнал.</span></label>
 <details class="kb-joinbox"><summary>Присоединиться к чужому приёму</summary><div class="kb-row"><input id="kbJoinCode" type="text" maxlength="120" autocomplete="off" spellcheck="false" placeholder="вставьте ссылку-билет от коллеги"><button type="button" class="btn" data-kbjoincode="1">Присоединиться</button></div></details>
-<p class="kb-note"><b>Формат:</b> 5 базовых вопросов (у всех одинаковые) + 5 лёгких — по 1 баллу; 10 посложнее — по 2 балла; 4 задачи — по 3 балла. Таймер — ${EXAM_MIN} минут, пойдёт по кнопке «Начать». Сдача — 1 раз в день; в Академии — 3 дня. Допуск: 1 активность и 1 дроп не старше 12 часов.</p>
+<p class="kb-note"><b>Формат:</b> 5 базовых вопросов (у всех одинаковые) + 5 лёгких — по 1 баллу; 10 посложнее — по 2 балла; 4 задачи — по 3 балла. Таймер — ${EXAM_MIN} минут, пойдёт по кнопке «Начать». Сдача — 1 раз в день (досрочно — галочкой выше). Допуск: звание от мл. лейтенанта и курс Академии — 5 дней, 10 отметок.</p>
 <div class="ex-acts"><button type="submit" class="btn pri"${KS.busy?" disabled":""}>${KS.busy?"Формирую…":"Сформировать вариант"}</button></div>${KS.err?`<p class="kb-err">${esc(KS.err)}</p>`:""}</form>`;
 }
 function kGradeHtml(){
@@ -4919,9 +4922,9 @@ function renderKab(){
         try{ const j=await kApi("login"); KS.me={name:j.name,role:j.role,chief:!!j.chief,lector:!!j.lector}; if(KS.me.lector){ KS.tab="ev"; setTimeout(kLectLoad); } ls("acad-key",k); const open=ls("acad-open"); if(open){ try{ const ex=JSON.parse(open); if(ex&&ex.code){ KS.pending=ex; } }catch(_){} } }catch(err){ KS.key=""; KS.err=err.message; }
         KS.busy=false; kDraw(); return; }
       if(e.target.id==="kbNew"){ const who=kParseWho($("kbWho").value); KS.whoDraft=$("kbWho").value; if(who.err){ KS.err=who.err; kDraw(); $("kbWho").focus(); return; } const cadet=who.name;
-        const type=$("kbType").value, order="up", st=who.stat;
+        const type=$("kbType").value, order="up", st=who.stat, early=!!($("kbEarly")&&$("kbEarly").checked);
         KS.busy=true; KS.err=""; kDraw();
-        try{ let use={}; try{ use=(await kApi("usage")).counts||{}; }catch(_){ if(!KS.me) throw _; } const items=kPickStd(use); let j; try{ j=await kApi("create",{cadet,static:st,type,order,cases:items}); }catch(er){ if(KS.me.chief&&/Академи|раз в сутки|24 час/.test(er.message)&&confirm(er.message+"\n\nВы начальник Академии. Выдать вариант в виде исключения?")) j=await kApi("create",{cadet,static:st,type,order,cases:items,force:true}); else throw er; } KS.whoDraft=""; KS.exam=j.exam; KS.draft=kLoadDraft(j.exam); ls("acad-open",JSON.stringify(j.exam)); KS.pending=null; toast("Вариант сформирован — отправьте кандидату ссылку-билет"); }catch(err){ KS.err=err.message; }
+        try{ let use={}; try{ use=(await kApi("usage")).counts||{}; }catch(_){ if(!KS.me) throw _; } const items=kPickStd(use); let j; try{ j=await kApi("create",{cadet,static:st,type,order,cases:items,early}); }catch(er){ if(KS.me.chief&&/Академи|раз в сутки|24 час/.test(er.message)&&confirm(er.message+"\n\nВы начальник Академии. Выдать вариант в виде исключения?")) j=await kApi("create",{cadet,static:st,type,order,cases:items,early,force:true}); else throw er; } KS.whoDraft=""; KS.exam=j.exam; KS.draft=kLoadDraft(j.exam); ls("acad-open",JSON.stringify(j.exam)); KS.pending=null; toast("Вариант сформирован — отправьте кандидату ссылку-билет"); }catch(err){ KS.err=err.message; }
         KS.busy=false; kDraw(); window.scrollTo({top:0}); return; }
       if(e.target.classList.contains("kb-cmark")){ const f=e.target, day=+f.dataset.day, kind=(f.querySelector('[name="kind"]:checked')||f.querySelector('[name="kind"]')).value, dept=f.querySelector('[name="dept"]')?f.querySelector('[name="dept"]').value:"";
         const P=kCParse(f.querySelector('[name="cadets"]').value); if(P.bad.length||!P.out.length){ KS.C.msg=P.bad.length?"Не понял строки: "+P.bad.join("; ")+". Формат — «имя | статик».":"Впишите курсантов: по строке «имя | статик»."; kDraw(); return; }
