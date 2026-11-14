@@ -64,9 +64,98 @@
 .kb-fold>.sk-box{margin:0;border:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px}
 .kb-pbar{display:flex;gap:2px;margin:6px 0 2px;max-width:220px}
 .kb-pbar i{flex:1;height:6px;border-radius:2px;background:var(--line)}
-.kb-pbar i.ok{background:var(--ok)}
-.kb-pbar i.bad{background:var(--stop)}
-.kb-pbar i.kr{margin-left:5px}
+.kb-pbar i.s-ok{background:var(--ok)}
+.kb-pbar i.s-bad{background:var(--stop)}
+.kb-pbar i.s-kr{margin-left:5px}
+/* ===== дизайн v2: страница Академии ===== */
+#vKab{--r:2px}
+#vKab .sk-box{border-radius:var(--r);border-top-width:1px;border-left:2px solid var(--accent)}
+#vKab .btn{border-radius:var(--r);font-weight:700}
+#vKab .chips button{border-radius:var(--r)}
+#vKab .kb-eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 0}
+#vKab .kb-kpis{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);background:var(--surface);margin:12px 0 14px}
+#vKab .kb-kpi{padding:14px 16px;border-left:1px solid var(--line);min-width:0}
+#vKab .kb-kpi:first-child{border-left:0}
+#vKab .kb-kpi b{display:block;font-family:var(--mono);font-size:30px;line-height:1;font-weight:700;color:var(--ink);letter-spacing:-.02em}
+#vKab .kb-kpi span{display:block;margin-top:6px;font-size:11.5px;line-height:1.3;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+#vKab .kb-hero-acts{margin:0 0 6px}
+#vKab .kb-hero-acts{display:grid;grid-template-columns:repeat(2,minmax(0,max-content));gap:10px}
+#vKab .kb-hero-acts .btn{padding:11px 18px;flex:none;width:100%}
+#vKab .kb-h{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:28px 0 12px}
+#vKab .kb-h::after{content:"";flex:1;height:1px;background:var(--line)}
+#vKab .kb-path{display:grid;grid-template-columns:repeat(4,1fr);gap:0 18px;padding:0;margin:0}
+#vKab .kb-step{position:relative;background:none;border:0;border-top:2px solid var(--line);border-radius:0;padding:14px 0 4px;display:grid;gap:6px;align-content:start}
+#vKab .kb-step::before{content:"";position:absolute;top:-2px;left:0;width:40px;height:2px;background:var(--accent)}
+#vKab .kb-stepn{width:auto;height:auto;display:block;background:none;border-radius:0;color:var(--accent);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em}
+#vKab .kb-step b{font-size:16px}
+#vKab .kb-step small{font-size:13.5px;line-height:1.5;color:var(--muted)}
+#vKab .kb-award{display:flex;gap:12px;align-items:baseline;margin:20px 0 0;padding:12px 14px;border:1px solid var(--line);border-left:2px solid var(--sign);background:var(--surface);font-size:14.5px}
+#vKab .kb-award span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sign);flex:none}
+#vKab .kb-roster{border:1px solid var(--line);background:var(--surface)}
+#vKab .kb-rrow{display:grid;grid-template-columns:170px minmax(0,1fr) auto;gap:14px;align-items:center;padding:11px 16px;border-top:1px solid var(--line)}
+#vKab .kb-rrow:first-child{border-top:0}
+#vKab .kb-rhead{padding-top:9px;padding-bottom:9px}
+#vKab .kb-rhead span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+#vKab .kb-rrole{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+#vKab .kb-rrole.ex{color:var(--ink)}
+#vKab .kb-rrole.ex::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);margin-right:8px;vertical-align:1px}
+#vKab .kb-rname{min-width:0}
+#vKab .kb-rname b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#vKab .kb-rname small{display:block;font-size:12.5px;color:var(--muted)}
+#vKab .kb-rst{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink)}
+#vKab .kb-login{margin-top:14px}
+#vKab .kb-me{display:flex;justify-content:space-between;align-items:center;gap:12px;background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:12px 0;margin:10px 0 0}
+#vKab .kb-me-l{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;min-width:0}
+#vKab .kb-lbl{flex:1 0 100%;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+#vKab .kb-me-l b{font-size:17px}
+#vKab .kb-me-st{font-family:var(--mono);font-size:13px;color:var(--muted)}
+#vKab .kb-out{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:none;color:var(--ink);padding:7px 14px;border-radius:var(--r);cursor:pointer;flex:none}
+#vKab .kb-seg{display:flex;flex-wrap:nowrap;gap:0;overflow-x:auto;padding:0;margin:0 0 14px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none}
+#vKab .kb-seg button{flex:0 0 auto;border:0;border-bottom:2px solid transparent;border-radius:0;margin-bottom:-1px;background:none;color:var(--muted);font-size:14.5px;font-weight:700;padding:13px 16px 11px}
+#vKab .kb-seg button:hover{color:var(--ink)}
+#vKab .kb-seg button[aria-pressed="true"]{background:none;color:var(--ink);border-bottom-color:var(--accent)}
+#vKab .kb-sub{display:inline-flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:0 0 14px;max-width:100%}
+#vKab .kb-sub button{margin:0;border:0;border-right:1px solid var(--line);border-radius:0;background:var(--surface);color:var(--muted);font-size:13.5px;font-weight:600;padding:8px 14px}
+#vKab .kb-sub button:last-child{border-right:0}
+#vKab .kb-sub button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+#vKab .kb-lgrid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);background:var(--surface);margin:0 0 14px}
+#vKab .kb-lcard{display:flex;align-items:baseline;gap:12px;border:0;border-top:1px solid var(--line);border-radius:0;background:none;box-shadow:none;padding:12px 16px;font-size:14.5px}
+#vKab .kb-lcard:nth-child(-n+2){border-top:0}
+#vKab .kb-lcard:nth-child(even){border-left:1px solid var(--line)}
+#vKab .kb-lcard:hover{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+#vKab .kb-lcard[aria-pressed="true"]{background:color-mix(in srgb,var(--accent) 14%,transparent);box-shadow:inset 2px 0 0 var(--accent)}
+#vKab .kb-ln{width:auto;height:auto;display:inline;background:none;border:0;border-radius:0;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--muted)}
+#vKab .kb-lcard[aria-pressed="true"] .kb-ln{background:none;color:var(--accent)}
+#vKab .kb-fold{border-radius:var(--r)}
+#vKab .kb-fold>summary{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+#vKab .kb-pbar i{border-radius:0;height:5px;padding:0;border:0}
+#vKab .kb-me{flex-wrap:nowrap}
+#vKab .kb-tbl{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);gap:0;display:grid}
+#vKab .kb-tbl .kb-tr{border:0;border-top:1px solid var(--line);border-radius:0;background:none;padding:11px 14px;margin:0}
+#vKab .kb-tbl .kb-tr:first-child{border-top:0}
+#vKab .sk-box .kb-tbl{margin-top:4px}
+@media (max-width:640px){
+#vKab .kb-kpis{grid-template-columns:1fr 1fr}
+#vKab .kb-kpi:nth-child(3){border-left:0}
+#vKab .kb-kpi:nth-child(n+3){border-top:1px solid var(--line)}
+#vKab .kb-kpi b{font-size:26px}
+#vKab .kb-hero-acts{grid-template-columns:1fr 1fr}
+#vKab .kb-path{grid-template-columns:1fr;gap:0;border-left:2px solid var(--line);padding-left:16px}
+#vKab .kb-step{border-top:0;padding:4px 0 16px}
+#vKab .kb-step::before{top:4px;left:-18px;width:2px;height:22px}
+#vKab .kb-rrow{grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:11px 14px}
+#vKab .kb-rrole{grid-column:1/-1}
+#vKab .kb-rhead{display:none}
+#vKab .kb-roster .kb-rrow:nth-child(2){border-top:0}
+#vKab .kb-seg{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+#vKab .kb-seg button{flex:0 0 auto;font-size:14px;padding:12px 12px 10px}
+#vKab .kb-sub{display:flex}
+#vKab .kb-sub button{flex:1 1 auto;border-bottom:1px solid var(--line)}
+#vKab .kb-lgrid{grid-template-columns:1fr}
+#vKab .kb-lcard:nth-child(2){border-top:1px solid var(--line)}
+#vKab .kb-lcard:nth-child(even){border-left:0}
+}
+
 @media (max-width:560px){.kb-seg{flex-wrap:wrap;overflow:visible}.kb-seg button{flex:1 1 30%;font-size:13.5px;padding:9px 6px}.kb-lgrid{grid-template-columns:1fr 1fr}.kb-lcard{font-size:13.5px;padding:9px 10px;gap:8px}.kb-ln{width:24px;height:24px}}
 .ex-lecg{margin:6px 0 10px}
 #exLecBox{margin:8px 0 14px}
@@ -4756,22 +4845,25 @@ let KSTAFF_LOADING=false;
 async function kStaffLoad(){ if(KSTAFF_LOADING||!ACAD_API) return; KSTAFF_LOADING=true; try{ const j=await kApi("staff"); KS.staff=j.staff||[]; ls("acad-staff",JSON.stringify(KS.staff)); if(!KS.me) kDraw(); }catch(_){} KSTAFF_LOADING=false; }
 const kStaffName=n=>esc(String(n).split("|").map(s=>s.trim()).filter(Boolean).join(" · "));
 const SROLE={chief:"Начальник",deputy:"Заместитель",instr:"Инструктор · экзаменатор",examiner:"Экзаменатор",lector:"Инструктор"};
-function kPerson(x){ const p=String(x.name).split("|").map(s=>s.trim()).filter(Boolean); const name=p.length>=3?p[1]:p.length===2?p[0]:p[0], st=p.length>=3?p[2]:p.length===2?p[1]:"", title=p.length>=3?p[0]:"";
-  const ini=name.replace(/[^А-Яа-яЁёA-Za-z ]/g,"").split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join("")||"?";
-  return `<div class="kb-person"><span class="kb-ava">${esc(ini)}</span><span class="kb-pn"><b>${esc(name)}</b><small>${esc([title,st].filter(Boolean).join(" · "))}</small></span><span class="kb-role${x.exam?" ex":""}">${SROLE[x.group]||""}</span></div>`; }
+const kSplitName=n=>{ const p=String(n||"").split("|").map(s=>s.trim()).filter(Boolean); return p.length>=3?{title:p[0],name:p[1],st:p[2]}:p.length===2?{title:"",name:p[0],st:p[1]}:{title:"",name:p[0]||"",st:""}; };
+function kPerson(x){ const P=kSplitName(x.name);
+  return `<div class="kb-rrow"><span class="kb-rrole${x.exam?" ex":""}">${SROLE[x.group]||""}</span><span class="kb-rname"><b>${esc(P.name)}</b>${P.title?`<small>${esc(P.title)}</small>`:""}</span><span class="kb-rst">${esc(P.st||"—")}</span></div>`; }
 function kPublicHtml(){
   if(!KS.staffTried){ KS.staffTried=true; setTimeout(kStaffLoad); }
   const st=KS.staff, ord=["chief","deputy","instr","examiner","lector"], ppl=(st||[]).slice().sort((a,b)=>ord.indexOf(a.group)-ord.indexOf(b.group));
-  const step=(n,t,d)=>`<div class="kb-step"><span class="kb-stepn">${n}</span><b>${t}</b><small>${d}</small></div>`;
-  return `<div class="kb-hero-acts"><a class="btn pri" href="https://san4epons.github.io/dps-shpora/trener/" target="_blank" rel="noopener">Открыть тренажёр</a><button type="button" class="btn" data-kblogin="1">Войти в кабинет</button></div>
-<h3 class="kb-h">Как пройти Академию</h3>
+  const step=(n,t,d)=>`<div class="kb-step"><span class="kb-stepn">0${n}</span><b>${t}</b><small>${d}</small></div>`;
+  const kpi=(v,l)=>`<div class="kb-kpi"><b>${v}</b><span>${l}</span></div>`;
+  return `<p class="kb-eyebrow">ФСБ РО · Управление «М» · Специальный учебный отдел</p>
+<div class="kb-kpis">${kpi(LECTURES.length,"лекций в двух курсах")}${kpi(CARDS.length,"вопросов в банке")}${kpi(20,"минут на экзамен")}${kpi(14,"суток на обучение")}</div>
+<div class="kb-hero-acts"><a class="btn pri" href="https://san4epons.github.io/dps-shpora/trener/" target="_blank" rel="noopener">Открыть тренажёр</a><button type="button" class="btn" data-kblogin="1">Вход для сотрудников</button></div>
+<h3 class="kb-h">Путь курсанта</h3>
 <div class="kb-path">${step(1,"Заявка",`Звание — от мл. лейтенанта. Заявка в <a href="${DCH("1538689096854278207")}" target="_blank" rel="noopener">#заявки-в-управление-м</a>, затем обзвон.`)}
-${step(2,"Курсы",`Курс I — 3 лекции, Курс II — 5, затем квалификационная работа. Лекции в 18:00 МСК — <a href="${DCH("1552065184124641311")}" target="_blank" rel="noopener">#расписание</a>.`)}
-${step(3,"Отчёт дня",`В своём деле — 3 скрина: дроп, мероприятие, лекция. Не прошли лекцию — повтор со следующего дня.`)}
+${step(2,"Курсы",`Курс I — 3 лекции, Курс II — 5, квалификационная работа. Лекции в 18:00 МСК, <a href="${DCH("1552065184124641311")}" target="_blank" rel="noopener">расписание</a>.`)}
+${step(3,"Отчёт дня",`В личном деле — 3 скрина: дроп, мероприятие, лекция. Не прошли лекцию — повтор со следующего дня.`)}
 ${step(4,"Экзамен",`Запись в <a href="${DCH("1568008368604586025")}" target="_blank" rel="noopener">#запись-на-экзамен</a>. 20 минут, только по темам лекций. <a href="${DCH("1568659011115421727")}" target="_blank" rel="noopener">Регламент</a>.`)}</div>
-<p class="kb-note">🎖️ Лучший выпускник недели — премия 100 000 и рекомендация в другие отделы.</p>
+<p class="kb-award"><span>Выпускнику</span>Лучший выпускник недели — премия 100 000 и рекомендация в другие отделы.</p>
 <h3 class="kb-h">Кто учит и принимает экзамен</h3>
-${st===null?`<p class="fc-empty">Загружаю список…</p>`:ppl.length?`<div class="kb-people">${ppl.map(kPerson).join("")}</div>`:`<p class="fc-empty">Список пока пуст.</p>`}`; }
+${st===null?`<p class="fc-empty">Загружаю список…</p>`:ppl.length?`<div class="kb-roster"><div class="kb-rrow kb-rhead"><span>Роль</span><span>Сотрудник</span><span>Статик</span></div>${ppl.map(kPerson).join("")}</div>`:`<p class="fc-empty">Список пока пуст.</p>`}`; }
 function kLoginHtml(){
   return `<div class="sk-box kb-login"><h3>Вход по ключу</h3><p class="lead">Ключ выдаёт начальник Академии. Каждый вход и каждое действие записываются в журнал таблицы.</p>
 ${ACAD_API?"":`<p class="kb-warn">Таблица ещё не подключена. Вход заработает, когда в сайт будет вставлен адрес веб-приложения Google.</p>`}
@@ -5008,7 +5100,7 @@ function kRosterPlain(R){ const cs=R.cadets.filter(c=>R.now-c.first<14*864e5||kS
 function kKursHtml(){ const K=KS.K, v=K.view;
   const nav=`<nav class="chips kb-sub" role="group">${[["c1","Курс I"],["c2","Курс II"],["kr","Квалиф. работа"],["cad","Курсанты"],["rat","Рейтинг"]].map(([k,t])=>`<button type="button" data-kv="${k}" aria-pressed="${v===k}">${t}</button>`).join("")}</nav>`;
   if(v==="c1"||v==="c2"){ const ls=LECTURES.filter(L=>L.c===(v==="c1"?1:2)); if(!ls.some(L=>L.n===K.lec)) K.lec=ls[0].n; const L=LECTURES[K.lec-1], Lv=KS.L||{};
-    return nav+`<div class="kb-lgrid">${ls.map(x=>`<button type="button" class="kb-lcard" data-kl="${x.n}" aria-pressed="${K.lec===x.n}"><span class="kb-ln">${x.n}</span><span>${esc(x.t)}</span></button>`).join("")}</div>
+    return nav+`<div class="kb-lgrid">${ls.map(x=>`<button type="button" class="kb-lcard" data-kl="${x.n}" aria-pressed="${K.lec===x.n}"><span class="kb-ln">${String(x.n).padStart(2,"0")}</span><span class="kb-lt">${esc(x.t)}</span></button>`).join("")}</div>
 <div class="sk-box"><p class="kb-code">${L.c===1?"Курс I — инструктор 1":"Курс II — инструктор 2"} · лекция ${L.n}</p><h3 class="kb-ltopic">${esc(L.t)}</h3><p class="kb-note">Лекция — до часа, 18:00–19:00 МСК (между дропами 16:00 и 20:00). После — день активности: курсант кидает в своё дело 3 скрина — дроп, мероприятие, лекция.</p>
 <div class="ex-acts">${Lv.open?`<button type="button" class="btn" data-kbtab="ev">Идёт мероприятие — открыть</button>`:`<button type="button" class="btn pri" data-kstart="${L.n}"${Lv.busy?" disabled":""}>Начать лекцию ${L.n} · 60 мин</button>`}</div></div>
 ${kLecPlanHtml(L)}<details class="kb-fold"${K.msg?" open":""}><summary>Отметить курсантов · лекция ${L.n}</summary>${kKMarkForm(L.n,true)}</details>`; }
@@ -5020,7 +5112,7 @@ ${kLecPlanHtml(L)}<details class="kb-fold"${K.msg?" open":""}><summary>Отме�
     const st={c1:"Курс I",c2:"Курс II",kr:"Квалиф. работа",ready:"Допущен к экзамену",grad:"Выпускник"};
     return nav+lookup+`<div class="sk-box"><div class="chips kb-evf" role="group">${Object.entries(F).map(([k,t])=>`<button type="button" data-kf="${k}" aria-pressed="${K.filter===k}">${t}</button>`).join("")}</div>
 <div class="ex-acts"><button type="button" class="btn pri" data-kcopy="1">Скопировать состав для Discord</button><button type="button" class="btn" data-kreload="1">Обновить</button></div>
-<div class="kb-tbl">${cs.map(c=>`<div class="kb-tr"><span><b>${kStName(c.cadet,c.static)}</b> · ${st[kStage(c)]}<span class="kb-pbar">${[1,2,3,4,5,6,7,8].map(n=>{ const r=c.last[n]; return `<i class="${r?(r.status==="пройдена"?"ok":"bad"):""}"></i>`; }).join("")}<i class="kr ${c.last["КР"]?(c.last["КР"].status==="засчитана"?"ok":"bad"):""}"></i></span><small>Курс I ${kDone(c,[1,2,3])}/3 · Курс II ${kDone(c,[4,5,6,7,8])}/5 · КР ${c.last["КР"]?esc(c.last["КР"].status):"—"}${Object.keys(c.kd||{}).length?` · <span class="kb-kd">КД: ${Object.keys(c.kd).map(k=>k==="КР"?"КР":"л."+k).join(", ")}</span>`:""}</small></span><button type="button" class="lnk" data-kopen="${esc(c.static)}">Подробно</button></div>`).join("")||`<p class="fc-empty">Пока никого.</p>`}</div></div>`; }
+<div class="kb-tbl">${cs.map(c=>`<div class="kb-tr"><span><b>${kStName(c.cadet,c.static)}</b> · ${st[kStage(c)]}<span class="kb-pbar">${[1,2,3,4,5,6,7,8].map(n=>{ const r=c.last[n]; return `<i class="${r?(r.status==="пройдена"?"s-ok":"s-bad"):""}"></i>`; }).join("")}<i class="s-kr ${c.last["КР"]?(c.last["КР"].status==="засчитана"?"s-ok":"s-bad"):""}"></i></span><small>Курс I ${kDone(c,[1,2,3])}/3 · Курс II ${kDone(c,[4,5,6,7,8])}/5 · КР ${c.last["КР"]?esc(c.last["КР"].status):"—"}${Object.keys(c.kd||{}).length?` · <span class="kb-kd">КД: ${Object.keys(c.kd).map(k=>k==="КР"?"КР":"л."+k).join(", ")}</span>`:""}</small></span><button type="button" class="lnk" data-kopen="${esc(c.static)}">Подробно</button></div>`).join("")||`<p class="fc-empty">Пока никого.</p>`}</div></div>`; }
   const per=K.per, lim=per==="all"?Infinity:(+per)*864e5; const gr=R.cadets.map(c=>({c,r:kRate(c)})).filter(x=>x.r&&R.now-x.r.date<lim).sort((a,b)=>b.r.total-a.r.total);
   return nav+`<div class="sk-box"><p class="kb-code">Рейтинг выпускников</p><p class="kb-note">100 баллов: экзамен — 50 (доля набранных баллов), квалификационная работа — 25, оценки лекторов — 15, лекции с первой попытки — 10. Лучший выпускник — премия 100 000 и рекомендация в другие отделы.</p>
 <div class="chips kb-evf" role="group">${[["7","7 дней"],["30","30 дней"],["all","Всё время"]].map(([k,t])=>`<button type="button" data-kp="${k}" aria-pressed="${per===k}">${t}</button>`).join("")}</div>
@@ -5045,8 +5137,9 @@ function kDraw(){
   if(KS.tab==="kurs") body=kKursHtml();
   if(KS.tab==="stats") body=KS.stats?kStatsHtml(KS.stats):`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
   if(KS.tab==="log") body=KS.log?`<div class="kb-tbl">${KS.log.map(x=>`<div class="kb-tr"><span><b>${esc(x.name)}</b> · ${esc(x.what)}<small>${esc(kD(x.time))}${x.role&&x.role!=="—"?" · "+esc(x.role):""}${x.details?" · "+esc(x.details):""}</small></span></div>`).join("")||`<p class="fc-empty">Записей нет</p>`}</div>`:`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
-  el.innerHTML=`<div class="kb-me"><span>${KS.me.lector?"Инструктор":"Экзаменатор"}: <b>${esc(KS.me.name)}</b>${KS.me.lector?"":" · "+esc(KS.me.role)}</span><button type="button" class="lnk" data-kblogout="1">Выйти</button></div>
+  el.innerHTML=`<div class="kb-me">${(()=>{ const P=kSplitName(KS.me.name); return `<span class="kb-me-l"><span class="kb-lbl">Кабинет · ${esc(KS.me.lector?"Инструктор":KS.me.role)}</span><b>${esc(P.name)}</b>${P.st?`<span class="kb-me-st">${esc(P.st)}</span>`:""}</span>`; })()}<button type="button" class="kb-out" data-kblogout="1">Выйти</button></div>
 <nav class="kb-seg" aria-label="Разделы кабинета">${GR.map(([t,ks])=>`<button type="button" data-kbtab="${ks.includes(KS.tab)?KS.tab:ks[0]}" aria-pressed="${ks.includes(KS.tab)}">${t}${t==="Экзамен"&&KS.exam?" ●":""}</button>`).join("")}</nav>${(()=>{ const g=GR.find(g=>g[1].includes(KS.tab)); return g&&g[1].length>1?`<nav class="chips kb-sub" aria-label="Подразделы">${g[1].map(k=>`<button type="button" data-kbtab="${k}" aria-pressed="${KS.tab===k}">${esc(LBL[k])}</button>`).join("")}</nav>`:""; })()}<div id="kbBody">${body}</div>`;
+  const sg=el.querySelector('.kb-seg'), sa=sg&&sg.querySelector('[aria-pressed="true"]'); if(sa&&sg.scrollWidth>sg.clientWidth) sg.scrollLeft=Math.max(0,sa.offsetLeft-(sg.clientWidth-sa.offsetWidth)/2);
   const b=el.querySelector("#kbBody"); if(b&&((KS.tab==="new"&&KS.exam)||KS.tab==="met"||KS.tab==="qs"||KS.tab==="ev"||KS.tab==="course"||KS.tab==="kurs")) linkify(b); kTimerOn(); kJoinPoll();
 }
 async function kLoadTab(){
