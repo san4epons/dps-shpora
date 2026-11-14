@@ -32,6 +32,8 @@
 .kb-delo{margin-top:12px}
 .kb-evf{margin:6px 0 4px}
 .kb-cdays{margin:0 0 10px}
+.ex-lecg{margin:6px 0 10px}
+#exLecBox{margin:8px 0 14px}
 .kb-staff{margin:4px 0 10px;padding-left:20px}
 .kb-staff li{margin:3px 0}
 .kb-loginbox{margin-top:12px}
@@ -4395,7 +4397,7 @@ const COURSES=STUDY.courses||[];
 const CARDS=[...COURSES.flatMap(c=>(c.cards||[]).map(x=>Object.assign({},x,{course:c.id,topic:(c.id==="c1"?"Курс I · ":"Курс II · ")+x.topic}))),...(STUDY.cards||[])];
 const inCourse=(c,cid)=>{ const C=COURSES.find(x=>x.id===cid); return !!C&&(c.course===cid||(C.reuse||[]).includes(c.id)); };
 const TOPICS=[...new Set(CARDS.map(c=>c.topic))];
-const exTopicOk=c=>EX.topic==="all"||(EX.topic==="marks"?isMk("ex|"+c.id):EX.topic.startsWith("course:")?inCourse(c,EX.topic.slice(7)):c.topic===EX.topic);
+const exTopicOk=c=>EX.topic==="all"||(EX.topic==="marks"?isMk("ex|"+c.id):EX.topic.startsWith("lec:")?(typeof LECTURES!=="undefined"&&(LECTURES[+EX.topic.slice(4)-1]||{topics:[]}).topics.includes(c.topic)):EX.topic.startsWith("course:")?inCourse(c,EX.topic.slice(7)):c.topic===EX.topic);
 const exPool=()=>CARDS.filter(exTopicOk).filter(c=>!EX.only||!EX.known[c.id]);
 const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 function exCardHtml(c,num,total,open,test){
@@ -4436,6 +4438,11 @@ function renderFsbExam(){
     el.dataset.ready="1";
     el.innerHTML=`<h2 class="htitle">${APP==="train"?"Тренажёр Академии «М»":"Экзамен ФСБ"}</h2>
 <p class="lead">Подготовка к экзамену Академии Управления «М». Начните с базы: что такое ФСБ и Управление «М», затем вопросы с ответами, затем задачи. Отмечайте «Знаю» — прогресс сохраняется на этом устройстве.</p>
+<h3 class="uk-ch">Курсы Академии</h3>
+<p class="lead">Экзамен спрашивает только то, что разбирают на лекциях. Выберите лекцию: план, проверочные вопросы и все вопросы экзамена по ней с ответами.</p>
+<div class="ex-lecs">${[1,2].map(cn=>`<div class="ex-lecg"><p class="kb-code">${cn===1?"Курс I · 3 лекции":"Курс II · 5 лекций"}</p><div class="chips" role="group">${LECTURES.filter(L=>L.c===cn).map(L=>`<button type="button" data-lecgo="${L.n}">${L.n}. ${esc(L.t)}</button>`).join("")}</div></div>`).join("")}
+<p class="kb-note">После лекций — квалификационная работа: рапорт по ситуации с обоснованием каждого действия по статье и устные вопросы «а если…». Тренируйтесь на задачах ниже.</p></div>
+<div id="exLecBox"></div>
 <h3 class="uk-ch">База знаний</h3>
 <div class="tiles ex-base" style="margin-top:8px">
  <button type="button" class="tile hot" data-go="fsbstruct"><span class="t">1. Что такое ФСБ и Управление «М»</span><span class="d">Структура ФСБ, подразделения, задачи Управления «М», руководство, обязанности и права сотрудника</span><span class="ref">ФЗ о ФСБ, устав</span></button>
@@ -4446,12 +4453,15 @@ function renderFsbExam(){
 
 <h3 class="uk-ch" id="exBaseQ">Вопросы с ответами</h3><div class="ex-top"><div class="ex-prog" id="exProg"></div>
 <div class="chips" role="group" aria-label="Режим"><button type="button" data-exmode="cards">Карточки</button><button type="button" data-exmode="test">Тест 20</button><button type="button" data-exscroll="1">Все вопросы</button><button type="button" data-go="marks" class="mkchip">⚑ Мои метки <b id="exMkN"></b></button></div>
-<div class="ex-ctrl"><label class="hide" for="exTopic">Тема</label><select id="exTopic"><option value="all">Все темы (${CARDS.length})</option><option value="marks" id="exMarksOpt">⚑ Мои метки</option>${COURSES.length?`<optgroup label="Академия «М»">${COURSES.map(C=>`<option value="course:${C.id}">${esc(C.title)} — все вопросы (${CARDS.filter(c=>inCourse(c,C.id)).length})</option>`).join("")}</optgroup>`:""}${[["C1-","Устав, задержание, должностные"],["C2-","Проверки, дела, эксперимент"],["L","Законы ФСБ"],["P","УК и УПК"]].map(([p,g])=>{ const ts=TOPICS.filter(t=>CARDS.some(c=>c.topic===t&&c.id.startsWith(p))); return ts.length?`<optgroup label="${g}">${ts.map(t=>`<option value="${esc(t)}">${esc(t)} (${CARDS.filter(c=>c.topic===t).length})</option>`).join("")}</optgroup>`:""; }).join("")}</select>
+<div class="ex-ctrl"><label class="hide" for="exTopic">Тема</label><select id="exTopic"><option value="all">Все темы (${CARDS.length})</option><option value="marks" id="exMarksOpt">⚑ Мои метки</option><optgroup label="Курсы Академии">${LECTURES.map(L=>`<option value="lec:${L.n}">Лекция ${L.n}. ${esc(L.t)} (${CARDS.filter(c=>L.topics.includes(c.topic)).length})</option>`).join("")}</optgroup>${COURSES.length?`<optgroup label="Академия «М»">${COURSES.map(C=>`<option value="course:${C.id}">${esc(C.title)} — все вопросы (${CARDS.filter(c=>inCourse(c,C.id)).length})</option>`).join("")}</optgroup>`:""}${[["C1-","Устав, задержание, должностные"],["C2-","Проверки, дела, эксперимент"],["L","Законы ФСБ"],["P","УК и УПК"]].map(([p,g])=>{ const ts=TOPICS.filter(t=>CARDS.some(c=>c.topic===t&&c.id.startsWith(p))); return ts.length?`<optgroup label="${g}">${ts.map(t=>`<option value="${esc(t)}">${esc(t)} (${CARDS.filter(c=>c.topic===t).length})</option>`).join("")}</optgroup>`:""; }).join("")}</select>
 <label class="fc-chk" style="padding:4px 0"><input type="checkbox" id="exOnly"><span>Только невыученные</span></label></div></div>
 <div id="exMain"></div>
 <section class="ex-list" id="exList"><h3>Все вопросы</h3><p class="lead">Нажмите на вопрос — откроется ответ со ссылкой на статью.</p><div id="exListBody"></div><div class="fc-acts" style="margin-top:16px"><button type="button" class="btn" id="exReset">Сбросить прогресс</button></div></section>`;
     el.addEventListener("click",e=>{
       const m=e.target.closest("[data-exmode]"); if(m){ EXS.mode=m.dataset.exmode; EXS.open=false; exDraw(); return; }
+      const lg=e.target.closest("[data-lecgo]"); if(lg){ const n=+lg.dataset.lecgo, L=LECTURES[n-1]; el.querySelectorAll("[data-lecgo]").forEach(b=>b.setAttribute("aria-pressed",String(b===lg)));
+        const box=$("exLecBox"); box.innerHTML=`<div class="sk-box"><p class="kb-code">${L.c===1?"Курс I":"Курс II"} · лекция ${L.n}</p><h3 class="kb-ltopic">${esc(L.t)}</h3><div class="ex-acts"><button type="button" class="btn pri" data-lecq="${n}">Учить вопросы этой лекции карточками</button></div></div>${kLecPlanHtml(L)}`; linkify(box); box.scrollIntoView({behavior:"smooth",block:"start"}); return; }
+      const lq=e.target.closest("[data-lecq]"); if(lq){ EX.topic="lec:"+lq.dataset.lecq; $("exTopic").value=EX.topic; EXS.mode="cards"; EXS.i=0; EXS.open=false; EXS.test=null; exSave(); exDraw(); $("exMain").scrollIntoView({behavior:"smooth",block:"start"}); return; }
       const cq=e.target.closest("[data-coursecards]"); if(cq){ EX.topic="course:"+cq.dataset.coursecards; EXS.mode="cards"; EXS.i=0; EXS.open=false; EXS.test=null; exSave(); exDraw(); $("exMain").scrollIntoView({behavior:"smooth",block:"start"}); return; }
       if(e.target.closest("[data-exscroll]")){ $("exList").scrollIntoView({behavior:"smooth",block:"start"}); return; }
       const b=e.target.closest("[data-ex]"); if(!b) return; const a=b.dataset.ex; const pool=exPool();
