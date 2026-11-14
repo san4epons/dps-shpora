@@ -32,6 +32,42 @@
 .kb-delo{margin-top:12px}
 .kb-evf{margin:6px 0 4px}
 .kb-cdays{margin:0 0 10px}
+.kb-hero-acts{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 4px}
+.kb-hero-acts .btn{flex:0 0 auto;text-decoration:none}
+.kb-hero-acts a.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.kb-h{margin:20px 0 8px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.kb-path{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;padding:0;margin:0}
+.kb-step{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;align-content:start}
+.kb-stepn{width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:800;font-size:14px}
+.kb-step small{color:var(--muted);font-size:13.5px;line-height:1.45}
+.kb-people{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.kb-person{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.kb-ava{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:800;font-size:14px;background:var(--accent);color:var(--accent-ink)}
+.kb-pn{min-width:0}
+.kb-pn b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kb-pn small{display:block;color:var(--muted);font-size:12.5px}
+.kb-role{margin-left:auto;font-size:11.5px;line-height:1.3;padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);text-align:center;flex:none;max-width:110px}
+.kb-role.ex{border-color:var(--accent);color:var(--ink)}
+.kb-me{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.kb-seg{display:flex;gap:4px;overflow-x:auto;padding:4px;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin:8px 0 6px;scrollbar-width:none}
+.kb-seg::-webkit-scrollbar{display:none}
+.kb-seg button{flex:1 0 auto;font:inherit;font-size:14.5px;font-weight:700;padding:10px 12px;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap}
+.kb-seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.kb-sub{margin:2px 0 8px}
+.kb-lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin:8px 0}
+.kb-lcard{display:flex;gap:10px;align-items:center;text-align:left;font:inherit;font-size:14.5px;line-height:1.3;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);cursor:pointer}
+.kb-lcard[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.kb-ln{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-weight:800;background:var(--bg);border:1px solid var(--line);flex:none}
+.kb-lcard[aria-pressed="true"] .kb-ln{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.kb-fold{margin-top:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.kb-fold>summary{cursor:pointer;padding:12px 14px;font-weight:700;color:var(--accent)}
+.kb-fold>.sk-box{margin:0;border:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px}
+.kb-pbar{display:flex;gap:2px;margin:6px 0 2px;max-width:220px}
+.kb-pbar i{flex:1;height:6px;border-radius:2px;background:var(--line)}
+.kb-pbar i.ok{background:var(--ok)}
+.kb-pbar i.bad{background:var(--stop)}
+.kb-pbar i.kr{margin-left:5px}
+@media (max-width:560px){.kb-seg{flex-wrap:wrap;overflow:visible}.kb-seg button{flex:1 1 30%;font-size:13.5px;padding:9px 6px}.kb-lgrid{grid-template-columns:1fr 1fr}.kb-lcard{font-size:13.5px;padding:9px 10px;gap:8px}.kb-ln{width:24px;height:24px}}
 .ex-lecg{margin:6px 0 10px}
 #exLecBox{margin:8px 0 14px}
 .kb-staff{margin:4px 0 10px;padding-left:20px}
@@ -4719,16 +4755,23 @@ KS.staff=null; try{ KS.staff=JSON.parse(ls("acad-staff")||"null"); }catch(_){}
 let KSTAFF_LOADING=false;
 async function kStaffLoad(){ if(KSTAFF_LOADING||!ACAD_API) return; KSTAFF_LOADING=true; try{ const j=await kApi("staff"); KS.staff=j.staff||[]; ls("acad-staff",JSON.stringify(KS.staff)); if(!KS.me) kDraw(); }catch(_){} KSTAFF_LOADING=false; }
 const kStaffName=n=>esc(String(n).split("|").map(s=>s.trim()).filter(Boolean).join(" · "));
+const SROLE={chief:"Начальник",deputy:"Заместитель",instr:"Инструктор · экзаменатор",examiner:"Экзаменатор",lector:"Инструктор"};
+function kPerson(x){ const p=String(x.name).split("|").map(s=>s.trim()).filter(Boolean); const name=p.length>=3?p[1]:p.length===2?p[0]:p[0], st=p.length>=3?p[2]:p.length===2?p[1]:"", title=p.length>=3?p[0]:"";
+  const ini=name.replace(/[^А-Яа-яЁёA-Za-z ]/g,"").split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join("")||"?";
+  return `<div class="kb-person"><span class="kb-ava">${esc(ini)}</span><span class="kb-pn"><b>${esc(name)}</b><small>${esc([title,st].filter(Boolean).join(" · "))}</small></span><span class="kb-role${x.exam?" ex":""}">${SROLE[x.group]||""}</span></div>`; }
 function kPublicHtml(){
   if(!KS.staffTried){ KS.staffTried=true; setTimeout(kStaffLoad); }
-  const st=KS.staff, grp=SGROUPS.map(([g,t,ex])=>{ const l=(st||[]).filter(x=>x.group===g); return l.length?`<h4 class="uk-ch">${t}${ex?"":""}</h4><ul class="kb-staff">${l.map(x=>`<li>${kStaffName(x.name)}</li>`).join("")}</ul>`:""; }).join("");
-  return `<div class="sk-box kb-pub"><h3>Как пройти Академию</h3>
-<ol class="qc-regl"><li><b>Заявка.</b> В <a href="${DCH("1538689096854278207")}" target="_blank" rel="noopener">#заявки-в-управление-м</a>. Звание — от младшего лейтенанта. После заявки — обзвон.</li>
-<li><b>Курсы.</b> Курс I — 3 лекции, Курс II — 5 лекций, затем квалификационная работа. Лекции — 18:00 МСК, расписание в <a href="${DCH("1552065184124641311")}" target="_blank" rel="noopener">#расписание-занятий</a>. Каждый день — отчёт в своём деле: 3 скрина — дроп, мероприятие, лекция. Не прошёл лекцию — повтор со следующего дня.</li>
-<li><b>Запись на экзамен.</b> В <a href="${DCH("1568008368604586025")}" target="_blank" rel="noopener">#запись-на-экзамен</a> по шаблону. Регламент — <a href="${DCH("1568659011115421727")}" target="_blank" rel="noopener">#регламент-экзамена</a>.</li>
-<li><b>Экзамен.</b> Экзаменатор присылает ссылку-билет, на ответы — 20 минут. Сдача — раз в сутки.</li></ol>
-<p class="kb-note">Готовиться — в <a href="https://san4epons.github.io/dps-shpora/trener/" target="_blank" rel="noopener">тренажёре</a>: вопросы с ответами и учебные задачи.</p></div>
-<div class="sk-box kb-pub"><h3>Кто принимает экзамен</h3>${st===null?`<p class="fc-empty">Загружаю список…</p>`:grp||`<p class="fc-empty">Список пока пуст.</p>`}</div>`; }
+  const st=KS.staff, ord=["chief","deputy","instr","examiner","lector"], ppl=(st||[]).slice().sort((a,b)=>ord.indexOf(a.group)-ord.indexOf(b.group));
+  const step=(n,t,d)=>`<div class="kb-step"><span class="kb-stepn">${n}</span><b>${t}</b><small>${d}</small></div>`;
+  return `<div class="kb-hero-acts"><a class="btn pri" href="https://san4epons.github.io/dps-shpora/trener/" target="_blank" rel="noopener">Открыть тренажёр</a><button type="button" class="btn" data-kblogin="1">Войти в кабинет</button></div>
+<h3 class="kb-h">Как пройти Академию</h3>
+<div class="kb-path">${step(1,"Заявка",`Звание — от мл. лейтенанта. Заявка в <a href="${DCH("1538689096854278207")}" target="_blank" rel="noopener">#заявки-в-управление-м</a>, затем обзвон.`)}
+${step(2,"Курсы",`Курс I — 3 лекции, Курс II — 5, затем квалификационная работа. Лекции в 18:00 МСК — <a href="${DCH("1552065184124641311")}" target="_blank" rel="noopener">#расписание</a>.`)}
+${step(3,"Отчёт дня",`В своём деле — 3 скрина: дроп, мероприятие, лекция. Не прошли лекцию — повтор со следующего дня.`)}
+${step(4,"Экзамен",`Запись в <a href="${DCH("1568008368604586025")}" target="_blank" rel="noopener">#запись-на-экзамен</a>. 20 минут, только по темам лекций. <a href="${DCH("1568659011115421727")}" target="_blank" rel="noopener">Регламент</a>.`)}</div>
+<p class="kb-note">🎖️ Лучший выпускник недели — премия 100 000 и рекомендация в другие отделы.</p>
+<h3 class="kb-h">Кто учит и принимает экзамен</h3>
+${st===null?`<p class="fc-empty">Загружаю список…</p>`:ppl.length?`<div class="kb-people">${ppl.map(kPerson).join("")}</div>`:`<p class="fc-empty">Список пока пуст.</p>`}`; }
 function kLoginHtml(){
   return `<div class="sk-box kb-login"><h3>Вход по ключу</h3><p class="lead">Ключ выдаёт начальник Академии. Каждый вход и каждое действие записываются в журнал таблицы.</p>
 ${ACAD_API?"":`<p class="kb-warn">Таблица ещё не подключена. Вход заработает, когда в сайт будет вставлен адрес веб-приложения Google.</p>`}
@@ -4963,13 +5006,13 @@ function kRosterPlain(R){ const cs=R.cadets.filter(c=>R.now-c.first<14*864e5||kS
     ...sec("📝 Квалификационная работа",g("kr")),...sec("✅ Допущены к экзамену",g("ready")),
     ...sec("🎖️ Выпускники за 7 дней",g("grad").filter(c=>(c.exams||[]).some(x=>x.total==="засчитан"&&R.now-x.date<7*864e5)))].join("\n"); }
 function kKursHtml(){ const K=KS.K, v=K.view;
-  const nav=`<div class="chips st-toc kb-cdays" role="group">${[["c1","Курс I · лекции 1–3"],["c2","Курс II · лекции 4–8"],["kr","Квалиф. работа"],["cad","Курсанты"],["rat","Лучшие выпускники"]].map(([k,t])=>`<button type="button" data-kv="${k}" aria-pressed="${v===k}">${t}</button>`).join("")}</div>`;
+  const nav=`<nav class="chips kb-sub" role="group">${[["c1","Курс I"],["c2","Курс II"],["kr","Квалиф. работа"],["cad","Курсанты"],["rat","Рейтинг"]].map(([k,t])=>`<button type="button" data-kv="${k}" aria-pressed="${v===k}">${t}</button>`).join("")}</nav>`;
   if(v==="c1"||v==="c2"){ const ls=LECTURES.filter(L=>L.c===(v==="c1"?1:2)); if(!ls.some(L=>L.n===K.lec)) K.lec=ls[0].n; const L=LECTURES[K.lec-1], Lv=KS.L||{};
-    return nav+`<div class="chips kb-evf" role="group">${ls.map(x=>`<button type="button" data-kl="${x.n}" aria-pressed="${K.lec===x.n}">${x.n}. ${esc(x.t)}</button>`).join("")}</div>
+    return nav+`<div class="kb-lgrid">${ls.map(x=>`<button type="button" class="kb-lcard" data-kl="${x.n}" aria-pressed="${K.lec===x.n}"><span class="kb-ln">${x.n}</span><span>${esc(x.t)}</span></button>`).join("")}</div>
 <div class="sk-box"><p class="kb-code">${L.c===1?"Курс I — инструктор 1":"Курс II — инструктор 2"} · лекция ${L.n}</p><h3 class="kb-ltopic">${esc(L.t)}</h3><p class="kb-note">Лекция — до часа, 18:00–19:00 МСК (между дропами 16:00 и 20:00). После — день активности: курсант кидает в своё дело 3 скрина — дроп, мероприятие, лекция.</p>
 <div class="ex-acts">${Lv.open?`<button type="button" class="btn" data-kbtab="ev">Идёт мероприятие — открыть</button>`:`<button type="button" class="btn pri" data-kstart="${L.n}"${Lv.busy?" disabled":""}>Начать лекцию ${L.n} · 60 мин</button>`}</div></div>
-${kLecPlanHtml(L)}${kKMarkForm(L.n,true)}`; }
-  if(v==="kr") return nav+`<div class="sk-box"><p class="kb-code">После лекций 1–8</p><h3 class="kb-ltopic">${esc(KRW.t)}</h3><ol class="qc-regl">${KRW.plan.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div>${kKMarkForm("КР",true)}`;
+${kLecPlanHtml(L)}<details class="kb-fold"${K.msg?" open":""}><summary>Отметить курсантов · лекция ${L.n}</summary>${kKMarkForm(L.n,true)}</details>`; }
+  if(v==="kr") return nav+`<div class="sk-box"><p class="kb-code">После лекций 1–8</p><h3 class="kb-ltopic">${esc(KRW.t)}</h3><ol class="qc-regl">${KRW.plan.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div><details class="kb-fold" open><summary>Отметить квалификационную работу</summary>${kKMarkForm("КР",true)}</details>`;
   const lookup=`<form class="sk-box qc-form kb-form" id="kbKProg"><label>Проверить курсанта · статик<input id="kbKStat" type="text" inputmode="numeric" maxlength="7" autocomplete="off" placeholder="12345" value="${esc(K.prog?K.prog.static:"")}"></label><div class="ex-acts"><button type="submit" class="btn"${K.busy?" disabled":""}>Проверить</button></div>${K.err?`<p class="kb-err">${esc(K.err)}</p>`:""}</form>${kKProgHtml(K.prog)}`;
   const R=K.roster; if(!R) return nav+lookup+`<p class="fc-empty">Загружаю курсантов…</p>`;
   if(v==="cad"){ const F={all:"Все",stuck:"Застряли (КД)",ready:"Допущены",grad:"Выпускники"}; let cs=R.cadets.slice().sort((a,b)=>b.first-a.first);
@@ -4977,7 +5020,7 @@ ${kLecPlanHtml(L)}${kKMarkForm(L.n,true)}`; }
     const st={c1:"Курс I",c2:"Курс II",kr:"Квалиф. работа",ready:"Допущен к экзамену",grad:"Выпускник"};
     return nav+lookup+`<div class="sk-box"><div class="chips kb-evf" role="group">${Object.entries(F).map(([k,t])=>`<button type="button" data-kf="${k}" aria-pressed="${K.filter===k}">${t}</button>`).join("")}</div>
 <div class="ex-acts"><button type="button" class="btn pri" data-kcopy="1">Скопировать состав для Discord</button><button type="button" class="btn" data-kreload="1">Обновить</button></div>
-<div class="kb-tbl">${cs.map(c=>`<div class="kb-tr"><span><b>${kStName(c.cadet,c.static)}</b> · ${st[kStage(c)]}<small>Курс I ${kDone(c,[1,2,3])}/3 · Курс II ${kDone(c,[4,5,6,7,8])}/5 · КР ${c.last["КР"]?esc(c.last["КР"].status):"—"}${Object.keys(c.kd||{}).length?` · <span class="kb-kd">КД: ${Object.keys(c.kd).map(k=>k==="КР"?"КР":"л."+k).join(", ")}</span>`:""}</small></span><button type="button" class="lnk" data-kopen="${esc(c.static)}">Подробно</button></div>`).join("")||`<p class="fc-empty">Пока никого.</p>`}</div></div>`; }
+<div class="kb-tbl">${cs.map(c=>`<div class="kb-tr"><span><b>${kStName(c.cadet,c.static)}</b> · ${st[kStage(c)]}<span class="kb-pbar">${[1,2,3,4,5,6,7,8].map(n=>{ const r=c.last[n]; return `<i class="${r?(r.status==="пройдена"?"ok":"bad"):""}"></i>`; }).join("")}<i class="kr ${c.last["КР"]?(c.last["КР"].status==="засчитана"?"ok":"bad"):""}"></i></span><small>Курс I ${kDone(c,[1,2,3])}/3 · Курс II ${kDone(c,[4,5,6,7,8])}/5 · КР ${c.last["КР"]?esc(c.last["КР"].status):"—"}${Object.keys(c.kd||{}).length?` · <span class="kb-kd">КД: ${Object.keys(c.kd).map(k=>k==="КР"?"КР":"л."+k).join(", ")}</span>`:""}</small></span><button type="button" class="lnk" data-kopen="${esc(c.static)}">Подробно</button></div>`).join("")||`<p class="fc-empty">Пока никого.</p>`}</div></div>`; }
   const per=K.per, lim=per==="all"?Infinity:(+per)*864e5; const gr=R.cadets.map(c=>({c,r:kRate(c)})).filter(x=>x.r&&R.now-x.r.date<lim).sort((a,b)=>b.r.total-a.r.total);
   return nav+`<div class="sk-box"><p class="kb-code">Рейтинг выпускников</p><p class="kb-note">100 баллов: экзамен — 50 (доля набранных баллов), квалификационная работа — 25, оценки лекторов — 15, лекции с первой попытки — 10. Лучший выпускник — премия 100 000 и рекомендация в другие отделы.</p>
 <div class="chips kb-evf" role="group">${[["7","7 дней"],["30","30 дней"],["all","Всё время"]].map(([k,t])=>`<button type="button" data-kp="${k}" aria-pressed="${per===k}">${t}</button>`).join("")}</div>
@@ -4985,8 +5028,10 @@ ${kLecPlanHtml(L)}${kKMarkForm(L.n,true)}`; }
 
 function kDraw(){
   const el=$("kbMain"); if(!el) return;
-  if(!KS.me){ el.innerHTML=kPublicHtml()+`<details class="kb-loginbox"${KS.key||KS.err||KS.busy?" open":""}><summary>Вход для экзаменаторов и инструкторов</summary>${kLoginHtml()}</details>`; return; }
-  const tabs=KS.me.lector?[["ev","Мероприятия"],["kurs","Курсы"],["stats","Слабые темы"]]:[["new",KS.exam?"Идёт экзамен":"Новый экзамен"],["find","Поиск экзаменов"],["list","Последние"],["qs","Поиск вопроса"],["stats","Слабые темы"],["kurs","Курсы"],["ev","Мероприятия"],["log","Журнал входов"],["met","Методика"]];
+  if(!KS.me){ const lg=KS.showLogin||KS.key||KS.err||KS.busy; el.innerHTML=(lg?kLoginHtml():"")+kPublicHtml(); if(lg&&KS.showLogin&&!KS.key){ const k=$("kbKey"); if(k) k.focus(); } return; }
+  const LBL={new:KS.exam?"Идёт экзамен":"Новый экзамен",find:"Поиск экзаменов",list:"Последние",qs:"Поиск вопроса",stats:"Слабые темы",log:"Журнал входов",met:"Методика и регламент",kurs:"Курсы",ev:"Мероприятия"};
+  const GR=KS.me.lector?[["Мероприятия",["ev"]],["Курсы",["kurs"]],["Аналитика",["stats"]]]:[["Экзамен",["new","find","list","qs"]],["Курсы",["kurs"]],["Мероприятия",["ev"]],["Аналитика",["stats","log"]],["Справка",["met"]]];
+  const tabs=[].concat(...GR.map(g=>g[1])).map(k=>[k,LBL[k]]);
   if(!tabs.some(([k])=>k===KS.tab)) KS.tab=tabs[0][0];
   let body="";
   if(KS.tab==="new") body=KS.exam?(KS.exam.timer?kGradeHtml():kStageHtml()):kNewHtml();
@@ -5001,7 +5046,7 @@ function kDraw(){
   if(KS.tab==="stats") body=KS.stats?kStatsHtml(KS.stats):`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
   if(KS.tab==="log") body=KS.log?`<div class="kb-tbl">${KS.log.map(x=>`<div class="kb-tr"><span><b>${esc(x.name)}</b> · ${esc(x.what)}<small>${esc(kD(x.time))}${x.role&&x.role!=="—"?" · "+esc(x.role):""}${x.details?" · "+esc(x.details):""}</small></span></div>`).join("")||`<p class="fc-empty">Записей нет</p>`}</div>`:`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
   el.innerHTML=`<div class="kb-me"><span>${KS.me.lector?"Инструктор":"Экзаменатор"}: <b>${esc(KS.me.name)}</b>${KS.me.lector?"":" · "+esc(KS.me.role)}</span><button type="button" class="lnk" data-kblogout="1">Выйти</button></div>
-<nav class="chips st-toc kb-tabs" aria-label="Разделы кабинета">${tabs.map(([k,t])=>`<button type="button" data-kbtab="${k}" aria-pressed="${KS.tab===k}">${esc(t)}</button>`).join("")}</nav><div id="kbBody">${body}</div>`;
+<nav class="kb-seg" aria-label="Разделы кабинета">${GR.map(([t,ks])=>`<button type="button" data-kbtab="${ks.includes(KS.tab)?KS.tab:ks[0]}" aria-pressed="${ks.includes(KS.tab)}">${t}${t==="Экзамен"&&KS.exam?" ●":""}</button>`).join("")}</nav>${(()=>{ const g=GR.find(g=>g[1].includes(KS.tab)); return g&&g[1].length>1?`<nav class="chips kb-sub" aria-label="Подразделы">${g[1].map(k=>`<button type="button" data-kbtab="${k}" aria-pressed="${KS.tab===k}">${esc(LBL[k])}</button>`).join("")}</nav>`:""; })()}<div id="kbBody">${body}</div>`;
   const b=el.querySelector("#kbBody"); if(b&&((KS.tab==="new"&&KS.exam)||KS.tab==="met"||KS.tab==="qs"||KS.tab==="ev"||KS.tab==="course"||KS.tab==="kurs")) linkify(b); kTimerOn(); kJoinPoll();
 }
 async function kLoadTab(){
@@ -5058,6 +5103,7 @@ function renderKab(){
     el.addEventListener("click",async e=>{
       const g=x=>e.target.closest(x);
       if(g("[data-kblogout]")){ kLogout(); return; }
+      if(g("[data-kblogin]")){ KS.showLogin=true; kDraw(); window.scrollTo({top:0}); return; }
       if(g("[data-lreload]")){ KS.L.topics=null; kDraw(); kLectLoad(); return; }
       const kv=g("[data-kv]"); if(kv){ KS.K.view=kv.dataset.kv; KS.K.msg=""; KS.K.err=""; kDraw(); if((KS.K.view==="cad"||KS.K.view==="rat")&&!KS.K.roster){ try{ KS.K.roster=await kApi("kroster"); }catch(err){ KS.K.err=err.message; } kDraw(); } return; }
       const kl=g("[data-kl]"); if(kl){ KS.K.lec=+kl.dataset.kl; KS.K.msg=""; kDraw(); return; }
