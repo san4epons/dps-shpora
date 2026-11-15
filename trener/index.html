@@ -69,6 +69,35 @@
 .kb-pbar i.s-kr{margin-left:5px}
 /* ===== дизайн v2: страница Академии ===== */
 #vKab{--r:2px}
+#vKab .kb-obz-crit{border:1px solid var(--line);border-left:2px solid var(--accent);background:var(--surface);padding:12px 14px;margin:10px 0 14px}
+#vKab .kb-obz-crit ol{margin:6px 0 0;padding-left:20px}
+#vKab .kb-obz-crit li{margin:3px 0}
+#vKab .kb-obz-req{display:grid;gap:0;border:1px solid var(--line);background:var(--surface);margin:0 0 14px}
+#vKab .kb-obz-req label{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-top:1px solid var(--line);cursor:pointer;font-weight:500}
+#vKab .kb-obz-req label:first-child{border-top:0}
+#vKab .kb-obz-req input{margin-top:3px;accent-color:var(--accent)}
+#vKab .kb-obz{border:1px solid var(--line);background:var(--surface);margin:0 0 14px}
+#vKab .kb-oq{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:4px 12px;align-items:start;padding:12px 14px;border-top:1px solid var(--line);border-left:2px solid transparent}
+#vKab .kb-oq:first-child{border-top:0}
+#vKab .kb-oq.s-ok{border-left-color:var(--ok,#3fb950)}
+#vKab .kb-oq.s-mid{border-left-color:#d29922}
+#vKab .kb-oq.s-bad{border-left-color:var(--bad,#f85149)}
+#vKab .kb-on{font-family:var(--mono);color:var(--muted);font-size:13px;padding-top:2px}
+#vKab .kb-ob b{display:block;line-height:1.35}
+#vKab .kb-ob details{margin-top:4px}
+#vKab .kb-ob summary{cursor:pointer;color:var(--accent);font-size:13px;font-weight:600}
+#vKab .kb-ob p{margin:6px 0 0;color:var(--ink);font-size:14px}
+#vKab .kb-ob small{display:block;color:var(--muted);font-family:var(--mono);font-size:11.5px;margin-top:3px}
+#vKab .kb-ograde{margin:0}
+#vKab .kb-ograde button{padding:6px 10px;font-size:13px}
+#vKab .kb-obz-res{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;border:1px solid var(--line);border-left:2px solid var(--line);background:var(--surface);padding:12px 14px;margin:0 0 12px}
+#vKab .kb-obz-res b{font-family:var(--mono);font-size:26px}
+#vKab .kb-obz-res.ok2{border-left-color:var(--ok,#3fb950)}
+#vKab .kb-obz-res.bad2{border-left-color:var(--bad,#f85149)}
+#vKab .kb-obz-res .kb-lbl{width:100%}
+#vKab .kb-obz-pre{font-family:var(--mono);font-size:12.5px;white-space:pre-wrap;border:1px solid var(--line);background:var(--surface);padding:10px 14px;margin:10px 0 0;color:var(--muted)}
+@media (max-width:640px){#vKab .kb-oq{grid-template-columns:28px minmax(0,1fr)}#vKab .kb-ograde{grid-column:1/-1;display:flex}#vKab .kb-ograde button{flex:1 1 0}}
+
 #vKab .sk-box{border-radius:var(--r);border-top-width:1px;border-left:2px solid var(--accent)}
 #vKab .btn{border-radius:var(--r);font-weight:700}
 #vKab .chips button{border-radius:var(--r)}
@@ -5118,11 +5147,41 @@ ${kLecPlanHtml(L)}<details class="kb-fold"${K.msg?" open":""}><summary>Отме�
 <div class="chips kb-evf" role="group">${[["7","7 дней"],["30","30 дней"],["all","Всё время"]].map(([k,t])=>`<button type="button" data-kp="${k}" aria-pressed="${per===k}">${t}</button>`).join("")}</div>
 <ol class="kb-rate">${gr.map(({c,r},i)=>`<li${i===0?' class="kb-top"':""}><b>${kStName(c.cadet,c.static)}</b> — <b>${r.total}</b><small>экзамен ${r.e} · КР ${r.k} · лекторы ${r.l} · с первой попытки ${r.f} · ${esc(kDay(r.date))}</small></li>`).join("")||`<p class="fc-empty">Выпускников за период нет.</p>`}</ol></div>`; }
 
+
+const OBZ_REQ=["Звание — от младшего лейтенанта","Нет активных выговоров","Нет служебных проверок и уголовных дел","Адекватен: рабочий микрофон, отвечает по делу, без грубости"];
+const OBZQ=[
+ ["Что такое ФСБ?","Федеральный правоохранительный орган, единая централизованная система, которая обеспечивает безопасность РО.","ФЗ о ФСБ ст. 1 ч. 1"],
+ ["Чем занимается ФСБ? Назовите хотя бы 3 направления.","Борьба с терроризмом; с преступностью и должностными преступлениями; разведка; информационная безопасность.","ФЗ о ФСБ ст. 5"],
+ ["Какие управления и службы есть в ФСБ? Назовите 3 и чем занимаются.","УКП — кадры, обучение, Академия ФСБ. КТЦ — шпионаж, ОПГ, контрразведка. ОПС — спецоперации, антитеррор, наружка. Управление «В» — контрабанда, наркотики, ЧП.","Устав ФСБ гл. I п. 6"],
+ ["Назовите звания ФСБ снизу вверх до Капитана.","Мл. сержант → Сержант → Прапорщик → Старшина → Мл. лейтенант → Лейтенант → Ст. лейтенант → Капитан.","Устав ФСБ гл. I п. 4"],
+ ["Кто руководит ФСБ?","Директор ФСБ (Генерал) и Заместитель Директора (Генерал-полковник).","Устав ФСБ гл. I п. 4"],
+ ["Какие бывают дисциплинарные взыскания? Что будет за 3 выговора?","Предупреждение, выговор, понижение в должности или звании, переаттестация, увольнение. 3 активных выговора — увольнение.","Устав, «Взыскания» п. 1.1; ТК ст. 30.1"],
+ ["За что можно задержать подозреваемого? Назовите 2 основания.","Застигнут при преступлении или сразу после; указали потерпевшие или очевидцы; явные следы преступления; есть ориентировка.","УПК ст. 91 ч. 1"],
+ ["Что нужно разъяснить человеку при задержании?","Причину, статьи УК (пункт, часть, статья) и права, в том числе право на адвоката.","УПК ст. 92 ч. 1 «г»"],
+ ["Сколько максимум длится задержание?","60 минут.","УПК ст. 94 ч. 1 п. 3"],
+ ["Кто неприкосновенный? Назовите 3 категории.","Премьер и вице-премьер, министры, судьи, сотрудники Генпрокуратуры, депутаты Госдумы, руководители госорганов и их замы и др.","Закон о неприкосновенности ст. 1.1"]
+];
+function kObzS(){ if(!KS.O){ let o=null; try{ o=JSON.parse(ls("acad-obz")||"null"); }catch(_){} KS.O=o&&Array.isArray(o.r)&&o.r.length===OBZQ.length?o:{who:"",req:OBZ_REQ.map(()=>false),r:OBZQ.map(()=>null)}; } return KS.O; }
+function kObzSave(){ try{ ls("acad-obz",JSON.stringify(KS.O)); }catch(_){} }
+function kObzSum(){ const O=kObzS(); const sc=O.r.reduce((s,x)=>s+(x==null?0:x),0), done=O.r.filter(x=>x!=null).length, req=O.req.every(Boolean);
+  const pass=req&&sc>=7; return {sc,done,req,pass,fin:done===OBZQ.length}; }
+function kObzPlain(){ const O=kObzS(), S=kObzSum(), who=(O.who||"").trim()||"Имя Фамилия | статик"; const d=new Date(Date.now()+3*3600e3), p=n=>String(n).padStart(2,"0");
+  return `Обзвон: ${who}\nКогда: ${p(d.getUTCDate())}.${p(d.getUTCMonth()+1)}.${d.getUTCFullYear()}, ${p(d.getUTCHours())}:${p(d.getUTCMinutes())} МСК\nИтог: ${S.pass?"принят":"отказ"} (${String(S.sc).replace(".",",")}/10)`; }
+function kObzHtml(){ const O=kObzS(), S=kObzSum(), f=x=>String(x).replace(".",",");
+  const verdict=!S.req?"Не проходит по требованиям — отказ":S.fin?(S.pass?"Принять в Академию":"Отказ"):(S.sc>=7?"Уже 7 баллов — можно принимать":"Идёт обзвон");
+  return `<p class="kb-eyebrow">Обзвон кандидата · 10–15 минут</p>
+<div class="kb-obz-crit"><b>Критерии отбора</b><ol><li>Формальные требования — все четыре, иначе отказ без вопросов.</li><li>10 базовых вопросов — без Управления «М». Верно — 1 балл, частично — 0,5, нет — 0.</li><li><b>От 7 баллов — принят</b>, выдать роль Академии «М». Меньше 7 — отказ, новая заявка через 24 часа.</li></ol></div>
+<div class="sk-box qc-form kb-form"><label>Кандидат<input id="kbObzWho" type="text" maxlength="40" autocomplete="off" spellcheck="false" placeholder="Иван Петров | 12345" value="${esc(O.who||"")}"></label></div>
+<h4 class="uk-ch">Требования</h4><div class="kb-obz-req">${OBZ_REQ.map((t,i)=>`<label><input type="checkbox" data-obzreq="${i}"${O.req[i]?" checked":""}> ${esc(t)}</label>`).join("")}</div>
+<h4 class="uk-ch">Вопросы</h4><div class="kb-obz">${OBZQ.map(([q,a,r],i)=>`<div class="kb-oq${O.r[i]==null?"":O.r[i]===1?" s-ok":O.r[i]===0?" s-bad":" s-mid"}"><span class="kb-on">${String(i+1).padStart(2,"0")}</span><div class="kb-ob"><b>${esc(q)}</b><details><summary>Ответ</summary><p>${esc(a)} <small>${esc(r)}</small></p></details></div><div class="kb-sub kb-ograde" role="group" aria-label="Оценка ответа ${i+1}">${[[1,"Верно"],[0.5,"Частично"],[0,"Нет"]].map(([v,t])=>`<button type="button" data-obzq="${i}" data-obzv="${v}" aria-pressed="${O.r[i]===v}">${t}</button>`).join("")}</div></div>`).join("")}</div>
+<div class="kb-obz-res${S.req&&S.pass?" ok2":!S.req||S.fin?" bad2":""}"><span class="kb-lbl">Итог · ${S.done}/10 отвечено</span><b>${f(S.sc)} / 10</b><span>${verdict}</span></div>
+<div class="ex-acts"><button type="button" class="btn pri" data-obzcopy="1">Скопировать отчёт в дело</button><button type="button" class="btn" data-obzreset="1">Новый кандидат</button></div>
+<pre class="kb-obz-pre">${esc(kObzPlain())}</pre>`; }
 function kDraw(){
   const el=$("kbMain"); if(!el) return;
   if(!KS.me){ const lg=KS.showLogin||KS.key||KS.err||KS.busy; el.innerHTML=(lg?kLoginHtml():"")+kPublicHtml(); if(lg&&KS.showLogin&&!KS.key){ const k=$("kbKey"); if(k) k.focus(); } return; }
-  const LBL={new:KS.exam?"Идёт экзамен":"Новый экзамен",find:"Поиск экзаменов",list:"Последние",qs:"Поиск вопроса",stats:"Слабые темы",log:"Журнал входов",met:"Методика и регламент",kurs:"Курсы",ev:"Мероприятия"};
-  const GR=KS.me.lector?[["Мероприятия",["ev"]],["Курсы",["kurs"]],["Аналитика",["stats"]]]:[["Экзамен",["new","find","list","qs"]],["Курсы",["kurs"]],["Мероприятия",["ev"]],["Аналитика",["stats","log"]],["Справка",["met"]]];
+  const LBL={new:KS.exam?"Идёт экзамен":"Новый экзамен",find:"Поиск экзаменов",list:"Последние",qs:"Поиск вопроса",stats:"Слабые темы",log:"Журнал входов",met:"Методика и регламент",kurs:"Курсы",ev:"Мероприятия",obz:"Обзвон"};
+  const GR=KS.me.lector?[["Мероприятия",["ev"]],["Курсы",["kurs"]],["Обзвон",["obz"]],["Аналитика",["stats"]]]:[["Экзамен",["new","find","list","qs"]],["Обзвон",["obz"]],["Курсы",["kurs"]],["Мероприятия",["ev"]],["Аналитика",["stats","log"]],["Справка",["met"]]];
   const tabs=[].concat(...GR.map(g=>g[1])).map(k=>[k,LBL[k]]);
   if(!tabs.some(([k])=>k===KS.tab)) KS.tab=tabs[0][0];
   let body="";
@@ -5135,6 +5194,7 @@ function kDraw(){
   if(KS.tab==="ev") body=kLectHtml();
   if(KS.tab==="course") body=kCourseHtml();
   if(KS.tab==="kurs") body=kKursHtml();
+  if(KS.tab==="obz") body=kObzHtml();
   if(KS.tab==="stats") body=KS.stats?kStatsHtml(KS.stats):`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
   if(KS.tab==="log") body=KS.log?`<div class="kb-tbl">${KS.log.map(x=>`<div class="kb-tr"><span><b>${esc(x.name)}</b> · ${esc(x.what)}<small>${esc(kD(x.time))}${x.role&&x.role!=="—"?" · "+esc(x.role):""}${x.details?" · "+esc(x.details):""}</small></span></div>`).join("")||`<p class="fc-empty">Записей нет</p>`}</div>`:`<p class="fc-empty">${KS.err?esc(KS.err):"Загружаю…"}</p>`;
   el.innerHTML=`<div class="kb-me">${(()=>{ const P=kSplitName(KS.me.name); return `<span class="kb-me-l"><span class="kb-lbl">Кабинет · ${esc(KS.me.lector?"Инструктор":KS.me.role)}</span><b>${esc(P.name)}</b>${P.st?`<span class="kb-me-st">${esc(P.st)}</span>`:""}</span>`; })()}<button type="button" class="kb-out" data-kblogout="1">Выйти</button></div>
@@ -5162,6 +5222,7 @@ async function kOpen(code){
 function renderKab(){
   const el=$("vKab");
   if(!el.dataset.ready){ el.dataset.ready="1";
+    el.addEventListener("input",e=>{ if(e.target.id==="kbObzWho"){ const O=kObzS(); O.who=e.target.value; kObzSave(); const p=el.querySelector(".kb-obz-pre"); if(p) p.textContent=kObzPlain(); } });
     el.innerHTML=`<h2 class="htitle">Академия Управления «М»</h2><p class="lead">Для курсантов — как пройти Академию и кто принимает экзамен. Для экзаменаторов и инструкторов — кабинет по личному ключу.</p><div id="kbMain"></div>`;
     el.addEventListener("submit",async e=>{ e.preventDefault(); if(KS.busy) return;
       if(e.target.id==="kbLogin"){ const k=$("kbKey").value.trim().toUpperCase(); if(!k) return; KS.key=k; KS.busy=true; KS.err=""; kDraw();
@@ -5196,6 +5257,10 @@ function renderKab(){
     el.addEventListener("click",async e=>{
       const g=x=>e.target.closest(x);
       if(g("[data-kblogout]")){ kLogout(); return; }
+      if(g("[data-obzq]")){ const b=g("[data-obzq]"), O=kObzS(), i=+b.dataset.obzq, v=+b.dataset.obzv; O.r[i]=O.r[i]===v?null:v; kObzSave(); const y=window.scrollY; kDraw(); window.scrollTo({top:y}); return; }
+      if(g("[data-obzreq]")){ const c=g("[data-obzreq]"), O=kObzS(); O.req[+c.dataset.obzreq]=c.checked; kObzSave(); const y=window.scrollY; kDraw(); window.scrollTo({top:y}); return; }
+      if(g("[data-obzcopy]")){ copyText(kObzPlain()); return; }
+      if(g("[data-obzreset]")){ if(!confirm("Очистить обзвон и начать с новым кандидатом?")) return; KS.O={who:"",req:OBZ_REQ.map(()=>false),r:OBZQ.map(()=>null)}; kObzSave(); kDraw(); window.scrollTo({top:0}); return; }
       if(g("[data-kblogin]")){ KS.showLogin=true; kDraw(); window.scrollTo({top:0}); return; }
       if(g("[data-lreload]")){ KS.L.topics=null; kDraw(); kLectLoad(); return; }
       const kv=g("[data-kv]"); if(kv){ KS.K.view=kv.dataset.kv; KS.K.msg=""; KS.K.err=""; kDraw(); if((KS.K.view==="cad"||KS.K.view==="rat")&&!KS.K.roster){ try{ KS.K.roster=await kApi("kroster"); }catch(err){ KS.K.err=err.message; } kDraw(); } return; }
