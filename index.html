@@ -67,122 +67,165 @@
 .kb-pbar i.s-ok{background:var(--ok)}
 .kb-pbar i.s-bad{background:var(--stop)}
 .kb-pbar i.s-kr{margin-left:5px}
-/* ===== дизайн v2: страница Академии ===== */
-#vKab{--r:2px}
-#vKab .kb-obz-crit{border:1px solid var(--line);border-left:2px solid var(--accent);background:var(--surface);padding:12px 14px;margin:10px 0 14px}
-#vKab .kb-obz-crit ol{margin:6px 0 0;padding-left:20px}
-#vKab .kb-obz-crit li{margin:3px 0}
-#vKab .kb-obz-req{display:grid;gap:0;border:1px solid var(--line);background:var(--surface);margin:0 0 14px}
-#vKab .kb-obz-req label{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-top:1px solid var(--line);cursor:pointer;font-weight:500}
-#vKab .kb-obz-req label:first-child{border-top:0}
-#vKab .kb-obz-req input{margin-top:3px;accent-color:var(--accent)}
-#vKab .kb-obz{border:1px solid var(--line);background:var(--surface);margin:0 0 14px}
-#vKab .kb-oq{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:4px 12px;align-items:start;padding:12px 14px;border-top:1px solid var(--line);border-left:2px solid transparent}
-#vKab .kb-oq:first-child{border-top:0}
-#vKab .kb-oq.s-ok{border-left-color:var(--ok,#3fb950)}
-#vKab .kb-oq.s-mid{border-left-color:#d29922}
-#vKab .kb-oq.s-bad{border-left-color:var(--bad,#f85149)}
-#vKab .kb-on{font-family:var(--mono);color:var(--muted);font-size:13px;padding-top:2px}
-#vKab .kb-ob b{display:block;line-height:1.35}
-#vKab .kb-ob details{margin-top:4px}
-#vKab .kb-ob summary{cursor:pointer;color:var(--accent);font-size:13px;font-weight:600}
-#vKab .kb-ob p{margin:6px 0 0;color:var(--ink);font-size:14px}
-#vKab .kb-ob small{display:block;color:var(--muted);font-family:var(--mono);font-size:11.5px;margin-top:3px}
-#vKab .kb-ograde{margin:0}
-#vKab .kb-ograde button{padding:6px 10px;font-size:13px}
-#vKab .kb-obz-res{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;border:1px solid var(--line);border-left:2px solid var(--line);background:var(--surface);padding:12px 14px;margin:0 0 12px}
-#vKab .kb-obz-res b{font-family:var(--mono);font-size:26px}
-#vKab .kb-obz-res.ok2{border-left-color:var(--ok,#3fb950)}
-#vKab .kb-obz-res.bad2{border-left-color:var(--bad,#f85149)}
-#vKab .kb-obz-res .kb-lbl{width:100%}
-#vKab .kb-obz-pre{font-family:var(--mono);font-size:12.5px;white-space:pre-wrap;border:1px solid var(--line);background:var(--surface);padding:10px 14px;margin:10px 0 0;color:var(--muted)}
-@media (max-width:640px){#vKab .kb-oq{grid-template-columns:28px minmax(0,1fr)}#vKab .kb-ograde{grid-column:1/-1;display:flex}#vKab .kb-ograde button{flex:1 1 0}}
 
-#vKab .sk-box{border-radius:var(--r);border-top-width:1px;border-left:2px solid var(--accent)}
-#vKab .btn{border-radius:var(--r);font-weight:700}
-#vKab .chips button{border-radius:var(--r)}
-#vKab .kb-eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 0}
-#vKab .kb-kpis{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);background:var(--surface);margin:12px 0 14px}
-#vKab .kb-kpi{padding:14px 16px;border-left:1px solid var(--line);min-width:0}
-#vKab .kb-kpi:first-child{border-left:0}
-#vKab .kb-kpi b{display:block;font-family:var(--mono);font-size:30px;line-height:1;font-weight:700;color:var(--ink);letter-spacing:-.02em}
-#vKab .kb-kpi span{display:block;margin-top:6px;font-size:11.5px;line-height:1.3;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-#vKab .kb-hero-acts{margin:0 0 6px}
-#vKab .kb-hero-acts{display:grid;grid-template-columns:repeat(2,minmax(0,max-content));gap:10px}
-#vKab .kb-hero-acts .btn{padding:11px 18px;flex:none;width:100%}
-#vKab .kb-h{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:28px 0 12px}
-#vKab .kb-h::after{content:"";flex:1;height:1px;background:var(--line)}
-#vKab .kb-path{display:grid;grid-template-columns:repeat(4,1fr);gap:0 18px;padding:0;margin:0}
-#vKab .kb-step{position:relative;background:none;border:0;border-top:2px solid var(--line);border-radius:0;padding:14px 0 4px;display:grid;gap:6px;align-content:start}
-#vKab .kb-step::before{content:"";position:absolute;top:-2px;left:0;width:40px;height:2px;background:var(--accent)}
-#vKab .kb-stepn{width:auto;height:auto;display:block;background:none;border-radius:0;color:var(--accent);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em}
-#vKab .kb-step b{font-size:16px}
-#vKab .kb-step small{font-size:13.5px;line-height:1.5;color:var(--muted)}
-#vKab .kb-award{display:flex;gap:12px;align-items:baseline;margin:20px 0 0;padding:12px 14px;border:1px solid var(--line);border-left:2px solid var(--sign);background:var(--surface);font-size:14.5px}
-#vKab .kb-award span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sign);flex:none}
-#vKab .kb-roster{border:1px solid var(--line);background:var(--surface)}
-#vKab .kb-rrow{display:grid;grid-template-columns:170px minmax(0,1fr) auto;gap:14px;align-items:center;padding:11px 16px;border-top:1px solid var(--line)}
-#vKab .kb-rrow:first-child{border-top:0}
-#vKab .kb-rhead{padding-top:9px;padding-bottom:9px}
-#vKab .kb-rhead span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-#vKab .kb-rrole{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-#vKab .kb-rrole.ex{color:var(--ink)}
-#vKab .kb-rrole.ex::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);margin-right:8px;vertical-align:1px}
-#vKab .kb-rname{min-width:0}
-#vKab .kb-rname b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#vKab .kb-rname small{display:block;font-size:12.5px;color:var(--muted)}
-#vKab .kb-rst{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink)}
-#vKab .kb-login{margin-top:14px}
-#vKab .kb-me{display:flex;justify-content:space-between;align-items:center;gap:12px;background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:12px 0;margin:10px 0 0}
-#vKab .kb-me-l{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;min-width:0}
-#vKab .kb-lbl{flex:1 0 100%;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-#vKab .kb-me-l b{font-size:17px}
-#vKab .kb-me-st{font-family:var(--mono);font-size:13px;color:var(--muted)}
-#vKab .kb-out{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:none;color:var(--ink);padding:7px 14px;border-radius:var(--r);cursor:pointer;flex:none}
-#vKab .kb-seg{display:flex;flex-wrap:nowrap;gap:0;overflow-x:auto;padding:0;margin:0 0 14px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none}
-#vKab .kb-seg button{flex:0 0 auto;border:0;border-bottom:2px solid transparent;border-radius:0;margin-bottom:-1px;background:none;color:var(--muted);font-size:14.5px;font-weight:700;padding:13px 16px 11px}
-#vKab .kb-seg button:hover{color:var(--ink)}
-#vKab .kb-seg button[aria-pressed="true"]{background:none;color:var(--ink);border-bottom-color:var(--accent)}
-#vKab .kb-sub{display:inline-flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:0 0 14px;max-width:100%}
-#vKab .kb-sub button{margin:0;border:0;border-right:1px solid var(--line);border-radius:0;background:var(--surface);color:var(--muted);font-size:13.5px;font-weight:600;padding:8px 14px}
-#vKab .kb-sub button:last-child{border-right:0}
-#vKab .kb-sub button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-#vKab .kb-lgrid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);background:var(--surface);margin:0 0 14px}
-#vKab .kb-lcard{display:flex;align-items:baseline;gap:12px;border:0;border-top:1px solid var(--line);border-radius:0;background:none;box-shadow:none;padding:12px 16px;font-size:14.5px}
-#vKab .kb-lcard:nth-child(-n+2){border-top:0}
-#vKab .kb-lcard:nth-child(even){border-left:1px solid var(--line)}
-#vKab .kb-lcard:hover{background:color-mix(in srgb,var(--accent) 7%,transparent)}
-#vKab .kb-lcard[aria-pressed="true"]{background:color-mix(in srgb,var(--accent) 14%,transparent);box-shadow:inset 2px 0 0 var(--accent)}
-#vKab .kb-ln{width:auto;height:auto;display:inline;background:none;border:0;border-radius:0;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--muted)}
-#vKab .kb-lcard[aria-pressed="true"] .kb-ln{background:none;color:var(--accent)}
-#vKab .kb-fold{border-radius:var(--r)}
-#vKab .kb-fold>summary{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
-#vKab .kb-pbar i{border-radius:0;height:5px;padding:0;border:0}
-#vKab .kb-me{flex-wrap:nowrap}
-#vKab .kb-tbl{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);gap:0;display:grid}
-#vKab .kb-tbl .kb-tr{border:0;border-top:1px solid var(--line);border-radius:0;background:none;padding:11px 14px;margin:0}
-#vKab .kb-tbl .kb-tr:first-child{border-top:0}
-#vKab .sk-box .kb-tbl{margin-top:4px}
+/* ===== тренажёр: строгий вид ===== */
+#vFsbExam .tile,#vFsbExam .ex-card,#vFsbExam .ex-ctrl select,#vFsbExam details.exrow,#vFsbExam .sk-box{border-radius:var(--r)}
+#vFsbExam .tiles{gap:0;border:1px solid var(--line);background:var(--surface);grid-template-columns:1fr}
+#vFsbExam .tile{border:0;border-top:1px solid var(--line);border-radius:0;background:none;min-height:0;padding:14px 16px}
+#vFsbExam .tile:first-child{border-top:0}
+#vFsbExam .tile:hover{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+#vFsbExam .tile.hot{background:none;box-shadow:inset 2px 0 0 var(--accent)}
+#vFsbExam .tile .ref{border-radius:var(--r)}
+#vFsbExam .tr-lead{color:var(--muted);margin:0 0 12px;line-height:1.5}
+#vFsbExam .tr-cap{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+#vFsbExam .tr-note{border-left:2px solid var(--line);padding:2px 0 2px 12px;color:var(--muted);font-size:14px;line-height:1.5;margin:12px 0}
+#vFsbExam [data-extab][hidden]{display:none}
+#vFsbExam .ex-top{margin-top:0}
+#vFsbExam .ex-prog .bar,#vFsbExam .ex-prog .bar i{border-radius:0;height:4px}
+#vFsbExam .ex-prog .bar{border:0}
+#vFsbExam .ex-prog small{font-family:var(--mono);font-size:12px;letter-spacing:.04em}
+#vFsbExam .ex-card{border-top-width:2px}
+#vFsbExam .ex-card .q{font-size:19px;line-height:1.35}
+#vFsbExam .ex-card .meta .tp{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase}
+#vFsbExam .tr-find{display:flex;gap:8px;margin:0 0 10px}
+#vFsbExam .tr-find input{flex:1;min-width:0;font:inherit;font-size:15px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--ink)}
+#vFsbExam .tr-find input:focus{outline:2px solid var(--accent);outline-offset:-1px}
+#vFsbExam .ex-grps{border:1px solid var(--line);background:var(--surface)}
+#vFsbExam details.ex-grp{border-top:1px solid var(--line)}
+#vFsbExam details.ex-grp:first-child{border-top:0}
+#vFsbExam details.ex-grp>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto 16px;gap:12px;align-items:center;padding:13px 16px;font-weight:700}
+#vFsbExam details.ex-grp>summary::-webkit-details-marker{display:none}
+#vFsbExam details.ex-grp>summary:hover{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+#vFsbExam details.ex-grp[open]>summary{box-shadow:inset 2px 0 0 var(--accent)}
+#vFsbExam details.ex-grp>summary .n{font-family:var(--mono);font-size:12.5px;color:var(--muted);font-weight:600}
+#vFsbExam details.ex-grp>summary .n.full{color:var(--ok)}
+#vFsbExam details.ex-grp>summary svg{transition:transform .15s}
+#vFsbExam details.ex-grp[open]>summary svg{transform:rotate(90deg)}
+#vFsbExam .ex-grpb{padding:0 12px 12px}
+#vFsbExam details.exrow{margin-top:0;border:0;border-top:1px solid var(--line);border-radius:0;background:none}
+#vFsbExam details.exrow>summary{font-weight:500;padding:11px 4px}
+#vFsbExam .tr-empty{padding:14px 16px;color:var(--muted)}
+#vFsbExam #exLecBox:not(:empty){margin-top:14px}
+#vFsbExam .kb-sub .mkchip{border:0;border-right:0;box-shadow:none}
+#vFsbExam .kb-sub .mkchip b:empty{display:none}
+@media (min-width:900px){#vFsbExam .tiles{grid-template-columns:repeat(3,1fr)}#vFsbExam .tile{border-top:0;border-left:1px solid var(--line)}#vFsbExam .tile:first-child{border-left:0}}
+
+/* ===== дизайн v2: страница Академии ===== */
+:is(#vKab,#vFsbExam){--r:2px}
+:is(#vKab,#vFsbExam) .kb-obz-crit{border:1px solid var(--line);border-left:2px solid var(--accent);background:var(--surface);padding:12px 14px;margin:10px 0 14px}
+:is(#vKab,#vFsbExam) .kb-obz-crit ol{margin:6px 0 0;padding-left:20px}
+:is(#vKab,#vFsbExam) .kb-obz-crit li{margin:3px 0}
+:is(#vKab,#vFsbExam) .kb-obz-req{display:grid;gap:0;border:1px solid var(--line);background:var(--surface);margin:0 0 14px}
+:is(#vKab,#vFsbExam) .kb-obz-req label{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-top:1px solid var(--line);cursor:pointer;font-weight:500}
+:is(#vKab,#vFsbExam) .kb-obz-req label:first-child{border-top:0}
+:is(#vKab,#vFsbExam) .kb-obz-req input{margin-top:3px;accent-color:var(--accent)}
+:is(#vKab,#vFsbExam) .kb-obz{border:1px solid var(--line);background:var(--surface);margin:0 0 14px}
+:is(#vKab,#vFsbExam) .kb-oq{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:4px 12px;align-items:start;padding:12px 14px;border-top:1px solid var(--line);border-left:2px solid transparent}
+:is(#vKab,#vFsbExam) .kb-oq:first-child{border-top:0}
+:is(#vKab,#vFsbExam) .kb-oq.s-ok{border-left-color:var(--ok,#3fb950)}
+:is(#vKab,#vFsbExam) .kb-oq.s-mid{border-left-color:#d29922}
+:is(#vKab,#vFsbExam) .kb-oq.s-bad{border-left-color:var(--bad,#f85149)}
+:is(#vKab,#vFsbExam) .kb-on{font-family:var(--mono);color:var(--muted);font-size:13px;padding-top:2px}
+:is(#vKab,#vFsbExam) .kb-ob b{display:block;line-height:1.35}
+:is(#vKab,#vFsbExam) .kb-ob details{margin-top:4px}
+:is(#vKab,#vFsbExam) .kb-ob summary{cursor:pointer;color:var(--accent);font-size:13px;font-weight:600}
+:is(#vKab,#vFsbExam) .kb-ob p{margin:6px 0 0;color:var(--ink);font-size:14px}
+:is(#vKab,#vFsbExam) .kb-ob small{display:block;color:var(--muted);font-family:var(--mono);font-size:11.5px;margin-top:3px}
+:is(#vKab,#vFsbExam) .kb-ograde{margin:0}
+:is(#vKab,#vFsbExam) .kb-ograde button{padding:6px 10px;font-size:13px}
+:is(#vKab,#vFsbExam) .kb-obz-res{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;border:1px solid var(--line);border-left:2px solid var(--line);background:var(--surface);padding:12px 14px;margin:0 0 12px}
+:is(#vKab,#vFsbExam) .kb-obz-res b{font-family:var(--mono);font-size:26px}
+:is(#vKab,#vFsbExam) .kb-obz-res.ok2{border-left-color:var(--ok,#3fb950)}
+:is(#vKab,#vFsbExam) .kb-obz-res.bad2{border-left-color:var(--bad,#f85149)}
+:is(#vKab,#vFsbExam) .kb-obz-res .kb-lbl{width:100%}
+:is(#vKab,#vFsbExam) .kb-obz-pre{font-family:var(--mono);font-size:12.5px;white-space:pre-wrap;border:1px solid var(--line);background:var(--surface);padding:10px 14px;margin:10px 0 0;color:var(--muted)}
+@media (max-width:640px){:is(#vKab,#vFsbExam) .kb-oq{grid-template-columns:28px minmax(0,1fr)}:is(#vKab,#vFsbExam) .kb-ograde{grid-column:1/-1;display:flex}:is(#vKab,#vFsbExam) .kb-ograde button{flex:1 1 0}}
+
+:is(#vKab,#vFsbExam) .sk-box{border-radius:var(--r);border-top-width:1px;border-left:2px solid var(--accent)}
+:is(#vKab,#vFsbExam) .btn{border-radius:var(--r);font-weight:700}
+:is(#vKab,#vFsbExam) .chips button{border-radius:var(--r)}
+:is(#vKab,#vFsbExam) .kb-eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 0}
+:is(#vKab,#vFsbExam) .kb-kpis{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);background:var(--surface);margin:12px 0 14px}
+:is(#vKab,#vFsbExam) .kb-kpi{padding:14px 16px;border-left:1px solid var(--line);min-width:0}
+:is(#vKab,#vFsbExam) .kb-kpi:first-child{border-left:0}
+:is(#vKab,#vFsbExam) .kb-kpi b{display:block;font-family:var(--mono);font-size:30px;line-height:1;font-weight:700;color:var(--ink);letter-spacing:-.02em}
+:is(#vKab,#vFsbExam) .kb-kpi span{display:block;margin-top:6px;font-size:11.5px;line-height:1.3;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+:is(#vKab,#vFsbExam) .kb-hero-acts{margin:0 0 6px}
+:is(#vKab,#vFsbExam) .kb-hero-acts{display:grid;grid-template-columns:repeat(2,minmax(0,max-content));gap:10px}
+:is(#vKab,#vFsbExam) .kb-hero-acts .btn{padding:11px 18px;flex:none;width:100%}
+:is(#vKab,#vFsbExam) .kb-h{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:28px 0 12px}
+:is(#vKab,#vFsbExam) .kb-h::after{content:"";flex:1;height:1px;background:var(--line)}
+:is(#vKab,#vFsbExam) .kb-path{display:grid;grid-template-columns:repeat(4,1fr);gap:0 18px;padding:0;margin:0}
+:is(#vKab,#vFsbExam) .kb-step{position:relative;background:none;border:0;border-top:2px solid var(--line);border-radius:0;padding:14px 0 4px;display:grid;gap:6px;align-content:start}
+:is(#vKab,#vFsbExam) .kb-step::before{content:"";position:absolute;top:-2px;left:0;width:40px;height:2px;background:var(--accent)}
+:is(#vKab,#vFsbExam) .kb-stepn{width:auto;height:auto;display:block;background:none;border-radius:0;color:var(--accent);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em}
+:is(#vKab,#vFsbExam) .kb-step b{font-size:16px}
+:is(#vKab,#vFsbExam) .kb-step small{font-size:13.5px;line-height:1.5;color:var(--muted)}
+:is(#vKab,#vFsbExam) .kb-award{display:flex;gap:12px;align-items:baseline;margin:20px 0 0;padding:12px 14px;border:1px solid var(--line);border-left:2px solid var(--sign);background:var(--surface);font-size:14.5px}
+:is(#vKab,#vFsbExam) .kb-award span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sign);flex:none}
+:is(#vKab,#vFsbExam) .kb-roster{border:1px solid var(--line);background:var(--surface)}
+:is(#vKab,#vFsbExam) .kb-rrow{display:grid;grid-template-columns:170px minmax(0,1fr) auto;gap:14px;align-items:center;padding:11px 16px;border-top:1px solid var(--line)}
+:is(#vKab,#vFsbExam) .kb-rrow:first-child{border-top:0}
+:is(#vKab,#vFsbExam) .kb-rhead{padding-top:9px;padding-bottom:9px}
+:is(#vKab,#vFsbExam) .kb-rhead span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+:is(#vKab,#vFsbExam) .kb-rrole{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+:is(#vKab,#vFsbExam) .kb-rrole.ex{color:var(--ink)}
+:is(#vKab,#vFsbExam) .kb-rrole.ex::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);margin-right:8px;vertical-align:1px}
+:is(#vKab,#vFsbExam) .kb-rname{min-width:0}
+:is(#vKab,#vFsbExam) .kb-rname b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+:is(#vKab,#vFsbExam) .kb-rname small{display:block;font-size:12.5px;color:var(--muted)}
+:is(#vKab,#vFsbExam) .kb-rst{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink)}
+:is(#vKab,#vFsbExam) .kb-login{margin-top:14px}
+:is(#vKab,#vFsbExam) .kb-me{display:flex;justify-content:space-between;align-items:center;gap:12px;background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:12px 0;margin:10px 0 0}
+:is(#vKab,#vFsbExam) .kb-me-l{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;min-width:0}
+:is(#vKab,#vFsbExam) .kb-lbl{flex:1 0 100%;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+:is(#vKab,#vFsbExam) .kb-me-l b{font-size:17px}
+:is(#vKab,#vFsbExam) .kb-me-st{font-family:var(--mono);font-size:13px;color:var(--muted)}
+:is(#vKab,#vFsbExam) .kb-out{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:none;color:var(--ink);padding:7px 14px;border-radius:var(--r);cursor:pointer;flex:none}
+:is(#vKab,#vFsbExam) .kb-seg{display:flex;flex-wrap:nowrap;gap:0;overflow-x:auto;padding:0;margin:0 0 14px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none}
+:is(#vKab,#vFsbExam) .kb-seg button{flex:0 0 auto;border:0;border-bottom:2px solid transparent;border-radius:0;margin-bottom:-1px;background:none;color:var(--muted);font-size:14.5px;font-weight:700;padding:13px 16px 11px}
+:is(#vKab,#vFsbExam) .kb-seg button:hover{color:var(--ink)}
+:is(#vKab,#vFsbExam) .kb-seg button[aria-pressed="true"]{background:none;color:var(--ink);border-bottom-color:var(--accent)}
+:is(#vKab,#vFsbExam) .kb-sub{display:inline-flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:0 0 14px;max-width:100%}
+:is(#vKab,#vFsbExam) .kb-sub button{margin:0;border:0;border-right:1px solid var(--line);border-radius:0;background:var(--surface);color:var(--muted);font-size:13.5px;font-weight:600;padding:8px 14px}
+:is(#vKab,#vFsbExam) .kb-sub button:last-child{border-right:0}
+:is(#vKab,#vFsbExam) .kb-sub button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+:is(#vKab,#vFsbExam) .kb-lgrid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);background:var(--surface);margin:0 0 14px}
+:is(#vKab,#vFsbExam) .kb-lcard{display:flex;align-items:baseline;gap:12px;border:0;border-top:1px solid var(--line);border-radius:0;background:none;box-shadow:none;padding:12px 16px;font-size:14.5px}
+:is(#vKab,#vFsbExam) .kb-lcard:nth-child(-n+2){border-top:0}
+:is(#vKab,#vFsbExam) .kb-lcard:nth-child(even){border-left:1px solid var(--line)}
+:is(#vKab,#vFsbExam) .kb-lcard:hover{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+:is(#vKab,#vFsbExam) .kb-lcard[aria-pressed="true"]{background:color-mix(in srgb,var(--accent) 14%,transparent);box-shadow:inset 2px 0 0 var(--accent)}
+:is(#vKab,#vFsbExam) .kb-ln{width:auto;height:auto;display:inline;background:none;border:0;border-radius:0;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--muted)}
+:is(#vKab,#vFsbExam) .kb-lcard[aria-pressed="true"] .kb-ln{background:none;color:var(--accent)}
+:is(#vKab,#vFsbExam) .kb-fold{border-radius:var(--r)}
+:is(#vKab,#vFsbExam) .kb-fold>summary{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+:is(#vKab,#vFsbExam) .kb-pbar i{border-radius:0;height:5px;padding:0;border:0}
+:is(#vKab,#vFsbExam) .kb-me{flex-wrap:nowrap}
+:is(#vKab,#vFsbExam) .kb-tbl{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);gap:0;display:grid}
+:is(#vKab,#vFsbExam) .kb-tbl .kb-tr{border:0;border-top:1px solid var(--line);border-radius:0;background:none;padding:11px 14px;margin:0}
+:is(#vKab,#vFsbExam) .kb-tbl .kb-tr:first-child{border-top:0}
+:is(#vKab,#vFsbExam) .sk-box .kb-tbl{margin-top:4px}
 @media (max-width:640px){
-#vKab .kb-kpis{grid-template-columns:1fr 1fr}
-#vKab .kb-kpi:nth-child(3){border-left:0}
-#vKab .kb-kpi:nth-child(n+3){border-top:1px solid var(--line)}
-#vKab .kb-kpi b{font-size:26px}
-#vKab .kb-hero-acts{grid-template-columns:1fr 1fr}
-#vKab .kb-path{grid-template-columns:1fr;gap:0;border-left:2px solid var(--line);padding-left:16px}
-#vKab .kb-step{border-top:0;padding:4px 0 16px}
-#vKab .kb-step::before{top:4px;left:-18px;width:2px;height:22px}
-#vKab .kb-rrow{grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:11px 14px}
-#vKab .kb-rrole{grid-column:1/-1}
-#vKab .kb-rhead{display:none}
-#vKab .kb-roster .kb-rrow:nth-child(2){border-top:0}
-#vKab .kb-seg{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
-#vKab .kb-seg button{flex:0 0 auto;font-size:14px;padding:12px 12px 10px}
-#vKab .kb-sub{display:flex}
-#vKab .kb-sub button{flex:1 1 auto;border-bottom:1px solid var(--line)}
-#vKab .kb-lgrid{grid-template-columns:1fr}
-#vKab .kb-lcard:nth-child(2){border-top:1px solid var(--line)}
-#vKab .kb-lcard:nth-child(even){border-left:0}
+:is(#vKab,#vFsbExam) .kb-kpis{grid-template-columns:1fr 1fr}
+:is(#vKab,#vFsbExam) .kb-kpi:nth-child(3){border-left:0}
+:is(#vKab,#vFsbExam) .kb-kpi:nth-child(n+3){border-top:1px solid var(--line)}
+:is(#vKab,#vFsbExam) .kb-kpi b{font-size:26px}
+:is(#vKab,#vFsbExam) .kb-hero-acts{grid-template-columns:1fr 1fr}
+:is(#vKab,#vFsbExam) .kb-path{grid-template-columns:1fr;gap:0;border-left:2px solid var(--line);padding-left:16px}
+:is(#vKab,#vFsbExam) .kb-step{border-top:0;padding:4px 0 16px}
+:is(#vKab,#vFsbExam) .kb-step::before{top:4px;left:-18px;width:2px;height:22px}
+:is(#vKab,#vFsbExam) .kb-rrow{grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:11px 14px}
+:is(#vKab,#vFsbExam) .kb-rrole{grid-column:1/-1}
+:is(#vKab,#vFsbExam) .kb-rhead{display:none}
+:is(#vKab,#vFsbExam) .kb-roster .kb-rrow:nth-child(2){border-top:0}
+:is(#vKab,#vFsbExam) .kb-seg{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+:is(#vKab,#vFsbExam) .kb-seg button{flex:0 0 auto;font-size:14px;padding:12px 12px 10px}
+:is(#vKab,#vFsbExam) .kb-sub{display:flex}
+:is(#vKab,#vFsbExam) .kb-sub button{flex:1 1 auto;border-bottom:1px solid var(--line)}
+:is(#vKab,#vFsbExam) .kb-lgrid{grid-template-columns:1fr}
+:is(#vKab,#vFsbExam) .kb-lcard:nth-child(2){border-top:1px solid var(--line)}
+:is(#vKab,#vFsbExam) .kb-lcard:nth-child(even){border-left:0}
 }
 
 @media (max-width:560px){.kb-seg{flex-wrap:wrap;overflow:visible}.kb-seg button{flex:1 1 30%;font-size:13.5px;padding:9px 6px}.kb-lgrid{grid-template-columns:1fr 1fr}.kb-lcard{font-size:13.5px;padding:9px 10px;gap:8px}.kb-ln{width:24px;height:24px}}
@@ -3444,7 +3487,7 @@ RES.addEventListener("click",e=>{
   else if(k==="r"){ const el=rowFor(Object.assign(document.createElement("span"),{textContent:(a==="uk"?"УК ":"")+n,className:a==="uk"?"art uk":"art"})); if(el) openRow(el); }
   else if(k==="s"){ if(a==="ART") location.href="govorit.html#"+encodeURIComponent(n); else if(a==="ALL") location.href="govorit.html"; else { const s=SAY.find(y=>y.id===a); if(s){ const done=()=>toast("Фраза скопирована"); try{navigator.clipboard.writeText(s.say).then(done,()=>location.href="govorit.html")}catch(e){location.href="govorit.html"} } } }
   else if(k==="l") openLaw(a,n);
-  else if(k==="d"){ nav(a); if(n) setTimeout(()=>{ const t=$(n); if(!t) return; if(t.tagName==="DETAILS") t.open=true; t.scrollIntoView({behavior:"smooth",block:"start"}); },60); }
+  else if(k==="d"){ nav(a); if(n) setTimeout(()=>{ const t=$(n); if(!t) return; if(typeof exReveal==="function") exReveal(t); if(t.tagName==="DETAILS") t.open=true; t.scrollIntoView({behavior:"smooth",block:"start"}); },60); }
   else if(k==="a") askAI(q);
 });
 document.addEventListener("click",e=>{ if(!e.target.closest(".gsearch")) closeResults(); });
@@ -4464,7 +4507,7 @@ ${nEx?`<div class="ex-acts" style="margin-top:10px"><button type="button" class=
 document.addEventListener("input",e=>{ if(e.target.id==="mkq"){ MKF.q=e.target.value; renderMarks(); } });
 document.addEventListener("click",e=>{
   const f=e.target.closest("[data-mkf]"); if(f){ MKF.kind=f.dataset.mkf; renderMarks(); return; }
-  const o=e.target.closest("[data-mkopen]"); if(o){ const id=o.dataset.mkopen.split("|")[1]; nav("fsbexam"); setTimeout(()=>{ const d=document.getElementById("ex-"+id); if(d){ d.open=true; d.scrollIntoView({behavior:"smooth",block:"start"}); } },120); return; }
+  const o=e.target.closest("[data-mkopen]"); if(o){ const id=o.dataset.mkopen.split("|")[1]; nav("fsbexam"); setTimeout(()=>{ const d=document.getElementById("ex-"+id); if(d){ exReveal(d); d.open=true; d.scrollIntoView({behavior:"smooth",block:"start"}); } },120); return; }
   if(e.target.closest("[data-mkdrill]")){ EX.topic="marks"; EXS.mode="cards"; EXS.i=0; EXS.open=false; EXS.test=null; exSave(); nav("fsbexam"); setTimeout(()=>{ exDraw(); const m=$("exMain"); if(m) m.scrollIntoView({block:"start"}); },80); }
 });
 
@@ -4563,6 +4606,7 @@ ${open?`<p class="ans">${esc(c.a)}<small>${refBtns(c.ref)}</small></p>`:""}
 function exDraw(){
   const el=$("vFsbExam"); if(!el.dataset.ready) return;
   const known=CARDS.filter(c=>EX.known[c.id]).length;
+  const kp=$("exKpis"); if(kp){ const mk=Object.keys(MARKS).filter(k=>k.startsWith("ex|")).length; kp.innerHTML=[[LECTURES.length,"лекций"],[CARDS.length,"вопросов"],[known,"знаю"],[(CARDS.length?Math.round(100*known/CARDS.length):0)+"%","пройдено"]].map(([b,s])=>`<div class="kb-kpi"><b>${b}</b><span>${s}</span></div>`).join(""); }
   $("exProg").innerHTML=`<div class="bar"><i style="width:${CARDS.length?Math.round(100*known/CARDS.length):0}%"></i></div><small>Знаю ${known} из ${CARDS.length} вопросов</small>`;
   el.querySelectorAll("[data-exmode]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.exmode===EXS.mode)));
   $("exTopic").value=EX.topic; $("exOnly").checked=EX.only; const mkn=Object.keys(MARKS).filter(k=>k.startsWith("ex|")).length; $("exMkN").textContent=mkn||""; $("exMarksOpt").textContent=`⚑ Мои метки (${mkn})`;
@@ -4581,43 +4625,68 @@ function exDraw(){
   main.innerHTML=exCardHtml(pool[EXS.i],EXS.i+1,pool.length,EXS.open,false);
 }
 function exListHtml(){
-  let html="",tp="";
-  CARDS.forEach(c=>{ if(c.topic!==tp){ tp=c.topic; html+=`<h4 class="uk-ch">${esc(tp)}</h4>`; }
+  const G=[]; CARDS.forEach(c=>{ let g=G[G.length-1]; if(!g||g.t!==c.topic){ g={t:c.topic,cs:[]}; G.push(g); } g.cs.push(c); });
+  return `<div class="ex-grps">${G.map((g,i)=>{ const k=g.cs.filter(c=>EX.known[c.id]).length; return `<details class="ex-grp" id="exg-${i}"><summary><span>${esc(g.t)}</span><span class="n${k===g.cs.length?" full":""}">${k}/${g.cs.length}</span>${CHEV}</summary><div class="ex-grpb">${exRowsHtml(g.cs)}</div></details>`; }).join("")}</div>`;
+}
+function exRowsHtml(cs){
+  let html="";
+  cs.forEach(c=>{
     html+=`<details class="exrow" id="ex-${esc(c.id)}"><summary><span>${isMk("ex|"+c.id)?`<i class="mkdot" title="Метка">${FLAG}</i>`:""}${esc(c.q)}</span><span class="k">${EX.known[c.id]?"✓":""}</span>${CHEV}</summary><div class="b">${esc(c.a)}<small>${refBtns(c.ref)}</small><div class="ex-acts" style="margin-top:8px">${mkBtn("ex|"+c.id," inline")}</div><div class="mkwrap" data-mkwrap="ex|${esc(c.id)}">${mkNote("ex|"+c.id)}</div></div></details>`; });
   return html;
 }
+let EXTAB=ls("trener-tab")||"lec";
+function exTab(t,scroll){ const el=$("vFsbExam"); if(!el) return; if(!["lec","study","list","base"].includes(t)) t="lec"; EXTAB=t; ls("trener-tab",t);
+  el.querySelectorAll("section[data-extab]").forEach(s=>s.hidden=s.dataset.extab!==t);
+  el.querySelectorAll(".kb-seg [data-extab]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.extab===t)));
+  const sg=el.querySelector(".kb-seg"), sa=sg&&sg.querySelector('[aria-pressed="true"]'); if(sa&&sg.scrollWidth>sg.clientWidth) sg.scrollLeft=Math.max(0,sa.offsetLeft-(sg.clientWidth-sa.offsetWidth)/2);
+  if(scroll&&sg){ const y=sg.getBoundingClientRect().top; if(y<0||y>innerHeight*0.6) sg.scrollIntoView({block:"start"}); } }
+function exReveal(t){ const el=$("vFsbExam"); if(!t||!el||!el.contains(t)) return; const s=t.closest("section[data-extab]"); if(s) exTab(s.dataset.extab);
+  const q=$("exListQ"); if(q&&q.value){ q.value=""; exFilter(""); } const g=t.closest("details.ex-grp"); if(g) g.open=true; }
+function exFilter(q){ const body=$("exListBody"); if(!body) return; q=q.trim().toLowerCase(); let any=0;
+  body.querySelectorAll("details.ex-grp").forEach(g=>{ let n=0; g.querySelectorAll("details.exrow").forEach(r=>{ const ok=!q||r.textContent.toLowerCase().includes(q); r.hidden=!ok; if(ok) n++; });
+    g.hidden=!n; if(q){ if(n&&!g.open){ g.open=true; g.dataset.auto="1"; } } else if(g.dataset.auto){ g.open=false; delete g.dataset.auto; } any+=n; });
+  let e=body.querySelector(".tr-empty"); if(!any){ if(!e){ e=document.createElement("p"); e.className="tr-empty"; body.appendChild(e); } e.textContent="Ничего не найдено. Попробуйте другое слово или номер статьи."; } else if(e) e.remove(); }
 function renderFsbExam(){
   const el=$("vFsbExam");
   if(!el.dataset.ready){
     el.dataset.ready="1";
     el.innerHTML=`<h2 class="htitle">${APP==="train"?"Тренажёр Академии «М»":"Экзамен ФСБ"}</h2>
-<p class="lead">Подготовка к экзамену Академии Управления «М». Начните с базы: что такое ФСБ и Управление «М», затем вопросы с ответами, затем задачи. Отмечайте «Знаю» — прогресс сохраняется на этом устройстве.</p>
-<h3 class="uk-ch">Курсы Академии</h3>
-<p class="lead">Экзамен спрашивает только то, что разбирают на лекциях. Выберите лекцию: план, проверочные вопросы и все вопросы экзамена по ней с ответами.</p>
-<div class="ex-lecs">${[1,2].map(cn=>`<div class="ex-lecg"><p class="kb-code">${cn===1?"Курс I · 3 лекции":"Курс II · 5 лекций"}</p><div class="chips" role="group">${LECTURES.filter(L=>L.c===cn).map(L=>`<button type="button" data-lecgo="${L.n}">${L.n}. ${esc(L.t)}</button>`).join("")}</div></div>`).join("")}
-<p class="kb-note">После лекций — квалификационная работа: рапорт по ситуации с обоснованием каждого действия по статье и устные вопросы «а если…». Тренируйтесь на задачах ниже.</p></div>
+<p class="kb-eyebrow">ФСБ РО · Управление «М» · подготовка к экзамену Академии</p>
+<div class="kb-kpis" id="exKpis"></div>
+<nav class="kb-seg" aria-label="Разделы тренажёра">${[["lec","Лекции"],["study","Учить"],["list","Все вопросы"],["base","База"]].map(([k,t])=>`<button type="button" data-extab="${k}">${t}</button>`).join("")}</nav>
+<section data-extab="lec">
+<p class="tr-lead">Экзамен спрашивает только то, что разбирают на лекциях. Выберите лекцию — план, проверочные вопросы и все вопросы экзамена по ней с ответами.</p>
+${[1,2].map(cn=>`<p class="tr-cap">${cn===1?"Курс I · 3 лекции":"Курс II · 5 лекций"}</p><div class="kb-lgrid">${LECTURES.filter(L=>L.c===cn).map(L=>`<button type="button" class="kb-lcard" data-lecgo="${L.n}" aria-pressed="false"><span class="kb-ln">${String(L.n).padStart(2,"0")}</span><span class="kb-lt">${esc(L.t)}</span></button>`).join("")}</div>`).join("")}
+<p class="tr-note">После лекций — квалификационная работа: рапорт по ситуации с обоснованием каждого действия по статье и устные вопросы «а если…». Тренируйтесь на задачах в разделе «База».</p>
 <div id="exLecBox"></div>
-<h3 class="uk-ch">База знаний</h3>
-<div class="tiles ex-base" style="margin-top:8px">
- <button type="button" class="tile hot" data-go="fsbstruct"><span class="t">1. Что такое ФСБ и Управление «М»</span><span class="d">Структура ФСБ, подразделения, задачи Управления «М», руководство, обязанности и права сотрудника</span><span class="ref">ФЗ о ФСБ, устав</span></button>
- <button type="button" class="tile" data-exscroll="1"><span class="t">2. Вопросы с ответами — ${CARDS.length}</span><span class="d">По темам: статус и задачи ФСБ, Управление «М» и устав, задержание, неприкосновенность, дела и подследственность…</span><span class="ref">карточки, тест 20, список</span></button>
- <button type="button" class="tile" data-go="fsbacad"><span class="t">3. Задачи как на экзамене</span><span class="d">По две задачи на каждый из 4 уровней: разберите ситуацию и сверьтесь с ответом</span><span class="ref">тренажёр</span></button>
- <button type="button" class="tile" data-go="fsblaw"><span class="t">Законы сервера</span><span class="d">Полные тексты: ФЗ о ФСБ, устав ФСБ, УК, УПК и другие</span><span class="ref">первоисточник</span></button>
-</div>
-
-<h3 class="uk-ch" id="exBaseQ">Вопросы с ответами</h3><div class="ex-top"><div class="ex-prog" id="exProg"></div>
-<div class="chips" role="group" aria-label="Режим"><button type="button" data-exmode="cards">Карточки</button><button type="button" data-exmode="test">Тест 20</button><button type="button" data-exscroll="1">Все вопросы</button><button type="button" data-go="marks" class="mkchip">⚑ Мои метки <b id="exMkN"></b></button></div>
+</section>
+<section data-extab="study" hidden>
+<div class="ex-top"><div class="ex-prog" id="exProg"></div>
+<div class="kb-sub" role="group" aria-label="Режим"><button type="button" data-exmode="cards">Карточки</button><button type="button" data-exmode="test">Тест 20</button><button type="button" data-go="marks" class="mkchip">⚑ Метки <b id="exMkN"></b></button></div>
 <div class="ex-ctrl"><label class="hide" for="exTopic">Тема</label><select id="exTopic"><option value="all">Все темы (${CARDS.length})</option><option value="marks" id="exMarksOpt">⚑ Мои метки</option><optgroup label="Курсы Академии">${LECTURES.map(L=>`<option value="lec:${L.n}">Лекция ${L.n}. ${esc(L.t)} (${CARDS.filter(c=>L.topics.includes(c.topic)).length})</option>`).join("")}</optgroup>${COURSES.length?`<optgroup label="Академия «М»">${COURSES.map(C=>`<option value="course:${C.id}">${esc(C.title)} — все вопросы (${CARDS.filter(c=>inCourse(c,C.id)).length})</option>`).join("")}</optgroup>`:""}${[["C1-","Устав, задержание, должностные"],["C2-","Проверки, дела, эксперимент"],["L","Законы ФСБ"],["P","УК и УПК"]].map(([p,g])=>{ const ts=TOPICS.filter(t=>CARDS.some(c=>c.topic===t&&c.id.startsWith(p))); return ts.length?`<optgroup label="${g}">${ts.map(t=>`<option value="${esc(t)}">${esc(t)} (${CARDS.filter(c=>c.topic===t).length})</option>`).join("")}</optgroup>`:""; }).join("")}</select>
 <label class="fc-chk" style="padding:4px 0"><input type="checkbox" id="exOnly"><span>Только невыученные</span></label></div></div>
 <div id="exMain"></div>
-<section class="ex-list" id="exList"><h3>Все вопросы</h3><p class="lead">Нажмите на вопрос — откроется ответ со ссылкой на статью.</p><div id="exListBody"></div><div class="fc-acts" style="margin-top:16px"><button type="button" class="btn" id="exReset">Сбросить прогресс</button></div></section>`;
+</section>
+<section data-extab="list" class="ex-list" id="exList" hidden>
+<div class="tr-find"><input type="search" id="exListQ" placeholder="Найти вопрос: слово, статья, номер" autocomplete="off" spellcheck="false" aria-label="Найти вопрос"></div>
+<div id="exListBody"></div><div class="fc-acts" style="margin-top:16px"><button type="button" class="btn" id="exReset">Сбросить прогресс</button></div>
+</section>
+<section data-extab="base" hidden>
+<p class="tr-lead">Основа службы, задачи как на экзамене и первоисточники.</p>
+<div class="tiles ex-base">
+ <button type="button" class="tile hot" data-go="fsbstruct"><span class="t">Что такое ФСБ и Управление «М»</span><span class="d">Структура ФСБ, подразделения, задачи Управления «М», руководство, обязанности и права сотрудника</span><span class="ref">ФЗ о ФСБ, устав</span></button>
+ <button type="button" class="tile" data-go="fsbacad"><span class="t">Задачи как на экзамене</span><span class="d">По две задачи на каждый из 4 уровней: разберите ситуацию и сверьтесь с ответом</span><span class="ref">задачи</span></button>
+ <button type="button" class="tile" data-go="fsblaw"><span class="t">Законы сервера</span><span class="d">Полные тексты: ФЗ о ФСБ, устав ФСБ, УК, УПК и другие</span><span class="ref">первоисточник</span></button>
+</div>
+</section>`;
     el.addEventListener("click",e=>{
-      const m=e.target.closest("[data-exmode]"); if(m){ EXS.mode=m.dataset.exmode; EXS.open=false; exDraw(); return; }
+      const tb=e.target.closest(".kb-seg [data-extab]"); if(tb){ exTab(tb.dataset.extab,true); return; }
+      const m=e.target.closest("[data-exmode]"); if(m){ EXS.mode=m.dataset.exmode; EXS.open=false; exTab("study"); exDraw(); return; }
       const lg=e.target.closest("[data-lecgo]"); if(lg){ const n=+lg.dataset.lecgo, L=LECTURES[n-1]; el.querySelectorAll("[data-lecgo]").forEach(b=>b.setAttribute("aria-pressed",String(b===lg)));
         const box=$("exLecBox"); box.innerHTML=`<div class="sk-box"><p class="kb-code">${L.c===1?"Курс I":"Курс II"} · лекция ${L.n}</p><h3 class="kb-ltopic">${esc(L.t)}</h3><div class="ex-acts"><button type="button" class="btn pri" data-lecq="${n}">Учить вопросы этой лекции карточками</button></div></div>${kLecPlanHtml(L)}`; linkify(box); box.scrollIntoView({behavior:"smooth",block:"start"}); return; }
-      const lq=e.target.closest("[data-lecq]"); if(lq){ EX.topic="lec:"+lq.dataset.lecq; $("exTopic").value=EX.topic; EXS.mode="cards"; EXS.i=0; EXS.open=false; EXS.test=null; exSave(); exDraw(); $("exMain").scrollIntoView({behavior:"smooth",block:"start"}); return; }
-      const cq=e.target.closest("[data-coursecards]"); if(cq){ EX.topic="course:"+cq.dataset.coursecards; EXS.mode="cards"; EXS.i=0; EXS.open=false; EXS.test=null; exSave(); exDraw(); $("exMain").scrollIntoView({behavior:"smooth",block:"start"}); return; }
-      if(e.target.closest("[data-exscroll]")){ $("exList").scrollIntoView({behavior:"smooth",block:"start"}); return; }
+      const lq=e.target.closest("[data-lecq]"); if(lq){ EX.topic="lec:"+lq.dataset.lecq; $("exTopic").value=EX.topic; EXS.mode="cards"; EXS.i=0; EXS.open=false; EXS.test=null; exSave(); exTab("study",true); exDraw(); return; }
+      const cq=e.target.closest("[data-coursecards]"); if(cq){ EX.topic="course:"+cq.dataset.coursecards; EXS.mode="cards"; EXS.i=0; EXS.open=false; EXS.test=null; exSave(); exTab("study",true); exDraw(); return; }
+      if(e.target.closest("[data-exscroll]")){ exTab("list",true); return; }
       const b=e.target.closest("[data-ex]"); if(!b) return; const a=b.dataset.ex; const pool=exPool();
       if(a==="show"){ EXS.open=true; }
       else if(a==="next"){ EXS.i++; EXS.open=false; }
@@ -4632,6 +4701,8 @@ function renderFsbExam(){
     $("exOnly").onchange=e=>{ EX.only=e.target.checked; EXS.i=0; EXS.open=false; exSave(); exDraw(); };
     $("exReset").onclick=()=>{ EX.known={}; exSave(); $("exListBody").innerHTML=exListHtml(); linkify($("exListBody")); exDraw(); toast("Прогресс сброшен"); };
     $("exListBody").innerHTML=exListHtml(); linkify($("exListBody"));
+    $("exListQ").addEventListener("input",e=>exFilter(e.target.value));
+    exTab(EXTAB);
   }
   exDraw();
 }
