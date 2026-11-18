@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Адвокат на задержании</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column of "плашки" grouped by stage of contact with a lawyer; sticky chip nav on top. */
+:root{
+  --bg:#f3f4f6; --card:#ffffff; --fg:#14181f; --muted:#5b6472; --line:#dde1e7;
+  --accent:#1d3f73; --accent-soft:#e6ecf6;
+  --ok:#1f6b45; --ok-soft:#e3f2ea; --no:#9b2c2c; --no-soft:#f8e6e6; --warn:#8a5a00; --warn-soft:#fbf0d9;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-head:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1318; --card:#171c23; --fg:#e7eaef; --muted:#97a1b0; --line:#2a313b;
+  --accent:#8fb2e8; --accent-soft:#1b2739;
+  --ok:#7fd1a4; --ok-soft:#15281f; --no:#f0a0a0; --no-soft:#2d1818; --warn:#e8c172; --warn-soft:#2b2312; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1318; --card:#171c23; --fg:#e7eaef; --muted:#97a1b0; --line:#2a313b;
+  --accent:#8fb2e8; --accent-soft:#1b2739;
+  --ok:#7fd1a4; --ok-soft:#15281f; --no:#f0a0a0; --no-soft:#2d1818; --warn:#e8c172; --warn-soft:#2b2312; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--f-body);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:820px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 60px}
+header h1{font:700 30px/1.15 var(--f-head);margin:0 0 6px;text-wrap:balance}
+header p{color:var(--muted);margin:0;max-width:62ch}
+.src{font:500 12px/1.5 var(--f-mono);color:var(--muted);margin-top:10px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:12px 0;margin:14px 0 6px;border-bottom:1px solid var(--line);scrollbar-width:none}
+nav a{flex:none;font:600 13px/1 var(--f-body);color:var(--accent);background:var(--accent-soft);padding:8px 11px;border-radius:999px;text-decoration:none}
+nav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section{margin-top:30px;scroll-margin-top:64px}
+h2{font:700 13px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
+.card h3{font:700 18px/1.25 var(--f-head);margin:0 0 8px}
+.card p{margin:0 0 8px}.card p:last-child{margin-bottom:0}
+.card ul{margin:0;padding-left:18px}.card li{margin:3px 0}
+.law{display:inline-block;font:500 11.5px/1.3 var(--f-mono);color:var(--muted);margin-top:8px}
+.ok{background:var(--ok-soft);border-color:transparent}.ok h3{color:var(--ok)}
+.no{background:var(--no-soft);border-color:transparent}.no h3{color:var(--no)}
+.warn{background:var(--warn-soft);border-color:transparent}.warn h3{color:var(--warn)}
+.big{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 2px}
+.num{flex:1 1 120px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.num b{display:block;font:700 26px/1 var(--f-head);color:var(--accent);font-variant-numeric:tabular-nums}
+.num span{font-size:13px;color:var(--muted)}
+.say{border-left:3px solid var(--accent);background:var(--card);border-radius:0 10px 10px 0;padding:12px 16px;margin:0 0 10px}
+.say .when{font:600 12px/1.3 var(--f-body);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.say q{quotes:"«" "»";font-weight:500}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px 11px 46px;position:relative}
+.steps li::before{content:counter(s);position:absolute;left:14px;top:11px;width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--card);font:700 12px/22px var(--f-body);text-align:center}
+table{border-collapse:collapse;width:100%;font-size:14px}
+.tbl{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12.5px;letter-spacing:.03em}
+tr:last-child td{border-bottom:0}
+footer{margin-top:36px;color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <h1>Адвокат на задержании</h1>
+  <p>Памятка для меня: что адвокат может, чего не может, что я обязан сделать и как с ним разговаривать. Сервер Арбатский, всё по законам с форума.</p>
+  <div class="src">ФЗ «Об адвокатуре» ред. 29.10.2026 · УПК ст. 49–52, 92, 92.1, 450 · УК ст. 144 · Конституция · ФКЗ о судах · проверено 18.11.2026</div>
+</header>
+
+<nav aria-label="Разделы">
+  <a href="#who">Кто это</a><a href="#call">Вызов</a><a href="#rights">Его права</a><a href="#limits">Его запреты</a><a href="#kick">Отстранить</a><a href="#talk">Как говорить</a><a href="#after">После</a><a href="#risk">Ответственность</a>
+</nav>
+
+<section id="who">
+  <h2>Кто это</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Государственный адвокат</h3>
+      <ul>
+        <li>Член палаты адвокатов при Правительстве.</li>
+        <li>Документ: <b>служебное удостоверение</b>. Обязан носить с собой и показывать по приезду на вызов.</li>
+        <li>Вызывается через Правительство РО.</li>
+        <li>На вызове при задержании <b>работает бесплатно</b>: брать договор и деньги ему запрещено.</li>
+      </ul>
+      <span class="law">ФЗ гл. 2 ст. 1 п. 12, ст. 2 · Закон о документах ст. 3.10</span>
+    </div>
+    <div class="card">
+      <h3>Частный адвокат</h3>
+      <ul>
+        <li>Не на госслужбе, работает по <b>лицензии</b>.</li>
+        <li>Лицензия стоит 100 000 ₽, её выдают после экзамена у Председателя палаты или его замов.</li>
+        <li>Продлевать каждый месяц: налог 80 000 ₽ и продление 15 000 ₽. Если не продлил за 48 часов, лицензия аннулируется.</li>
+        <li>Берёт деньги по договору, только безналом.</li>
+      </ul>
+      <span class="law">ФЗ гл. 3 ст. 1, 3</span>
+    </div>
+    <div class="card">
+      <h3>Состав палаты</h3>
+      <p>Председатель → заместители → старшие адвокаты → адвокаты → младшие адвокаты → стажёры, плюс частные адвокаты.</p>
+      <p>Надзор: Минюст. Он может приостановить или прекратить статус адвоката и аннулировать лицензию частника.</p>
+      <span class="law">ФЗ гл. 1 ст. 2 · ФКЗ о Правительстве</span>
+    </div>
+    <div class="card warn">
+      <h3>Важно помнить</h3>
+      <ul>
+        <li>Адвокаты, и гос, и частные, <b>не должностные лица</b>.</li>
+        <li><b>Председатель палаты неприкосновенен</b>, когда исполняет обязанности.</li>
+        <li>Задержал адвоката — уведоми по горячей линии прокурора, СК и <b>председателя палаты адвокатов</b>.</li>
+      </ul>
+      <span class="law">УК гл. о должн. прест., прим. 2 · ФЗ о неприкосновенности ч. 8 · УПК ст. 450 ч. 1</span>
+    </div>
+  </div>
+</section>
+
+<section id="call">
+  <h2>Вызов адвоката</h2>
+  <div class="big">
+    <div class="num"><b>3 мин</b><span>ждём ответа на вызов</span></div>
+    <div class="num"><b>7 мин</b><span>на приезд после ответа</span></div>
+    <div class="num"><b>10 мин</b><span>разговор наедине</span></div>
+    <div class="num"><b>1 + 1</b><span>максимум: один гос и один частный</span></div>
+  </div>
+  <div class="grid" style="margin-top:12px">
+    <div class="card">
+      <h3>Порядок</h3>
+      <ol class="steps">
+        <li>При задержании разъясняю статью и права, <b>в том числе право вызвать адвоката</b>.</li>
+        <li>Вызов даю <b>в КПЗ или в помещении для допроса</b>, не на улице.</li>
+        <li>Сначала государственный адвокат через Правительство. Не принял вызов — даю вызвать частного.</li>
+        <li>Не принял ни гос, ни частный — право на юрпомощь <b>считается реализованным</b>, продолжаю.</li>
+        <li>Приехавшему адвокату озвучиваю основания и статью, показываю материалы и видео задержания.</li>
+      </ol>
+      <span class="law">УПК ст. 92 ч. 1 п. «г», «ж»</span>
+    </div>
+    <div class="card ok">
+      <h3>Могу отказать в вызове, если</h3>
+      <ul>
+        <li>задержанный <b>отказался</b> от адвоката, а потом в том же задержании передумал;</li>
+        <li>задержание идёт <b>по решению суда или по ордеру на арест</b>;</li>
+        <li>я переспросил, нужен ли ему адвокат, а он <b>не ответил</b>.</li>
+      </ul>
+      <p>Отказ говорю вслух, на камеру, с основанием.</p>
+      <span class="law">УПК ст. 92 прим. к п. «ж» · ст. 52 ч. 3</span>
+    </div>
+    <div class="card">
+      <h3>Если я не профильный орган</h3>
+      <p>Если дело не моей подследственности и я только передаю задержанного, вызов адвоката даёт <b>тот, кому я передал</b>.</p>
+      <span class="law">УПК ст. 92 ч. 12, ст. 92.1 ч. 1</span>
+    </div>
+  </div>
+</section>
+
+<section id="rights">
+  <h2>Что адвокат вправе</h2>
+  <div class="grid">
+    <div class="card ok">
+      <h3>На задержании</h3>
+      <ul>
+        <li>Узнать основания задержания и статью.</li>
+        <li>Посмотреть материалы и <b>видеозапись задержания</b>.</li>
+        <li>Задавать вопросы по существу задержания.</li>
+        <li>Поговорить с клиентом наедине <b>10 минут</b>. После этого я вправе прервать.</li>
+        <li>Заявлять ходатайства и отвод — устно, на видео.</li>
+        <li>Находиться в месте задержания, в КПЗ и на охраняемой территории <b>по вызову</b>. После процедур обязан уйти.</li>
+      </ul>
+      <span class="law">ФЗ гл. 2 ст. 1 п. 1, 10, 11 · гл. 4 п. 2, 4 · УПК 92.1 · Закон о территориях 2.11, 3.7</span>
+    </div>
+    <div class="card ok">
+      <h3>На допросе и обыске</h3>
+      <ul>
+        <li>Если подозреваемый потребовал защитника, <b>допрос не начинаю</b>, пока защитник не приедет.</li>
+        <li>Защитник может кратко консультировать клиента при мне, задавать вопросы с разрешения следователя и писать замечания к протоколу.</li>
+        <li>Может присутствовать при обыске.</li>
+        <li>Свидетель вправе прийти на допрос или очную ставку с адвокатом.</li>
+      </ul>
+      <span class="law">УПК ст. 49 ч. 5–6 · допрос ч. 4 · обыск ч. 10 · свидетель ч. 4 п. 3</span>
+    </div>
+    <div class="card ok">
+      <h3>Адвокатская тайна</h3>
+      <ul>
+        <li>Что клиент сказал адвокату, нельзя истребовать <b>без решения суда</b>.</li>
+        <li>Изъять у адвоката документы, полученные от клиента, — только по решению суда.</li>
+        <li>Адвоката нельзя допрашивать свидетелем о том, что он узнал от клиента.</li>
+      </ul>
+      <span class="law">ФЗ гл. 1 ст. 1 п. 5 · УПК выемка ч. 2 · свидетель ч. 3</span>
+    </div>
+    <div class="card ok">
+      <h3>В целом по делу</h3>
+      <ul>
+        <li>Собирать доказательства, опрашивать людей с их согласия, привлекать специалиста.</li>
+        <li>Знакомиться с протоколом задержания и протоколами действий с клиентом.</li>
+        <li>Жаловаться на следователя, прокурора, суд.</li>
+        <li>Передать клиенту деньги на залог.</li>
+        <li>Защищать в суде. На одного обвиняемого — не больше двух адвокатов.</li>
+      </ul>
+      <span class="law">УПК ст. 49 ч. 5, ст. 86 ч. 3 · ФКЗ о судах ст. 9 п. 14</span>
+    </div>
+  </div>
+</section>
+
+<section id="limits">
+  <h2>Чего адвокат не вправе</h2>
+  <div class="grid">
+    <div class="card no">
+      <h3>На задержании</h3>
+      <ul>
+        <li>Говорить со мной о том, что <b>не относится к делу клиента</b>, и использовать такое против меня.</li>
+        <li>Требовать разговор наедине дольше 10 минут.</li>
+        <li>Заявлять мне ходатайства, не связанные с задержанием (приобщить доказательства, провести экспертизу). Это к следователю, прокурору или в суд.</li>
+        <li>Вести себя против норм этики.</li>
+        <li>Оставаться в КПЗ после окончания процедур.</li>
+      </ul>
+      <span class="law">ФЗ гл. 4 п. 1 · гл. 2 ст. 3 п. 5 · УПК 92.1 ч. 4</span>
+    </div>
+    <div class="card no">
+      <h3>Вообще</h3>
+      <ul>
+        <li>Брать заведомо незаконные поручения.</li>
+        <li>Идти против воли клиента и публично признавать его вину, если клиент отрицает.</li>
+        <li>Бросить защиту, которую уже взял.</li>
+        <li>Защищать двоих с противоположными интересами.</li>
+        <li>Разглашать данные следствия, если его предупредили.</li>
+        <li>Подделывать доказательства. Это ст. 303 УК, до 50 месяцев.</li>
+      </ul>
+      <span class="law">ФЗ гл. 2 ст. 3, гл. 3 ст. 4 · УПК ст. 49 ч. 7–10 · УК ст. 303 ч. 2</span>
+    </div>
+  </div>
+</section>
+
+<section id="kick">
+  <h2>Когда можно отстранить частного адвоката</h2>
+  <div class="grid">
+    <div class="card warn">
+      <h3>Основания</h3>
+      <ul>
+        <li>Он на <b>госслужбе</b> (тогда его лицензия аннулирована).</li>
+        <li>Нарушен <b>деловой вид</b>: маска (медицинскую можно), татуировки, грим, макияж.</li>
+        <li>Есть <b>активная судимость</b>.</li>
+        <li>Есть постановление по КоАП, вынесенное за нарушение во время адвокатской работы.</li>
+      </ul>
+      <span class="law">ФЗ гл. 4 п. 5 · гл. 3 ст. 4 п. 6–8 · УПК ст. 50 ч. 1</span>
+    </div>
+    <div class="card">
+      <h3>Что делаю</h3>
+      <ol class="steps">
+        <li>Называю основание вслух, на камеру.</li>
+        <li>Прошу покинуть место процессуальных действий.</li>
+        <li>Даю задержанному вызвать <b>другого</b> адвоката.</li>
+      </ol>
+      <p style="margin-top:8px">Без этих оснований частника не выгоняю: мешать ему запрещено.</p>
+      <span class="law">ФЗ гл. 4 п. 3, 5</span>
+    </div>
+  </div>
+</section>
+
+<section id="talk">
+  <h2>Как разговаривать</h2>
+  <div class="card" style="margin-bottom:12px">
+    <p><b>Тон:</b> спокойно, на «вы», по статьям. Не спорю, не перебиваю, не перехожу на личности. Всё, что важно, говорю в камеру: ходатайство, решение, основание отказа. Камеру не выключаю, видео храню минимум 48 часов.</p>
+    <span class="law">УПК ст. 92.1 ч. 2–3 · видеофиксация ч. 4–5</span>
+  </div>
+
+  <div class="say"><div class="when">Встретил адвоката</div><q>Здравствуйте. Представьтесь и предъявите, пожалуйста, служебное удостоверение (или лицензию частного адвоката).</q></div>
+  <div class="say"><div class="when">Объясняю основания</div><q>Ваш подзащитный задержан по подозрению в преступлении по п. … ч. … ст. … УК РО, за … . Протокол и видеозапись задержания можете посмотреть.</q></div>
+  <div class="say"><div class="when">Разговор наедине</div><q>Вам положено 10 минут на конфиденциальный разговор. Время пошло, по окончании я продолжу процедуру.</q></div>
+  <div class="say"><div class="when">10 минут прошли</div><q>Время конфиденциальной беседы истекло, продолжаем — примечание к п. 11 ст. 1 гл. 2 закона об адвокатуре.</q></div>
+  <div class="say"><div class="when">Ходатайство по задержанию</div><q>Ходатайство услышал. Удовлетворено. / Отказано, потому что … .</q><div class="law">Решаю сразу, вслух, без постановления — УПК 92.1 ч. 3</div></div>
+  <div class="say"><div class="when">Ходатайство не про задержание</div><q>Это ходатайство не связано с задержанием, я его не рассматриваю. Заявите следователю, прокурору или в суд — ст. 92.1 ч. 4 УПК.</q></div>
+  <div class="say"><div class="when">Просит материалы после</div><q>Направьте адвокатский запрос с договором. Ответ — в течение 24 часов.</q></div>
+  <div class="say"><div class="when">Уводит разговор в сторону</div><q>Это не относится к делу вашего подзащитного — п. 1 гл. 4 закона об адвокатуре. Давайте по задержанию.</q></div>
+  <div class="say"><div class="when">Отстраняю частника</div><q>Вы нарушаете деловой внешний вид (на вас маска) — п. 5 гл. 4 закона об адвокатуре. Прошу покинуть место процессуальных действий. Задержанный, вы вправе вызвать другого адвоката.</q></div>
+  <div class="say"><div class="when">Процедуры закончились</div><q>Процессуальные действия окончены. Прошу покинуть территорию КПЗ.</q><div class="law">Закон о территориях ст. 2.11, 3.7</div></div>
+</section>
+
+<section id="after">
+  <h2>После задержания</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Адвокатский запрос</h3>
+      <ul>
+        <li>Пишется письменно: ФИО и должность адвоката, номер дела или обстоятельства, список материалов, дата и подпись.</li>
+        <li>Гос адвокат подаёт запрос только при <b>договоре с пострадавшим</b>.</li>
+        <li>Ответить или выдать материалы — <b>в течение 24 часов</b>.</li>
+      </ul>
+      <span class="law">ФЗ гл. 2 ст. 1 п. 2 · форум «Адвокатские запросы»</span>
+    </div>
+    <div class="card ok">
+      <h3>Можно отказать в запросе, если</h3>
+      <ul>
+        <li>то, что просят, не относится к делу;</li>
+        <li>у меня этих материалов нет;</li>
+        <li>это информация с ограниченным доступом (гостайна);</li>
+        <li>из запроса непонятно, что именно нужно.</li>
+      </ul>
+      <p>Отказ — письменный, с причиной.</p>
+      <span class="law">ФЗ гл. 2 ст. 1 п. 3</span>
+    </div>
+    <div class="card">
+      <h3>Куда адвокат пожалуется</h3>
+      <ul>
+        <li>В <b>прокуратуру</b> — на неприкосновенных и на сотрудников СК.</li>
+        <li>На остальных госслужащих — в <b>СК</b>.</li>
+        <li>Срок — <b>48 часов</b> с инцидента. Приложит договор или доверенность, удостоверение или лицензию и доказательства отказа по запросу.</li>
+        <li>Жалобу на мои действия при задержании можно подать и в суд.</li>
+      </ul>
+      <span class="law">Регламент Генпрокуратуры · ФЗ гл. 2 ст. 1 п. 4 прим. · УПК гл. 16</span>
+    </div>
+  </div>
+</section>
+
+<section id="risk">
+  <h2>Ответственность</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Что сделал</th><th>Чем грозит</th></tr></thead>
+    <tbody>
+      <tr><td>Не дал задержанному вызвать адвоката без законного основания</td><td>ст. 144 УК: штраф до 85 000 ₽ или до 40 месяцев</td></tr>
+      <tr><td>Помешал адвокату работать, нарушил адвокатскую тайну</td><td>ст. 144 УК, то же</td></tr>
+      <tr><td>Без причины отказал в адвокатском запросе или не ответил за 24 часа</td><td>ответственность по УК (ФЗ гл. 2 ст. 1 п. 4)</td></tr>
+      <tr><td>Не уведомил председателя палаты о задержании адвоката</td><td>нарушение ст. 450 УПК, повод для жалобы</td></tr>
+      <tr><td>Затягивал задержание: долгий маршрут, дальний КПЗ, держал остальных в ожидании</td><td>нарушение ст. 92 ч. 2 УПК</td></tr>
+    </tbody>
+  </table></div>
+  <p style="color:var(--muted);font-size:13.5px;margin-top:10px">Ст. 144 не применяется, если право на юрпомощь считается реализованным (никто не принял вызов) или в вызове отказано по законным основаниям, перечисленным выше.</p>
+</section>
+
+<footer>Источники: forum.russia.online, раздел «Арбатский» → Законодательная база и Правительство. ФЗ «Об адвокатской деятельности и адвокатуре в РО» (тема 41964, ред. 29.10.2026), «Адвокатские запросы» (тема 2296), Регламент обращений в Генпрокуратуру (тема 2264), УПК, УК, Конституция, ФКЗ о судебной системе, законы о неприкосновенности, о территориях, о документах.</footer>
+</div>
+</body>
+</html>
