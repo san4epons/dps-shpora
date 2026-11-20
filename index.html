@@ -117,7 +117,12 @@
 :is(#vKab,#vFsbExam) .kb-obz-crit li{margin:3px 0}
 :is(#vKab,#vFsbExam) .kb-obz-req{display:grid;gap:0;border:1px solid var(--line);background:var(--surface);margin:0 0 14px}
 :is(#vKab,#vFsbExam) .kb-obz-req label{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-top:1px solid var(--line);cursor:pointer;font-weight:500}
-:is(#vKab,#vFsbExam) .kb-obz-req label:first-child{border-top:0}
+:is(#vKab,#vFsbExam) .kb-oreq{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--line);border-left:2px solid transparent;font-weight:500}
+.kb-oreq:first-child{border-top:0}
+.kb-oreq.s-ok{border-left-color:var(--ok,#3fb950)}
+.kb-oreq.s-bad{border-left-color:var(--bad,#f85149);background:color-mix(in srgb,var(--bad,#f85149) 8%,transparent)}
+.kb-obz-ver{margin:0 0 6px}
+.kb-obz-ver button{padding:10px 18px;font-size:15px;font-weight:700}
 :is(#vKab,#vFsbExam) .kb-obz-req input{margin-top:3px;accent-color:var(--accent)}
 :is(#vKab,#vFsbExam) .kb-obz{border:1px solid var(--line);background:var(--surface);margin:0 0 14px}
 :is(#vKab,#vFsbExam) .kb-oq{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:4px 12px;align-items:start;padding:12px 14px;border-top:1px solid var(--line);border-left:2px solid transparent}
@@ -5275,27 +5280,30 @@ ${!live&&x.status!=="сдал экзамен"&&!KS.me.lector?`<div class="kb-sub
 ${L.length?`<div class="kb-tbl">${L.map(row).join("")}</div>`:`<p class="fc-empty">${f==="act"?"Сейчас в Академии никого. Академики появляются здесь сами после «Зачислить в Академию» на обзвоне.":"Пока никого."}</p>`}
 <div class="ex-acts"><button type="button" class="btn pri" data-accopy="1">Скопировать список</button><button type="button" class="btn" data-acreload="1">Обновить</button></div>
 <p class="kb-hint">${esc(ACAD_RANK)} Сдал экзамен — статус меняется сам. «Выпущен» и «Отчислен» отмечают все, кроме инструкторов. Таблица: лист «Академики».</p>`; }
-function kObzS(){ if(!KS.O){ let o=null; try{ o=JSON.parse(ls("acad-obz2")||"null"); }catch(_){} KS.O=o&&Array.isArray(o.r)&&o.r.length===OBZQ.length?o:{who:"",req:OBZ_REQ.map(()=>true),r:OBZQ.map(()=>null)}; } return KS.O; }
+function kObzS(){ if(!KS.O){ let o=null; try{ o=JSON.parse(ls("acad-obz2")||"null"); }catch(_){} KS.O=o&&Array.isArray(o.r)&&o.r.length===OBZQ.length&&Array.isArray(o.req)?o:{who:"",req:OBZ_REQ.map(()=>true),r:OBZQ.map(()=>null),v:null}; } return KS.O; }
 function kObzSave(){ try{ ls("acad-obz2",JSON.stringify(KS.O)); }catch(_){} }
 function kObzSum(){ const O=kObzS(); const sc=O.r.reduce((s,x)=>s+(x==null?0:x),0), done=O.r.filter(x=>x!=null).length, req=O.req.every(Boolean);
   const pass=req&&sc>=7; return {sc,done,req,pass,fin:done===OBZQ.length}; }
 function kObzPlain(){ const O=kObzS(), S=kObzSum(), who=(O.who||"").trim()||"Имя Фамилия | статик"; const d=new Date(Date.now()+3*3600e3), p=n=>String(n).padStart(2,"0");
-  return `Обзвон: ${who}\nКогда: ${p(d.getUTCDate())}.${p(d.getUTCMonth()+1)}.${d.getUTCFullYear()}, ${p(d.getUTCHours())}:${p(d.getUTCMinutes())} МСК\nИтог: ${S.pass?"принят":"отказ"} (${String(S.sc).replace(".",",")}/10)`; }
+  const bad=OBZ_REQ.filter((t,i)=>!O.req[i]), it=O.v==="принят"?"✅ принят":O.v==="отказ"?"❌ отказ":"итог не вынесен";
+  return `Обзвон: ${who}\nКогда: ${p(d.getUTCDate())}.${p(d.getUTCMonth()+1)}.${d.getUTCFullYear()}, ${p(d.getUTCHours())}:${p(d.getUTCMinutes())} МСК\nБаллы: ${String(S.sc).replace(".",",")}/10\nТребования: ${bad.length?"не выполнено — "+bad.join("; "):"выполнены"}\nИтог: ${it}${KS.me&&KS.me.name?"\nПровёл: "+KS.me.name:""}`; }
 function kObzHtml(){ const O=kObzS(), S=kObzSum(), f=x=>String(x).replace(".",",");
   const bad=OBZ_REQ.filter((t,i)=>!O.req[i]); const verdict=!S.req?"Не выполнено: "+bad.join("; ")+" — отказ":S.fin?(S.pass?"Принят — зачислить в Академию":"Меньше 7 баллов — отказ"):(S.sc>=7?"Уже 7 баллов — можно принимать":"Идёт обзвон");
   return `<p class="kb-eyebrow">Обзвон кандидата · 10–15 минут</p>
 <div class="kb-obz-crit"><b>Критерии отбора</b><ol><li>Формальные требования — все четыре, иначе отказ без вопросов.</li><li>10 базовых вопросов — без Управления «М». Верно — 1 балл, частично — 0,5, нет — 0.</li><li><b>От 7 баллов — принят</b>, выдать роль Академии «М». Меньше 7 — отказ, новая заявка через 24 часа.</li></ol></div>
 <div class="sk-box qc-form kb-form"><label>Кандидат<input id="kbObzWho" type="text" maxlength="40" autocomplete="off" spellcheck="false" placeholder="Иван Петров | 12345" value="${esc(O.who||"")}"></label></div>
-<h4 class="uk-ch">Требования</h4><p class="kb-hint">Все отмечены заранее. Снимите галочку только если требование НЕ выполнено — тогда отказ.</p><div class="kb-obz-req">${OBZ_REQ.map((t,i)=>`<label><input type="checkbox" data-obzreq="${i}"${O.req[i]?" checked":""}> ${esc(t)}</label>`).join("")}</div>
+<h4 class="uk-ch">Требования</h4><p class="kb-hint">По умолчанию — «Да». Нажмите «Нет», только если требование не выполнено.</p><div class="kb-obz-req">${OBZ_REQ.map((t,i)=>`<div class="kb-oreq${O.req[i]?" s-ok":" s-bad"}"><span>${esc(t)}</span><div class="kb-sub kb-ograde" role="group" aria-label="${esc(t)}"><button type="button" data-obzreq="${i}" data-obzrv="1" aria-pressed="${!!O.req[i]}">Да</button><button type="button" data-obzreq="${i}" data-obzrv="0" aria-pressed="${!O.req[i]}">Нет</button></div></div>`).join("")}</div>
 <h4 class="uk-ch">Вопросы</h4><div class="kb-obz">${OBZQ.map(([q,a,r],i)=>`<div class="kb-oq${O.r[i]==null?"":O.r[i]===1?" s-ok":O.r[i]===0?" s-bad":" s-mid"}"><span class="kb-on">${String(i+1).padStart(2,"0")}</span><div class="kb-ob"><b>${esc(q)}</b><details><summary>Ответ</summary><p>${esc(a)} <small>${esc(r)}</small></p></details></div><div class="kb-sub kb-ograde" role="group" aria-label="Оценка ответа ${i+1}">${[[1,"Верно"],[0.5,"Частично"],[0,"Нет"]].map(([v,t])=>`<button type="button" data-obzq="${i}" data-obzv="${v}" aria-pressed="${O.r[i]===v}">${t}</button>`).join("")}</div></div>`).join("")}</div>
-<div class="kb-obz-res${S.req&&S.pass?" ok2":!S.req||S.fin?" bad2":""}"><span class="kb-lbl">Итог · ${S.done}/10 отвечено</span><b>${f(S.sc)} / 10</b><span>${verdict}</span></div>
-${O.saved?`<p class="kb-obz-saved">${esc(O.saved)}</p>`:""}<div class="ex-acts">${S.fin||!S.req||S.pass?`<button type="button" class="btn pri" data-obzsave="1"${O.saved?" disabled":""}>${S.pass?"Зачислить в Академию":"Записать отказ"}</button>`:""}<button type="button" class="btn${S.fin||!S.req||S.pass?"":" pri"}" data-obzcopy="1">Скопировать отчёт в дело</button><button type="button" class="btn" data-obzreset="1">Новый кандидат</button></div>
+<div class="kb-obz-res${O.v==="принят"?" ok2":O.v==="отказ"?" bad2":""}"><span class="kb-lbl">Баллы · ${S.done}/10 отвечено</span><b>${f(S.sc)} / 10</b><span>${O.v?(O.v==="принят"?"Итог: принят":"Итог: не принят"):"Подсказка: "+verdict}</span></div>
+<div class="kb-sub kb-obz-ver" role="group" aria-label="Итог обзвона"><button type="button" data-obzver="принят" aria-pressed="${O.v==="принят"}"${O.saved?" disabled":""}>✅ Принят</button><button type="button" data-obzver="отказ" aria-pressed="${O.v==="отказ"}"${O.saved?" disabled":""}>❌ Не принят</button></div>
+<p class="kb-hint">Итог решаете вы. «Принят» — запись в таблицу и зачисление в Академию (вкладка «Академики»), «Не принят» — запись отказа.</p>
+${O.saved?`<p class="kb-obz-saved">${esc(O.saved)}</p>`:""}<div class="ex-acts"><button type="button" class="btn pri" data-obzcopy="1">Скопировать отчёт</button><button type="button" class="btn" data-obzreset="1">Новый кандидат</button></div>
 <pre class="kb-obz-pre">${esc(kObzPlain())}</pre>`; }
 function kDraw(){
   const el=$("kbMain"); if(!el) return;
   if(!KS.me){ const lg=KS.showLogin||KS.key||KS.err||KS.busy; el.innerHTML=(lg?kLoginHtml():"")+kPublicHtml(); if(lg&&KS.showLogin&&!KS.key){ const k=$("kbKey"); if(k) k.focus(); } return; }
   const LBL={new:KS.exam?"Идёт экзамен":"Новый экзамен",find:"Поиск экзаменов",list:"Последние",qs:"Поиск вопроса",stats:"Слабые темы",log:"Журнал входов",met:"Методика и регламент",kurs:"Курсы",ev:"Мероприятия",obz:"Обзвон",acad:"Академики"};
-  const GR=KS.me.lector?[["Мероприятия",["ev"]],["Академики",["acad"]],["Курсы",["kurs"]],["Обзвон",["obz"]],["Аналитика",["stats"]]]:[["Экзамен",["new","find","list","qs"]],["Обзвон",["obz"]],["Академики",["acad"]],["Курсы",["kurs"]],["Мероприятия",["ev"]],["Аналитика",["stats","log"]],["Справка",["met"]]];
+  const GR=[["Экзамен",["new","find","list","qs"]],["Обзвон",["obz"]],["Академики",["acad"]],["Курсы",["kurs"]],["Мероприятия",["ev"]],["Аналитика",["stats","log"]],["Справка",["met"]]];
   const tabs=[].concat(...GR.map(g=>g[1])).map(k=>[k,LBL[k]]);
   if(!tabs.some(([k])=>k===KS.tab)) KS.tab=tabs[0][0];
   let body="";
@@ -5374,12 +5382,14 @@ function renderKab(){
       const g=x=>e.target.closest(x);
       if(g("[data-kblogout]")){ kLogout(); return; }
       if(g("[data-obzq]")){ const b=g("[data-obzq]"), O=kObzS(), i=+b.dataset.obzq, v=+b.dataset.obzv; O.r[i]=O.r[i]===v?null:v; kObzSave(); const y=window.scrollY; kDraw(); window.scrollTo({top:y}); return; }
-      if(g("[data-obzreq]")){ const c=g("[data-obzreq]"), O=kObzS(); O.req[+c.dataset.obzreq]=c.checked; kObzSave(); const y=window.scrollY; kDraw(); window.scrollTo({top:y}); return; }
-      if(g("[data-obzcopy]")){ copyText(kObzPlain()); return; }
-      if(g("[data-obzsave]")){ const O=kObzS(), S=kObzSum(), m=String(O.who||"").match(/^\s*(.+?)\s*[|,;\s]\s*(\d{1,7})\s*$/);
+      if(g("[data-obzreq]")){ const c=g("[data-obzreq]"), O=kObzS(); O.req[+c.dataset.obzreq]=c.dataset.obzrv==="1"; kObzSave(); const y=window.scrollY; kDraw(); window.scrollTo({top:y}); return; }
+      if(g("[data-obzcopy]")){ const O=kObzS(); if(!O.v){ toast("Сначала нажмите «Принят» или «Не принят»"); return; } copyText(kObzPlain()); return; }
+      if(g("[data-obzver]")){ const O=kObzS(), S=kObzSum(), v=g("[data-obzver]").dataset.obzver, m=String(O.who||"").match(/^\s*(.+?)\s*[|,;\s]\s*(\d{1,7})\s*$/);
+        if(O.saved) return;
         if(!m){ toast("Впишите кандидата: Имя Фамилия | статик"); const w=$("kbObzWho"); if(w) w.focus(); return; }
-        const b=g("[data-obzsave]"); b.disabled=true;
-        try{ const j=await kApi("obz",{cadet:m[1].replace(/\s*\|\s*$/,""),static:m[2],score:S.sc,reqOk:S.req});
+        if(v==="принят"&&(!S.req||S.sc<7)&&!confirm(`${!S.req?"Не все требования выполнены":"Меньше 7 баллов"}. Всё равно принять?`)) return;
+        g("[data-obzver]").disabled=true;
+        try{ const j=await kApi("obz",{cadet:m[1].replace(/\s*\|\s*$/,""),static:m[2],score:S.sc,reqOk:S.req,verdict:v}); O.v=v;
           O.saved=j.pass?(j.added?`Зачислен в Академию ${kD(Date.now())}. Срок — ${ACAD_N} суток, список — во вкладке «Академики».`:`Принят. Уже числится в Академии с ${kD(j.already)} — повторно не добавлен.`):"Отказ записан в таблицу.";
           kObzSave(); KS.acad=null; toast(j.pass?"Принят в Академию":"Отказ записан"); }catch(e){ toast(e.message); }
         const y=window.scrollY; kDraw(); window.scrollTo({top:y}); return; }
@@ -5388,7 +5398,7 @@ function renderKab(){
         try{ KS.acad=await kApi("aclose",{static:st,status:stt}); toast("Готово"); }catch(e){ toast(e.message); } kDraw(); return; }
       if(g("[data-accopy]")){ copyText(kAcadPlain()); return; }
       if(g("[data-acreload]")){ KS.acad=null; kDraw(); kLoadTab(); return; }
-      if(g("[data-obzreset]")){ if(!confirm("Очистить обзвон и начать с новым кандидатом?")) return; KS.O={who:"",req:OBZ_REQ.map(()=>true),r:OBZQ.map(()=>null)}; kObzSave(); kDraw(); window.scrollTo({top:0}); return; }
+      if(g("[data-obzreset]")){ if(!confirm("Очистить обзвон и начать с новым кандидатом?")) return; KS.O={who:"",req:OBZ_REQ.map(()=>true),r:OBZQ.map(()=>null),v:null}; kObzSave(); kDraw(); window.scrollTo({top:0}); return; }
       if(g("[data-kblogin]")){ KS.showLogin=true; kDraw(); window.scrollTo({top:0}); return; }
       if(g("[data-lreload]")){ KS.L.topics=null; kDraw(); kLectLoad(); return; }
       const kv=g("[data-kv]"); if(kv){ KS.K.view=kv.dataset.kv; KS.K.msg=""; KS.K.err=""; kDraw(); if((KS.K.view==="cad"||KS.K.view==="rat")&&!KS.K.roster){ try{ KS.K.roster=await kApi("kroster"); }catch(err){ KS.K.err=err.message; } kDraw(); } return; }
